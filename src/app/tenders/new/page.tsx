@@ -30,6 +30,7 @@ import {
   Info,
   Layers,
   HelpCircle,
+  RotateCcw,
 } from 'lucide-react';
 
 export default function CreateTenderNewPage() {
@@ -174,6 +175,79 @@ export default function CreateTenderNewPage() {
   const [formErrors, setFormErrors] = useState<Record<string, string>>({});
   const [toastMessage, setToastMessage] = useState<string | null>(null);
   const [hasDraft, setHasDraft] = useState(false);
+
+  // Gemini AI RFP Analyzer State
+  const [isAiRfpOpen, setIsAiRfpOpen] = useState(false);
+  const [rfpInputText, setRfpInputText] = useState('');
+  const [isAiRfpAnalyzing, setIsAiRfpAnalyzing] = useState(false);
+
+  const handleLoadSampleRfp = () => {
+    setRfpInputText(
+      'REQUEST FOR PROPOSAL (RFP) - GOVERNMENT E-MARKETPLACE (GeM)\\n' +
+      'Procurement of Enterprise Cloud Infrastructure & Threat Defense Systems\\n' +
+      'Procuring Ministry: Ministry of Electronics and Information Technology (MeitY)\\n' +
+      'Estimated Budget: ₹8.50 Crores\\n' +
+      'Submission Window: 45 Days\\n\\n' +
+      'Scope of Procurement:\\n' +
+      'Turnkey enterprise private cloud compute, SIEM cybersecurity infrastructure, and 100Gbps SDN networking for national data centers.\\n\\n' +
+      'Mandatory Eligibility Clauses:\\n' +
+      '1. Minimum Turnover: ₹5.00 Crores CA-certified average across last 3 FY with valid UDIN.\\n' +
+      '2. Experience: Minimum 7 years enterprise IT infrastructure delivery for Govt/PSU.\\n' +
+      '3. GST Registration: Active Form GST REG-06 verified on GSTN portal.\\n' +
+      '4. Non-Debarment: Clear debarment standing on CPPP portal under GFR Rule 151.\\n' +
+      '5. OEM MAF: Original Equipment Manufacturer Authorization Form from OEM partners.'
+    );
+  };
+
+  const handleAnalyzeRfp = async () => {
+    if (!rfpInputText.trim()) {
+      showToast('Please paste RFP text to analyze.');
+      return;
+    }
+
+    setIsAiRfpAnalyzing(true);
+    try {
+      const res = await fetch('/api/gemini', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          action: 'ANALYZE_RFP',
+          rfpText: rfpInputText,
+        }),
+      });
+
+      if (res.ok) {
+        const data = await res.json();
+        const analysis = data.analysis;
+        if (analysis) {
+          if (analysis.title) setTitle(analysis.title);
+          if (analysis.department) setDepartment(analysis.department);
+          if (analysis.estimated_budget) setBudgetCr(analysis.estimated_budget / 10000000);
+          if (analysis.deadline_days) setDeadlineDays(analysis.deadline_days);
+          if (analysis.description) setDescription(analysis.description);
+          if (analysis.requirements && analysis.requirements.length > 0) {
+            setRequirements(analysis.requirements);
+          }
+          if (analysis.required_documents && analysis.required_documents.length > 0) {
+            setRequiredDocs(analysis.required_documents);
+          }
+          showToast(
+            data.isGeminiConfigured
+              ? '✨ RFP analyzed with Gemini! Specifications populated.'
+              : '✨ RFP analyzed! Pre-configured GeM standard clauses populated.'
+          );
+          setIsAiRfpOpen(false);
+        }
+      } else {
+        showToast('Failed to analyze RFP text.');
+      }
+    } catch (err) {
+      console.warn('RFP analysis notice:', err);
+      showToast('Error analyzing RFP text.');
+    } finally {
+      setIsAiRfpAnalyzing(false);
+    }
+  };
 
   // Hidden File Input Ref
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -459,6 +533,15 @@ export default function CreateTenderNewPage() {
         <div className="flex items-center space-x-3 shrink-0">
           <button
             type="button"
+            onClick={() => setIsAiRfpOpen(!isAiRfpOpen)}
+            className="px-4 py-2.5 bg-gradient-to-r from-indigo-700 to-blue-700 hover:from-indigo-800 hover:to-blue-800 text-white text-xs font-bold rounded-xl shadow-xs transition-colors flex items-center space-x-1.5 cursor-pointer"
+          >
+            <Sparkles className="w-3.5 h-3.5 text-amber-300" />
+            <span>✨ Auto-Fill with Gemini</span>
+          </button>
+
+          <button
+            type="button"
             onClick={handleSaveDraft}
             className="px-4 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs font-bold rounded-xl transition-colors flex items-center space-x-1.5 cursor-pointer border border-slate-300"
           >
@@ -474,6 +557,75 @@ export default function CreateTenderNewPage() {
           </Link>
         </div>
       </div>
+
+      {/* Gemini AI RFP Analyzer Drawer */}
+      {isAiRfpOpen && (
+        <div className="p-6 bg-gradient-to-br from-indigo-50/80 via-white to-blue-50/50 border border-indigo-200 rounded-3xl shadow-xs space-y-4 animate-fadeIn">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+            <div className="flex items-center space-x-2.5">
+              <div className="w-8 h-8 rounded-xl bg-gradient-to-tr from-indigo-600 to-blue-600 text-white flex items-center justify-center shadow-xs">
+                <Sparkles className="w-4 h-4" />
+              </div>
+              <div>
+                <h3 className="text-sm font-black text-slate-900">
+                  Gemini AI RFP Specification Parser
+                </h3>
+                <p className="text-xs text-slate-500">
+                  Paste raw tender document text or government RFP specifications to automatically generate compliance clauses and required documents.
+                </p>
+              </div>
+            </div>
+            <div className="flex items-center space-x-2 self-end sm:self-auto">
+              <button
+                type="button"
+                onClick={handleLoadSampleRfp}
+                className="px-3 py-1.5 bg-white border border-indigo-200 hover:bg-indigo-50 text-indigo-900 text-xs font-bold rounded-lg transition-colors cursor-pointer"
+              >
+                Load Sample GeM RFP
+              </button>
+              <button
+                type="button"
+                onClick={() => setIsAiRfpOpen(false)}
+                className="p-1.5 text-slate-400 hover:text-slate-600 rounded-lg hover:bg-slate-100"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+          </div>
+
+          <textarea
+            rows={5}
+            value={rfpInputText}
+            onChange={(e) => setRfpInputText(e.target.value)}
+            placeholder="Paste raw tender / RFP notice text here (e.g. Scope of work, eligibility turnover, technical criteria, mandatory certificates)..."
+            className="w-full p-3.5 text-xs rounded-2xl border border-indigo-200 bg-white text-slate-900 focus:outline-hidden focus:ring-2 focus:ring-indigo-600 leading-relaxed font-mono"
+          />
+
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pt-1">
+            <span className="text-[11px] text-slate-500">
+              ⚡ Powered by Google Gemini AI • GFR 2017 & GeM GTC Compliant • Non-Authoritative
+            </span>
+            <button
+              type="button"
+              onClick={handleAnalyzeRfp}
+              disabled={isAiRfpAnalyzing}
+              className="px-5 py-2.5 bg-indigo-900 hover:bg-indigo-800 disabled:bg-slate-400 text-white text-xs font-bold rounded-xl shadow-xs transition-colors flex items-center space-x-2 cursor-pointer"
+            >
+              {isAiRfpAnalyzing ? (
+                <>
+                  <RotateCcw className="w-3.5 h-3.5 animate-spin text-indigo-200" />
+                  <span>Analyzing RFP with Gemini...</span>
+                </>
+              ) : (
+                <>
+                  <Sparkles className="w-3.5 h-3.5 text-amber-300" />
+                  <span>Extract & Populate Tender Specifications</span>
+                </>
+              )}
+            </button>
+          </div>
+        </div>
+      )}
 
       {/* Main Form */}
       <form onSubmit={handleSubmit} className="grid grid-cols-1 lg:grid-cols-3 gap-6">

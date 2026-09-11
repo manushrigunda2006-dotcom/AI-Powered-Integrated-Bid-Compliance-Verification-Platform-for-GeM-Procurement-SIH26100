@@ -14,18 +14,22 @@ import {
   Filter,
   ShieldCheck,
   AlertOctagon,
+  Sparkles,
 } from 'lucide-react';
+import { ClauseExplanationItem } from '@/lib/gemini/types';
 
 interface ComplianceMatrixProps {
   results: ComplianceResult[];
   onViewEvidence: (evidence: Evidence, clauseCode: string, clauseTitle: string) => void;
   crossEntityWarning?: string;
+  clauseExplanations?: Record<string, ClauseExplanationItem>;
 }
 
 export function ComplianceMatrix({
   results,
   onViewEvidence,
   crossEntityWarning,
+  clauseExplanations,
 }: ComplianceMatrixProps) {
   const [activeCategory, setActiveCategory] = useState<string>('ALL');
 
@@ -216,9 +220,27 @@ export function ComplianceMatrix({
               </div>
 
               {/* Plain-English Explanation */}
-              <p className="text-xs text-slate-600 leading-relaxed font-normal mb-3">
+              <p className="text-xs text-slate-600 leading-relaxed font-normal mb-2.5">
                 {result.human_explanation}
               </p>
+
+              {/* AI Statutory Advisory Grounding */}
+              {clauseExplanations?.[result.clause_code] && (
+                <div className="mb-3 p-2.5 rounded-lg bg-indigo-50/70 border border-indigo-100 text-xs space-y-1">
+                  <div className="flex items-center justify-between">
+                    <span className="text-indigo-900 font-bold flex items-center space-x-1.5 text-[11px]">
+                      <Sparkles className="w-3 h-3 text-indigo-600" />
+                      <span>Statutory Citation: {clauseExplanations[result.clause_code].gfr_or_gem_rule_ref}</span>
+                    </span>
+                    <span className="text-[9px] bg-indigo-100 text-indigo-800 font-semibold px-1.5 py-0.2 rounded-xs">
+                      ✨ AI Grounding
+                    </span>
+                  </div>
+                  <p className="text-[11px] text-slate-700 leading-relaxed font-normal">
+                    {clauseExplanations[result.clause_code].plain_english_explanation}
+                  </p>
+                </div>
+              )}
 
               {/* Action: View Evidence Button */}
               {result.evidence && (

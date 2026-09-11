@@ -36,7 +36,10 @@ import {
   Loader2,
   CheckCircle2,
   AlertTriangle,
+  Sparkles,
 } from 'lucide-react';
+import { GeminiAiInsights } from '@/components/GeminiAiInsights';
+import { GeminiFullEvaluationResult } from '@/lib/gemini/types';
 
 export default function BidderVerificationPage() {
   const params = useParams();
@@ -54,6 +57,42 @@ export default function BidderVerificationPage() {
   const [isExporting, setIsExporting] = useState<boolean>(false);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
   const [toastType, setToastType] = useState<'success' | 'error'>('success');
+
+  // Gemini AI Copilot State
+  const [aiEvaluation, setAiEvaluation] = useState<GeminiFullEvaluationResult | null>(null);
+  const [isAiLoading, setIsAiLoading] = useState<boolean>(false);
+  const [isGeminiConfigured, setIsGeminiConfigured] = useState<boolean>(false);
+  const [geminiFallbackMsg, setGeminiFallbackMsg] = useState<string | null>(null);
+  const [showAiInsights, setShowAiInsights] = useState<boolean>(true);
+
+  const runGeminiAnalysis = async (targetBidderId?: string) => {
+    const bId = targetBidderId || bidder?.id || bidderId;
+    setIsAiLoading(true);
+    try {
+      const res = await fetch('/api/gemini', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          action: 'ANALYZE_BIDDER',
+          bidderId: bId,
+          tenderId,
+        }),
+      });
+      if (res.ok) {
+        const data = await res.json();
+        setAiEvaluation(data.aiEvaluation);
+        setIsGeminiConfigured(Boolean(data.isGeminiConfigured));
+        setGeminiFallbackMsg(data.fallbackMessage);
+        if (data.auditLogs) {
+          setAuditLogs(data.auditLogs);
+        }
+      }
+    } catch (err) {
+      console.warn('Gemini evaluation notice:', err);
+    } finally {
+      setIsAiLoading(false);
+    }
+  };
 
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -129,7 +168,10 @@ export default function BidderVerificationPage() {
       }
     }
 
-    evaluateBidder();
+    evaluateBidder().then(() => {
+      runGeminiAnalysis(bidderId);
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [bidderId, tenderId]);
 
   // Handle Officer Decision
@@ -346,6 +388,26 @@ export default function BidderVerificationPage() {
             <RotateCcw className={`w-4 h-4 ${isLoading ? 'animate-spin' : ''}`} />
           </button>
 
+          {/* Gemini AI Copilot Toggle Button */}
+          <button
+            type="button"
+            onClick={() => {
+              setShowAiInsights(!showAiInsights);
+              if (!aiEvaluation && !isAiLoading) {
+                runGeminiAnalysis();
+              }
+            }}
+            className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center space-x-1.5 cursor-pointer ${
+              showAiInsights
+                ? 'bg-gradient-to-r from-indigo-800 to-blue-900 text-white shadow-xs'
+                : 'bg-white border border-indigo-200 text-indigo-900 hover:bg-indigo-50'
+            }`}
+            title="Toggle Gemini AI Copilot Advisory Insights"
+          >
+            <Sparkles className={`w-3.5 h-3.5 ${isAiLoading ? 'animate-spin text-indigo-300' : 'text-amber-300'}`} />
+            <span>Gemini Copilot</span>
+          </button>
+
           {/* Export 65B Certificate Button */}
           <button
             type="button"
@@ -496,10 +558,21 @@ export default function BidderVerificationPage() {
           </div>
         </div>
 
-        {/* CENTER PANE (45%): Interactive Compliance Matrix */}
+        {/* CENTER PANE (45%): Interactive Compliance Matrix & Gemini Copilot */}
         <div className="lg:col-span-5 space-y-4">
+          {showAiInsights && (
+            <GeminiAiInsights
+              evaluation={aiEvaluation}
+              isLoading={isAiLoading}
+              onRefresh={() => runGeminiAnalysis(bidder?.id || bidderId)}
+              isConfigured={isGeminiConfigured}
+              fallbackMessage={geminiFallbackMsg}
+            />
+          )}
+
           <ComplianceMatrix
             results={report.clause_results}
+            clauseExplanations={aiEvaluation?.clause_explanations}
             crossEntityWarning={
               report.cross_entity_check.warning_flag
                 ? `Entity Name Mismatch Flagged: Legal Name on GST Certificate is "${report.cross_entity_check.gst_entity_name}", whereas OEM Authorization Form states "${report.cross_entity_check.oem_entity_name}". Levenshtein distance: ${report.cross_entity_check.levenshtein_distance} (Similarity: ${(
