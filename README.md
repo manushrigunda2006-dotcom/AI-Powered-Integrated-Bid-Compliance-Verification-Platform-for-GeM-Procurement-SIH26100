@@ -1,9 +1,9 @@
-# 🏛️ GeM Automated Verification & Compliance Assistant
+# 🏛️ AI-Powered Integrated Bid Compliance Verification Platform for GeM Procurement (SIH26100)
 ### Smart India Hackathon (SIH) • RegTech / GovTech Innovation MVP
 
-An explainable, human-in-the-loop verification and compliance engine designed for Government Procurement Officers on the **Government e-Marketplace (GeM)**. 
+An explainable, human-in-the-loop verification and compliance engine designed for Government Procurement Officers on the **Government e-Marketplace (GeM)**.
 
-The system automates the ingestion of Tender RFPs, parses Bidder document packets, runs strict deterministic rule-based compliance checks, simulates live external government registry validations via an extensible adapter pattern, calculates dynamic composite risk scores, and presents evidence-backed audit trails to procurement officers for final human adjudication.
+The system combines deterministic compliance rules, document verification, simulated government registry adapters, bidder cross-entity checks, dynamic risk scoring, and immutable audit trails to make procurement evaluation faster, more transparent, and tamper-evident.
 
 ---
 
@@ -28,8 +28,8 @@ The system automates the ingestion of Tender RFPs, parses Bidder document packet
 |  • GSTNAdapter (Active, Tax Score)|   |  • Turnover Check (CA UDIN validated)     |
 |  • UdyamAdapter (MSE Category)    |   |  • Past Experience Check (Years)          |
 |  • DebarmentAdapter (CPPP Blacklist)   • Statutory Expiry Check (Valid Date)      |
-+-----------------------------------+   |  • Cross-Document Entity Name Match       |
-                     │                  +-------------------------------------------+
+|                                   |   |  • Cross-Document Entity Name Match       |
++-----------------------------------+   +-------------------------------------------+
                      │                                   │
                      └───────────────────┬───────────────┘
                                          ▼
@@ -57,85 +57,48 @@ The system automates the ingestion of Tender RFPs, parses Bidder document packet
 gem-compliance-assistant/
 ├── prisma/
 │   └── schema.prisma            # Full PostgreSQL schema with 7 models & relationships
-├── python_engine/               # Dedicated Python 3.11+ / Pydantic V2 engine
-│   ├── models.py                # Pydantic validation schemas
-│   ├── normalizers.py           # Currency & Levenshtein entity matcher
-│   ├── adapters.py              # Abstract VerificationAdapter, GSTN, Udyam, Debarment
-│   └── test_engine.py           # Standalone automated test suite
+├── public/                      # Static assets, official emblem & visual badges
+├── python_engine/               # Core reference deterministic verification engine
+│   ├── adapters.py              # GSTN, Udyam, Debarment external adapters
+│   ├── normalizers.py           # Indian currency & corporate name normalizers
+│   └── test_engine.py           # Verification unit tests
 ├── src/
 │   ├── app/
-│   │   ├── layout.tsx           # GeM GovTech tricolor header & container
-│   │   ├── page.tsx             # Active Tenders Dashboard
-│   │   ├── tenders/[id]/
-│   │   │   └── bidders/
-│   │   │       ├── page.tsx     # Bidder Overview Table with Risk badges & scores
-│   │   │       └── [bidderId]/verification/
-│   │   │           └── page.tsx # 3-Pane Hero Verification Screen (35% / 45% / 20%)
-│   │   └── api/
-│   │       ├── tenders/route.ts # Fetch tender and bidder packets
-│   │       ├── evaluate/route.ts# Execute deterministic verification pipeline
-│   │       └── decision/route.ts# Commit officer adjudication to audit log
-│   ├── components/
-│   │   ├── Header.tsx           # Indian Tricolor & GeM Navigation bar
-│   │   ├── RiskGauge.tsx        # Circular SVG animated risk & score gauge
-│   │   ├── RegistryBadge.tsx    # Live GSTN, Udyam, Debarment registry badges
-│   │   ├── ComplianceMatrix.tsx # Clause-by-clause evaluation cards with citations
-│   │   ├── OfficerActionDock.tsx# Decision buttons & immutable remarks dock
-│   │   ├── EvidenceModal.tsx    # PDF OCR snippet viewer with bounding box
-│   │   └── AuditTimeline.tsx    # Immutable chronological audit trail modal
-│   └── lib/
-│       ├── types.ts             # Production-ready TypeScript domain types
-│       ├── utils.ts             # Badge, date, and currency helpers
-│       ├── normalizers/
-│       │   ├── currency.ts      # Indian currency parser (Lakhs, Crores, ₹)
-│       │   └── entity.ts        # Levenshtein distance & corporate entity normalizer
-│       ├── adapters/
-│       │   ├── base.ts          # Abstract VerificationAdapter base class
-│       │   ├── gstn.ts          # GSTN Verification Adapter
-│       │   ├── udyam.ts         # Udyam MSME Verification Adapter
-│       │   ├── debarment.ts     # CPPP Debarment / Blacklist Adapter
-│       │   └── index.ts         # Concurrent registry orchestrator
-│       ├── engine/
-│       │   ├── evaluator.ts     # Deterministic clause evaluator
-│       │   ├── scoring.ts       # Dynamic scoring & executive summary synthesizer
-│       │   └── service.ts       # In-memory store & verification pipeline
-│       └── mock-data/
-│           └── tender-seed.ts   # Realistic GeM RFP seed with 3 diverse bidders
+│   │   ├── api/                 # API Routes (evaluate, decision, export-65b, tenders)
+│   │   ├── tenders/             # Tenders list, RFP creation, bidder evaluation matrix
+│   │   ├── audit-logs/          # Cryptographic immutable audit logs
+│   │   ├── profile/             # Procurement officer profile & DSC credentials
+│   │   └── page.tsx             # Homepage hero & SIH workflow overview
+│   ├── components/              # UI components (ComplianceMatrix, RiskGauge, Header)
+│   ├── lib/
+│   │   ├── adapters/            # TypeScript registry adapters (GSTN, Udyam, Debarment)
+│   │   ├── engine/              # TypeScript deterministic evaluator & scoring engine
+│   │   ├── normalizers/         # Currency & entity normalizers
+│   │   └── supabase.ts          # Supabase client & environment helpers
+│   └── services/                # Business logic services (bidders, audit, compliance)
+└── supabase/
+    └── full_setup.sql           # Complete Supabase schema, RLS policies & indexes
 ```
 
 ---
 
-## ⚡ Quick Start Instructions
-
-### 1. Run the Full Next.js 14 Application
-```bash
-cd gem-compliance-assistant
-npm install
-npm run build
-npx next start -p 3005
-```
-Open **`http://localhost:3005`** in your browser.
-
-- **Home Page**: `http://localhost:3005/`
-- **Tender Bidders Overview**: `http://localhost:3005/tenders/tender-gem-2026-cloud/bidders`
-- **Hero Verification Screen**: `http://localhost:3005/tenders/tender-gem-2026-cloud/bidders/bidder-01/verification`
-
-### 2. Run the Python Engine Test Suite
-```bash
-cd gem-compliance-assistant/python_engine
-python test_engine.py
-```
-Expected output:
-```
-ALL PYTHON ENGINE TESTS PASSED DETERMINISTICALLY! [OK]
-```
+## 🚀 Key Features
+- **Tender/RFP Creation & Management**: Configure mandatory clauses, turnover thresholds, and statutory criteria.
+- **Automated Compliance & Eligibility Engine**: 100% deterministic rule verification without generative hallucination.
+- **External Registry Adapters**: Simulated live latency adapters for GSTN (tax compliance), Udyam (MSE status), and CPPP (central debarment blacklist).
+- **Cross-Entity Fuzzy Matching**: Corporate name normalizer with Levenshtein distance cross-checking to detect subcontracting shell entities.
+- **Dynamic Bidder Risk Scoring**: Weighted composite scoring (0-100) with automatic disqualification overrides for statutory breaches.
+- **Evidence-Based Compliance Matrix**: Interactive breakdown of statutory criteria with one-click modal evidence inspection.
+- **Human Officer Review & Adjudication**: Explainable decision dock for final human-in-the-loop qualification.
+- **Digital Signatures & Officer Credentialing**: Certified audit sign-offs with officer profiles.
+- **Immutable Audit Timeline**: Cryptographic audit trails with SHA-256 hash tracking and GFR Rule 151 compliance verification.
+- **Section 65B Certificate Export**: Instant generation and download of 65B Electronic Evidence Verification Certificates.
 
 ---
 
-## 👥 Three Seeded Bidder Personas
-
+## 🧪 Demo Scenario (Tender: Cloud Migration & Modernization RFP)
 1. **Bidder 1: Bharat Datatech Solutions Private Limited**
-   - **Score**: 96/100 • **Risk**: 🟢 LOW (Eligible for Technical Qualification)
+   - **Score**: 94/100 • **Risk**: 🟢 LOW (Compliant)
    - **Status**: CA-audited turnover of ₹5.20 Cr (exceeds ₹3.0 Cr threshold), 7 years track record, GST active (Score: 98%), Udyam Medium MSE verified, CPPP Clear, Dell OEM MAF matches entity name exactly.
 
 2. **Bidder 2: Apex Infoways India Private Limited**
@@ -152,3 +115,4 @@ ALL PYTHON ENGINE TESTS PASSED DETERMINISTICALLY! [OK]
 - **General Financial Rules (GFR) 2017**: Rule 151 debarment enforcement.
 - **Central Vigilance Commission (CVC)**: Explainable reasoning for rejection.
 - **Public Procurement Policy for MSEs (PPP-MSE)**: Udyam MSME verification.
+- **Indian Evidence Act**: Section 65B electronic compliance certificate generation.
