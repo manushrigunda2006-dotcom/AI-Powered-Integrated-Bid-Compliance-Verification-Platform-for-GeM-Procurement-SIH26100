@@ -199,7 +199,7 @@ export function OfficerActionDock({
           )}
         </button>
         <p className="text-[10px] text-center text-slate-400 mt-1.5">
-          Signed digitally by Shri V. Ramaswamy (GeM Joint Director)
+          Signed digitally by ABCD
         </p>
       </div>
     </div>

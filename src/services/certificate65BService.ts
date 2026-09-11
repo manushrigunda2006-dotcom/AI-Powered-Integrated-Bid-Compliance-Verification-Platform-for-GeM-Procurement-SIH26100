@@ -44,7 +44,7 @@ export const certificate65BService = {
       complianceResults,
       registrySummary,
       auditLogs = [],
-      officerName = 'Shri V. Ramaswamy (Joint Director, GeM Procurement)',
+      officerName = 'ABCD',
       runId,
     } = params;
 
@@ -584,9 +584,7 @@ export const certificate65BService = {
     doc.setFont('helvetica', 'normal');
     doc.setFontSize(6.5);
     doc.setTextColor(15, 23, 42);
-    doc.text('Shri V. Ramaswamy', margin + contentWidth - 36, currentY2 + 15);
-    doc.setTextColor(100, 116, 139);
-    doc.text('Joint Director, GeM', margin + contentWidth - 36, currentY2 + 19);
+    doc.text('ABCD', margin + contentWidth - 36, currentY2 + 15);
 
     // ==========================================
     // RUNNING FOOTERS ON ALL PAGES

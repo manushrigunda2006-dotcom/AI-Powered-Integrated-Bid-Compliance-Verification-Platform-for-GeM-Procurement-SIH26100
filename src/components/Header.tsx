@@ -2,7 +2,6 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
-import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import {
   FileText,
@@ -80,25 +79,10 @@ export function Header() {
           {/* HEADER LEFT BRANDING */}
           <div className="flex items-center space-x-3">
             <Link href="/" className="flex items-center space-x-2.5 group">
-              {/* Official Government of India State Emblem (Lion Capital of Ashoka) */}
-              <div className="w-[28px] h-[36px] relative shrink-0 flex items-center justify-center">
-                <Image
-                  src="/assets/government-of-india-emblem.svg"
-                  alt="State Emblem of India - Lion Capital of Ashoka"
-                  width={28}
-                  height={36}
-                  className="w-[28px] h-[36px] object-contain"
-                  priority
-                />
-              </div>
-
               <div className="flex flex-col justify-center leading-tight">
                 <div className="flex items-center space-x-1.5">
                   <span className="font-bold text-[14px] sm:text-[15px] text-[#102F5F] tracking-tight">
                     Government e-Marketplace
-                  </span>
-                  <span className="bg-[#EAF4FF] text-[#1D4ED8] text-[9.5px] font-bold px-2 py-0.5 rounded-full leading-none">
-                    GovTech AI
                   </span>
                 </div>
                 <span className="text-[9px] text-[#64748B] font-medium hidden sm:inline-block mt-0.5">
@@ -163,21 +147,18 @@ export function Header() {
                 aria-expanded={isProfileOpen}
                 aria-haspopup="true"
               >
-                {/* Circular Avatar 30px, #0F2F63 with VR */}
+                {/* Circular Avatar 30px, #0F2F63 with AB */}
                 <div className="w-[30px] h-[30px] rounded-full bg-[#0F2F63] text-white flex items-center justify-center text-[11px] font-bold shrink-0 shadow-2xs">
-                  VR
+                  AB
                 </div>
-                <div className="hidden sm:flex flex-col text-left leading-tight">
+                <div className="hidden sm:flex items-center text-left leading-tight">
                   <span className="text-[11px] font-bold text-[#102F5F] flex items-center space-x-1">
-                    <span>Shri V. Ramaswamy</span>
+                    <span>ABCD</span>
                     <ChevronDown
                       className={`w-3 h-3 text-[#64748B] transition-transform ${
                         isProfileOpen ? 'rotate-180' : ''
                       }`}
                     />
-                  </span>
-                  <span className="text-[9px] text-[#64748B]">
-                    Joint Director (GeM Procurement)
                   </span>
                 </div>
               </button>
@@ -187,20 +168,17 @@ export function Header() {
                 <div className="absolute right-0 mt-2 w-72 bg-white rounded-xl shadow-lg border border-[#D9E3EF] py-2 z-50 animate-in fade-in slide-in-from-top-2 duration-150">
                   <div className="px-3.5 py-2.5 border-b border-slate-100 flex items-start space-x-2.5">
                     <div className="w-8 h-8 rounded-full bg-[#0F2F63] text-white flex items-center justify-center text-xs font-bold shrink-0">
-                      VR
+                      AB
                     </div>
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center space-x-1">
                         <h4 className="text-xs font-bold text-[#102F5F] truncate">
-                          Shri V. Ramaswamy
+                          ABCD
                         </h4>
                         <span className="bg-[#ECFDF5] text-[#15803D] text-[9px] font-bold px-1.5 py-0.2 rounded-full">
                           Active
                         </span>
                       </div>
-                      <p className="text-[10px] text-[#475569]">
-                        Joint Director (GeM Procurement)
-                      </p>
                       <p className="text-[10px] text-[#64748B] flex items-center space-x-1 mt-0.5 truncate">
                         <Building2 className="w-3 h-3 text-[#94A3B8] shrink-0" />
                         <span className="truncate">Ministry of Commerce & Industry</span>

@@ -18,8 +18,8 @@ const GSTN_MOCK_DATABASE: Record<string, Partial<GSTNVerificationResult>> = {
   // Bidder 1: Fully Compliant Tech Provider
   '07AAACB1234F1Z8': {
     gstin: '07AAACB1234F1Z8',
-    legal_name: 'Bharat Datatech Solutions Private Limited',
-    trade_name: 'Bharat Datatech',
+    legal_name: 'BCDE Technologies Private Limited',
+    trade_name: 'BCDE Technologies',
     status: 'ACTIVE',
     registration_date: '2017-08-14',
     taxpayer_type: 'Regular',
@@ -32,8 +32,8 @@ const GSTN_MOCK_DATABASE: Record<string, Partial<GSTNVerificationResult>> = {
   // Bidder 2: Slight name variance & borderline compliance
   '27AABCA5678K1ZQ': {
     gstin: '27AABCA5678K1ZQ',
-    legal_name: 'Apex Infoways India Private Limited',
-    trade_name: 'Apex Infoways',
+    legal_name: 'CDEF Solutions Private Limited',
+    trade_name: 'CDEF Solutions',
     status: 'ACTIVE',
     registration_date: '2019-02-10',
     taxpayer_type: 'Regular',
@@ -46,8 +46,8 @@ const GSTN_MOCK_DATABASE: Record<string, Partial<GSTNVerificationResult>> = {
   // Bidder 3: Cancelled / Suspended GST
   '33AAACD9999L1ZM': {
     gstin: '33AAACD9999L1ZM',
-    legal_name: 'Global Nexus Technologies Limited',
-    trade_name: 'Nexus Tech',
+    legal_name: 'DEFG Systems Limited',
+    trade_name: 'DEFG Systems',
     status: 'CANCELLED',
     registration_date: '2015-05-20',
     taxpayer_type: 'Regular',

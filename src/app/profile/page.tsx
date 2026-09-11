@@ -27,19 +27,18 @@ export default function OfficerProfilePage() {
   const router = useRouter();
 
   const officer = {
-    name: 'Shri V. Ramaswamy',
-    designation: 'Joint Director (GeM Procurement)',
+    name: 'ABCD',
     department: 'Ministry of Commerce & Industry / MeitY',
     officerId: 'GEM-OFF-2024-8841',
-    email: 'v.ramaswamy@gem.gov.in',
-    phone: '+91 11 2309 4481',
+    email: 'abcd@gmail.com',
+    phone: '1234567890',
     jurisdiction: 'National Public Procurement & Technical Adjudication',
     securityClearance: 'Class-3 PKI / GeM Level-IV Authority',
     dscToken: {
       status: 'ACTIVE_VALID',
-      hardwareDevice: 'ePass2003 FIPS 140-2 Level 3 Cryptographic Token',
+      hardwareDevice: 'FIPS 140-2 Level 3 Cryptographic Token',
       serialNumber: '04:7A:B3:91:F8:42:C1:99',
-      issuer: 'CCA India / eMudhra Sub-CA III',
+      issuer: 'Certifying Authority / PKI Sub-CA III',
       validFrom: '15-Aug-2024',
       validTill: '14-Aug-2027',
       sha256Fingerprint: 'e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855',
@@ -56,7 +55,7 @@ export default function OfficerProfilePage() {
       {
         id: 'sig-01',
         timestamp: '10-Sep-2026 14:45 IST',
-        bidder: 'Bharat Digital Grid Ltd (Bidder 03)',
+        bidder: 'DEFG Systems Limited (Bidder 03)',
         tender: 'GEM/2026/B/894120 - Cloud Infrastructure',
         decision: 'DISQUALIFIED',
         reason: 'GFR Rule 151 Blacklist match on CPPP registry (DoE Office Memorandum)',
@@ -65,7 +64,7 @@ export default function OfficerProfilePage() {
       {
         id: 'sig-02',
         timestamp: '10-Sep-2026 11:20 IST',
-        bidder: 'Zenith Infotech Systems (Bidder 02)',
+        bidder: 'CDEF Solutions Private Limited (Bidder 02)',
         tender: 'GEM/2026/B/894120 - Cloud Infrastructure',
         decision: 'CLARIFICATION REQUESTED',
         reason: 'Turnover ₹41.20 Cr falls short of ₹50 Cr minimum threshold; MSME waiver evidence pending',
@@ -74,7 +73,7 @@ export default function OfficerProfilePage() {
       {
         id: 'sig-03',
         timestamp: '09-Sep-2026 17:15 IST',
-        bidder: 'NexGen Cloud Technologies Pvt Ltd (Bidder 01)',
+        bidder: 'BCDE Technologies Private Limited (Bidder 01)',
         tender: 'GEM/2026/B/894120 - Cloud Infrastructure',
         decision: 'QUALIFIED',
         reason: '100% Deterministic rule pass (Turnover ₹58.4 Cr, GST Active, MAF Verified)',
@@ -106,7 +105,7 @@ export default function OfficerProfilePage() {
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
           <div className="flex items-start space-x-5">
             <div className="w-20 h-20 rounded-2xl bg-linear-to-br from-blue-900 to-blue-700 text-white font-black text-2xl flex items-center justify-center ring-4 ring-blue-100 shadow-md shrink-0">
-              VR
+              AB
             </div>
             <div className="space-y-1.5">
               <div className="flex flex-wrap items-center gap-2">
@@ -125,15 +124,6 @@ export default function OfficerProfilePage() {
               <h1 className="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight">
                 {officer.name}
               </h1>
-
-              <div className="flex flex-col sm:flex-row sm:items-center gap-2 text-xs text-slate-600">
-                <span className="font-bold text-slate-800">{officer.designation}</span>
-                <span className="hidden sm:inline text-slate-300">•</span>
-                <span className="flex items-center space-x-1">
-                  <Building2 className="w-3.5 h-3.5 text-slate-400" />
-                  <span>{officer.department}</span>
-                </span>
-              </div>
 
               <p className="text-xs text-slate-500 flex items-center space-x-3 pt-1">
                 <span className="flex items-center space-x-1">

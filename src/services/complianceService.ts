@@ -101,8 +101,8 @@ export const complianceService = {
   },
 
   getFallbackComplianceResults(bidderId: string): ComplianceResult[] {
-    const isBidder3 = bidderId.endsWith('223') || bidderId.includes('03') || bidderId.includes('nexus');
-    const isBidder2 = bidderId.endsWith('222') || bidderId.includes('02') || bidderId.includes('apex');
+    const isBidder3 = bidderId.endsWith('223') || bidderId.includes('03') || bidderId.includes('defg');
+    const isBidder2 = bidderId.endsWith('222') || bidderId.includes('02') || bidderId.includes('cdef');
 
     if (isBidder3) {
       return [
@@ -264,7 +264,7 @@ export const complianceService = {
             requirement_id: 'req-r001',
             document_id: 'doc-02-audit',
             document_type: 'FINANCIAL_AUDIT',
-            document_name: 'Apex_Audited_Financials_FY23_25.pdf',
+            document_name: 'CDEF_Audited_Financials_FY23_25.pdf',
             extracted_value: '₹6.20 Crores',
             source_page: 4,
             snippet_text: 'Average 3-yr annual turnover verified: ₹6,20,00,000/-',
@@ -329,16 +329,16 @@ export const complianceService = {
           score_contribution: 0,
           threshold_display: 'OEM Authorized Partner Certification',
           extracted_display: 'NAME MISMATCH DETECTED',
-          human_explanation: 'OFFICER REVIEW REQUIRED: Legal entity name on MAF ("Apex Infoway Tech") differs from GST cert ("Apex Infoways India Pvt Ltd").',
+          human_explanation: 'OFFICER REVIEW REQUIRED: Legal entity name on MAF ("CDEF Solutions Tech") differs from GST cert ("CDEF Solutions Pvt Ltd").',
           evidence: {
             id: 'ev-02-5',
             requirement_id: 'req-r005',
             document_id: 'doc-02-maf',
             document_type: 'OEM_AUTH',
-            document_name: 'Cisco_OEM_Partner_MAF.pdf',
-            extracted_value: 'Apex Infoway Tech Pvt Ltd',
+            document_name: 'OEM_Partner_MAF.pdf',
+            extracted_value: 'CDEF Solutions Tech Pvt Ltd',
             source_page: 1,
-            snippet_text: 'Partner Name: Apex Infoway Tech Pvt Ltd',
+            snippet_text: 'Partner Name: CDEF Solutions Tech Pvt Ltd',
             confidence_score: 0.94,
           },
         },
@@ -360,7 +360,7 @@ export const complianceService = {
       ];
     }
 
-    // Bidder 01 (Bharat Datatech) - 100% Compliant
+    // Bidder 01 (BCDE Technologies) - 100% Compliant
     return [
       {
         id: 'cr-01-1',
@@ -446,7 +446,7 @@ export const complianceService = {
         score_contribution: 15,
         threshold_display: 'OEM Authorized Partner Certification',
         extracted_display: 'MATCHED & VERIFIED',
-        human_explanation: 'Valid Cisco OEM MAF submitted matching legal entity.',
+        human_explanation: 'Valid OEM MAF submitted matching legal entity.',
       },
       {
         id: 'cr-01-6',

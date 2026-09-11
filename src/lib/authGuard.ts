@@ -6,7 +6,7 @@ import { supabase, isSupabaseConfigured } from './supabase';
 
 export interface OfficerSession {
   name: string;
-  designation: string;
+  designation?: string;
   department: string;
   email: string;
   officerId: string;
@@ -66,10 +66,9 @@ export function useOfficerAuth(redirectToLogin = true) {
           const { data } = await supabase.auth.getUser();
           if (data?.user) {
             const mockSession: OfficerSession = {
-              name: data.user.user_metadata?.full_name || 'Shri V. Ramaswamy',
-              designation: 'Joint Director (GeM Procurement)',
+              name: data.user.user_metadata?.full_name || 'ABCD',
               department: 'Ministry of Commerce & Industry / MeitY',
-              email: data.user.email || 'v.ramaswamy@gem.gov.in',
+              email: data.user.email || 'abcd@gmail.com',
               officerId: 'GEM-OFF-2024-8841',
               dscValid: true,
               authenticatedAt: new Date().toISOString(),

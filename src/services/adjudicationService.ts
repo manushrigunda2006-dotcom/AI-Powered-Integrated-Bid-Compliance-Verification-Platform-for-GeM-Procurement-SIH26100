@@ -13,7 +13,7 @@ export interface CommitAdjudicationParams {
 
 export const adjudicationService = {
   async commitAdjudication(params: CommitAdjudicationParams) {
-    const { bidderId, action, remarks, officerName = 'Shri V. Ramaswamy (Joint Director, Procurement)', officerId } = params;
+    const { bidderId, action, remarks, officerName = 'ABCD', officerId } = params;
     const dbBidderId = resolveBidderId(bidderId);
 
     if (!remarks || remarks.trim().length === 0) {

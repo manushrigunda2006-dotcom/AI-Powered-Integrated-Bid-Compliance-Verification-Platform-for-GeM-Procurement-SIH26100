@@ -60,7 +60,7 @@ class VerificationStore {
     bidderId: string,
     decision: OfficerDecision,
     remarks: string,
-    officerName = 'Shri V. Ramaswamy (Joint Director, Procurement)'
+    officerName = 'ABCD'
   ): Bidder {
     const bidder = this.bidders.get(bidderId);
     if (!bidder) throw new Error(`Bidder not found: ${bidderId}`);

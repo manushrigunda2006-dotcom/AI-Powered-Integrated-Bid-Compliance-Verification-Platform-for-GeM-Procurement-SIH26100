@@ -30,7 +30,7 @@ export async function POST(request: Request) {
       bidderId,
       action,
       remarks,
-      officerName: officerName || 'Shri V. Ramaswamy (Joint Director, Procurement)',
+      officerName: officerName || 'ABCD',
     });
 
     // Parallelize independent post-adjudication lookups

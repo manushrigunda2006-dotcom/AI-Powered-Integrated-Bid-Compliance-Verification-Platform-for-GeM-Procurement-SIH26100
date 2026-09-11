@@ -57,7 +57,7 @@ The system combines deterministic compliance rules, document verification, simul
 gem-compliance-assistant/
 ├── prisma/
 │   └── schema.prisma            # Full PostgreSQL schema with 7 models & relationships
-├── public/                      # Static assets, official emblem & visual badges
+├── public/                      # Static assets & visual badges
 ├── python_engine/               # Core reference deterministic verification engine
 │   ├── adapters.py              # GSTN, Udyam, Debarment external adapters
 │   ├── normalizers.py           # Indian currency & corporate name normalizers
@@ -97,15 +97,15 @@ gem-compliance-assistant/
 ---
 
 ## 🧪 Demo Scenario (Tender: Cloud Migration & Modernization RFP)
-1. **Bidder 1: Bharat Datatech Solutions Private Limited**
+1. **Bidder 1: BCDE Technologies Private Limited**
    - **Score**: 94/100 • **Risk**: 🟢 LOW (Compliant)
-   - **Status**: CA-audited turnover of ₹5.20 Cr (exceeds ₹3.0 Cr threshold), 7 years track record, GST active (Score: 98%), Udyam Medium MSE verified, CPPP Clear, Dell OEM MAF matches entity name exactly.
+   - **Status**: CA-audited turnover of ₹5.20 Cr (exceeds ₹3.0 Cr threshold), 7 years track record, GST active (Score: 98%), Udyam Medium MSE verified, CPPP Clear, OEM MAF matches entity name exactly.
 
-2. **Bidder 2: Apex Infoways India Private Limited**
+2. **Bidder 2: CDEF Solutions Private Limited**
    - **Score**: 76/100 • **Risk**: 🟡 MEDIUM (Officer Clarification Required)
-   - **Status**: Turnover of ₹3.15 Cr meets threshold, but **Cross-Document Entity Name Mismatch** detected between GST certificate (*Apex Infoways India Private Limited*) and Cisco OEM Authorization (*Apex Infoways Technologies Pvt Ltd*). Levenshtein distance triggers `⚠️ ENTITY_NAME_MISMATCH`.
+   - **Status**: Turnover of ₹3.15 Cr meets threshold, but **Cross-Document Entity Name Mismatch** detected between GST certificate (*CDEF Solutions Private Limited*) and OEM Authorization (*CDEF Solutions Technologies Pvt Ltd*). Levenshtein distance triggers `⚠️ ENTITY_NAME_MISMATCH`.
 
-3. **Bidder 3: Global Nexus Technologies Limited**
+3. **Bidder 3: DEFG Systems Limited**
    - **Score**: 28/100 • **Risk**: 🔴 HIGH (Disqualification Recommended)
    - **Status**: Fatal statutory breaches: Listed in **CPPP Central Debarment Registry** (Order MOD/PROC/DEBAR/2023/1892), GST registration is **CANCELLED**, turnover is sub-par (₹1.80 Cr), and OEM Authorization is **MISSING**. Automatic override caps score and mandates disqualification under GFR Rule 151.
 

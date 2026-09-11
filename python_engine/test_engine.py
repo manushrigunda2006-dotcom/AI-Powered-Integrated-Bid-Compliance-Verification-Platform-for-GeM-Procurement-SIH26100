@@ -18,21 +18,21 @@ def test_currency_normalizer():
 def test_entity_normalization():
     assert normalize_entity_name("ABC Technologies Pvt Ltd") == "abc"
     assert normalize_entity_name("ABC Technology Private Limited") == "abc"
-    assert normalize_entity_name("Bharat Datatech Solutions Private Limited") == "bharat datatech"
+    assert normalize_entity_name("BCDE Technologies Private Limited") == "bcde"
 
 
 def test_cross_entity_verification():
     # Exact match after suffix normalization
     status, ratio = cross_verify_entities(
-        "Bharat Datatech Solutions Private Limited",
-        "Bharat Datatech Solutions Pvt Ltd"
+        "BCDE Technologies Private Limited",
+        "BCDE Technologies Pvt Ltd"
     )
     assert status == "EXACT_MATCH"
 
     # Mild typo / naming variation (Levenshtein > 0 and <= 0.2)
     status_mismatch, ratio_mismatch = cross_verify_entities(
-        "Apex Infoways Private Limited",
-        "Apex Infowayz Private Limited"
+        "CDEF Solutions Private Limited",
+        "CDEF Solutionz Private Limited"
     )
     assert status_mismatch == "ENTITY_NAME_MISMATCH"
     assert 0.0 < ratio_mismatch <= 0.20

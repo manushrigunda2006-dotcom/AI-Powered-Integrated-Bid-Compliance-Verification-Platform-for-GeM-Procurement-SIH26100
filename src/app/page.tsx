@@ -27,8 +27,8 @@ export default function HomePage() {
   const [activeModal, setActiveModal] = useState<'engine' | 'adapters' | 'crosscheck' | null>(null);
 
   // Levenshtein test state for Cross-Entity modal
-  const [entity1, setEntity1] = useState('Bharat Datatech Solutions Private Limited');
-  const [entity2, setEntity2] = useState('Bharat Datatech Solutions Pvt. Ltd.');
+  const [entity1, setEntity1] = useState('BCDE Technologies Private Limited');
+  const [entity2, setEntity2] = useState('BCDE Technologies Pvt. Ltd.');
 
   const calculateSimilarity = (s1: string, s2: string): { distance: number; score: number } => {
     const a = s1.trim().toLowerCase();
@@ -85,10 +85,7 @@ export default function HomePage() {
 
             {/* Hero Description */}
             <p className="text-[#365A7D] text-[11px] sm:text-[11.5px] leading-[1.5] max-w-[620px] font-normal">
-              Explainable, human-in-the-loop compliance evaluation engine for Tender RFP documents.
-              Combines strict deterministic rule verification, simulated external government registry
-              adapters (GSTN, Udyam MSME, CPPP Debarment), Levenshtein corporate entity cross-checking,
-              and dynamic risk scoring.
+              An AI-powered bid compliance and verification platform that helps procurement teams analyze tender documents, verify bidder eligibility, identify compliance gaps, assess risks, and maintain a transparent audit trail. The system combines AI-assisted document analysis with rule-based verification to make procurement review faster, clearer, and more reliable.
             </p>
 
             {/* Hero Buttons */}
@@ -114,22 +111,7 @@ export default function HomePage() {
           </div>
 
           {/* HERO RIGHT SIDE (~35% of Hero Width: 4 of 12 cols) */}
-          <div className="lg:col-span-4 relative flex flex-col justify-start p-5 sm:p-6 lg:pl-0 z-10">
-            {/* Upper Right: Transparent Procurement Stronger India + Tricolor Line */}
-            <div className="z-10 self-start space-y-1">
-              <div className="text-[#123B73] text-[13px] font-extrabold leading-tight tracking-tight">
-                <div>Transparent</div>
-                <div>Procurement</div>
-                <div>Stronger India</div>
-              </div>
-              {/* Tiny Indian Tricolor Accent */}
-              <div className="h-[3px] w-12 flex rounded-xs overflow-hidden shadow-2xs">
-                <div className="w-1/3 bg-[#FF9933]" />
-                <div className="w-1/3 bg-[#FFFFFF]" />
-                <div className="w-1/3 bg-[#138808]" />
-              </div>
-            </div>
-          </div>
+          <div className="lg:col-span-4 relative flex flex-col justify-start p-5 sm:p-6 lg:pl-0 z-10" />
         </div>
 
         {/* Decorative Government Building Image with Indian National Flag (Lower-Right Hero Visual) */}
@@ -406,7 +388,7 @@ export default function HomePage() {
                 </span>
               </div>
               <div className="font-bold text-[#0F2F63] group-hover:text-[#1D4ED8] transition-colors truncate text-[12px]">
-                Bharat Datatech Solutions Private Limited
+                BCDE Technologies Private Limited
               </div>
               <div className="text-[10.5px] text-[#64748B] flex justify-between pt-0.5">
                 <span>Score: <strong className="text-[#0F2F63]">100/100</strong></span>
@@ -428,7 +410,7 @@ export default function HomePage() {
                 </span>
               </div>
               <div className="font-bold text-[#0F2F63] group-hover:text-[#D97706] transition-colors truncate text-[12px]">
-                Apex Infoways India Private Limited
+                CDEF Solutions Private Limited
               </div>
               <div className="text-[10.5px] text-[#64748B] flex justify-between pt-0.5">
                 <span>Score: <strong className="text-[#0F2F63]">85/100</strong></span>
@@ -450,7 +432,7 @@ export default function HomePage() {
                 </span>
               </div>
               <div className="font-bold text-[#0F2F63] group-hover:text-[#DC2626] transition-colors truncate text-[12px]">
-                Global Nexus Technologies Limited
+                DEFG Systems Limited
               </div>
               <div className="text-[10.5px] text-[#64748B] flex justify-between pt-0.5">
                 <span>Score: <strong className="text-[#0F2F63]">2/100</strong></span>

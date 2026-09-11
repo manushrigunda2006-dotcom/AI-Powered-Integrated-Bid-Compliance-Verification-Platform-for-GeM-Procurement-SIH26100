@@ -187,7 +187,7 @@ export default function BidderVerificationPage() {
           bidderId: bidder?.id || bidderId,
           decision,
           remarks,
-          officerName: 'Shri V. Ramaswamy (Joint Director, Procurement)',
+          officerName: 'ABCD',
         }),
       });
 
@@ -263,7 +263,7 @@ export default function BidderVerificationPage() {
       const nameUpper = file.name.toUpperCase();
       if (nameUpper.includes('GST')) docType = 'GST_CERT';
       else if (nameUpper.includes('UDYAM') || nameUpper.includes('MSME')) docType = 'UDYAM';
-      else if (nameUpper.includes('OEM') || nameUpper.includes('MAF') || nameUpper.includes('CISCO') || nameUpper.includes('DELL')) docType = 'OEM_AUTH';
+      else if (nameUpper.includes('OEM') || nameUpper.includes('MAF')) docType = 'OEM_AUTH';
       else if (nameUpper.includes('EXP') || nameUpper.includes('WORK')) docType = 'WORK_ORDER_EXPERIENCE';
       else if (nameUpper.includes('AFFIDAVIT') || nameUpper.includes('BLACK')) docType = 'AFFIDAVIT_BLACKLIST';
 

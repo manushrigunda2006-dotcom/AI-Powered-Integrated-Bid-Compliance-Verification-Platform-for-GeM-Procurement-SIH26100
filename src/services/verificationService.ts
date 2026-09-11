@@ -36,13 +36,13 @@ export const verificationService = {
       const msmeRecord = data.find((r: any) => r.registry_type === 'MSME_UDYAM');
       const cpppRecord = data.find((r: any) => r.registry_type === 'CPPP_BLACKLIST');
 
-      const isBidder3 = dbBidderId.endsWith('223') || bidderId.includes('03') || bidderId.includes('nexus');
+      const isBidder3 = dbBidderId.endsWith('223') || bidderId.includes('03') || bidderId.includes('defg');
 
       return {
         gstn: {
           gstin: gstRecord?.registration_number || (isBidder3 ? '33AAACD9999L1ZM' : '07AAACB1234F1Z8'),
-          legal_name: gstRecord?.verified_name || (isBidder3 ? 'Global Nexus Technologies Limited' : 'Bharat Datatech Solutions Private Limited'),
-          trade_name: gstRecord?.verified_name || (isBidder3 ? 'Global Nexus Tech' : 'Bharat Datatech'),
+          legal_name: gstRecord?.verified_name || (isBidder3 ? 'DEFG Systems Limited' : 'BCDE Technologies Private Limited'),
+          trade_name: gstRecord?.verified_name || (isBidder3 ? 'DEFG Systems' : 'BCDE Technologies'),
           status: (gstRecord?.status as any) || (isBidder3 ? 'CANCELLED' : 'ACTIVE'),
           registration_date: '2017-08-14',
           taxpayer_type: 'Regular',
@@ -54,7 +54,7 @@ export const verificationService = {
         },
         udyam: {
           udyam_number: msmeRecord?.registration_number || 'UDYAM-DL-01-0089123',
-          enterprise_name: msmeRecord?.verified_name || (isBidder3 ? 'Global Nexus Technologies Limited' : 'Bharat Datatech Solutions Private Limited'),
+          enterprise_name: msmeRecord?.verified_name || (isBidder3 ? 'DEFG Systems Limited' : 'BCDE Technologies Private Limited'),
           msme_category: 'Medium',
           major_activity: 'Services',
           registration_date: '2020-07-15',
@@ -119,15 +119,15 @@ export const verificationService = {
   },
 
   getSimulatedSummaryForBidder(bidderId: string): ExternalRegistrySummary {
-    const isBidder3 = bidderId.endsWith('223') || bidderId.includes('03') || bidderId.includes('nexus');
-    const isBidder2 = bidderId.endsWith('222') || bidderId.includes('02') || bidderId.includes('apex');
+    const isBidder3 = bidderId.endsWith('223') || bidderId.includes('03') || bidderId.includes('defg');
+    const isBidder2 = bidderId.endsWith('222') || bidderId.includes('02') || bidderId.includes('cdef');
 
     if (isBidder3) {
       return {
         gstn: {
           gstin: '33AAACD9999L1ZM',
-          legal_name: 'Global Nexus Technologies Limited',
-          trade_name: 'Global Nexus Tech',
+          legal_name: 'DEFG Systems Limited',
+          trade_name: 'DEFG Systems',
           status: 'CANCELLED',
           registration_date: '2015-05-10',
           taxpayer_type: 'Regular',
@@ -139,7 +139,7 @@ export const verificationService = {
         },
         udyam: {
           udyam_number: 'UDYAM-TN-03-0099881',
-          enterprise_name: 'Global Nexus Technologies Limited',
+          enterprise_name: 'DEFG Systems Limited',
           msme_category: 'Medium',
           major_activity: 'Services',
           registration_date: '2020-09-12',
@@ -165,8 +165,8 @@ export const verificationService = {
       return {
         gstn: {
           gstin: '27AABC5678K1ZQ',
-          legal_name: 'Apex Infoways India Private Limited',
-          trade_name: 'Apex Infoways',
+          legal_name: 'CDEF Solutions Private Limited',
+          trade_name: 'CDEF Solutions',
           status: 'ACTIVE',
           registration_date: '2019-02-10',
           taxpayer_type: 'Regular',
@@ -178,7 +178,7 @@ export const verificationService = {
         },
         udyam: {
           udyam_number: 'UDYAM-MH-02-0045612',
-          enterprise_name: 'Apex Infoways India Private Limited',
+          enterprise_name: 'CDEF Solutions Private Limited',
           msme_category: 'Small',
           major_activity: 'Services',
           registration_date: '2020-11-20',
@@ -200,8 +200,8 @@ export const verificationService = {
     return {
       gstn: {
         gstin: '07AAACB1234F1Z8',
-        legal_name: 'Bharat Datatech Solutions Private Limited',
-        trade_name: 'Bharat Datatech',
+        legal_name: 'BCDE Technologies Private Limited',
+        trade_name: 'BCDE Technologies',
         status: 'ACTIVE',
         registration_date: '2017-08-14',
         taxpayer_type: 'Regular',
@@ -213,7 +213,7 @@ export const verificationService = {
       },
       udyam: {
         udyam_number: 'UDYAM-DL-01-0089123',
-        enterprise_name: 'Bharat Datatech Solutions Private Limited',
+        enterprise_name: 'BCDE Technologies Private Limited',
         msme_category: 'Medium',
         major_activity: 'Services',
         registration_date: '2020-07-15',

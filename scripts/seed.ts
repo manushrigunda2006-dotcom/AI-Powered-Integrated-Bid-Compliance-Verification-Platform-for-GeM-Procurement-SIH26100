@@ -43,15 +43,15 @@ async function seed() {
   const { error: profileError } = await supabase.from('profiles').upsert([
     {
       id: '00000000-0000-0000-0000-000000000001',
-      full_name: 'Shri V. Ramaswamy',
-      email: 'v.ramaswamy@gem.gov.in',
+      full_name: 'ABCD',
+      email: 'abcd@gmail.com',
       role: 'OFFICER',
-      designation: 'Joint Director (GeM Procurement)',
+      designation: '',
       department: 'Ministry of Commerce & Industry',
     },
   ]);
   if (profileError) console.warn('Profile seed note:', profileError.message);
-  else console.log('✅ Profile seeded: Shri V. Ramaswamy');
+  else console.log('✅ Profile seeded: ABCD');
 
   // 2. Insert Tender
   const { error: tenderError } = await supabase.from('tenders').upsert([
@@ -129,7 +129,7 @@ async function seed() {
       tender_id: '11111111-1111-1111-1111-111111111111',
       clause_code: 'R005',
       title: 'OEM Authorization Form (MAF)',
-      description: 'Bidder must submit a verifiable Manufacturer Authorization Form from OEM (Cisco/Dell/HPE) specifically tied to this GeM Tender. Legal entity name must match bidder documentation.',
+      description: 'Bidder must submit a verifiable Manufacturer Authorization Form from authorized OEM specifically tied to this GeM Tender. Legal entity name must match bidder documentation.',
       category: 'OEM',
       mandatory: true,
       threshold: 'OEM Authorized Partner Certification',
@@ -159,8 +159,8 @@ async function seed() {
       id: '22222222-2222-2222-2222-222222222221',
       tender_id: '11111111-1111-1111-1111-111111111111',
       bidder_code: 'BIDDER-01',
-      company_name: 'Bharat Datatech Solutions Private Limited',
-      email: 'compliance@bharatdatatech.in',
+      company_name: 'BCDE Technologies Private Limited',
+      email: 'compliance@bcdetech.in',
       gstin: '07AAACB1234F1Z8',
       pan: 'AAACB1234F',
       udyam_number: 'UDYAM-DL-01-0089123',
@@ -175,8 +175,8 @@ async function seed() {
       id: '22222222-2222-2222-2222-222222222222',
       tender_id: '11111111-1111-1111-1111-111111111111',
       bidder_code: 'BIDDER-02',
-      company_name: 'Apex Infoways India Private Limited',
-      email: 'tenders@apexinfoways.co.in',
+      company_name: 'CDEF Solutions Private Limited',
+      email: 'tenders@cdefsolutions.co.in',
       gstin: '27AABC5678K1ZQ',
       pan: 'AABCA5678K',
       udyam_number: 'UDYAM-MH-02-0045612',
@@ -191,8 +191,8 @@ async function seed() {
       id: '22222222-2222-2222-2222-222222222223',
       tender_id: '11111111-1111-1111-1111-111111111111',
       bidder_code: 'BIDDER-03',
-      company_name: 'Global Nexus Technologies Limited',
-      email: 'karthik@nexusglobitech.org',
+      company_name: 'DEFG Systems Limited',
+      email: 'contact@defgsystems.org',
       gstin: '33AAACD9999L1ZM',
       pan: 'AAACD9999L',
       udyam_number: 'UDYAM-TN-03-0099881',

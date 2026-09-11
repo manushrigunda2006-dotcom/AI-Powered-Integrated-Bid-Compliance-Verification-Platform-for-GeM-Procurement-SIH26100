@@ -15,7 +15,7 @@ export interface UdyamAdapterInput {
 const UDYAM_MOCK_DATABASE: Record<string, Partial<UdyamVerificationResult>> = {
   'UDYAM-DL-01-0089123': {
     udyam_number: 'UDYAM-DL-01-0089123',
-    enterprise_name: 'Bharat Datatech Solutions Private Limited',
+    enterprise_name: 'BCDE Technologies Private Limited',
     msme_category: 'Medium',
     major_activity: 'Services',
     registration_date: '2020-09-15',
@@ -25,7 +25,7 @@ const UDYAM_MOCK_DATABASE: Record<string, Partial<UdyamVerificationResult>> = {
   },
   'UDYAM-MH-02-0045612': {
     udyam_number: 'UDYAM-MH-02-0045612',
-    enterprise_name: 'Apex Infoways India Private Limited',
+    enterprise_name: 'CDEF Solutions Private Limited',
     msme_category: 'Small',
     major_activity: 'Services',
     registration_date: '2021-03-22',
@@ -35,7 +35,7 @@ const UDYAM_MOCK_DATABASE: Record<string, Partial<UdyamVerificationResult>> = {
   },
   'UDYAM-TN-03-0099881': {
     udyam_number: 'UDYAM-TN-03-0099881',
-    enterprise_name: 'Global Nexus Technologies Limited',
+    enterprise_name: 'DEFG Systems Limited',
     msme_category: 'Medium',
     major_activity: 'Manufacturing',
     registration_date: '2019-11-05',

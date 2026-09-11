@@ -18,7 +18,7 @@ import {
 
 export default function LoginPage() {
   const router = useRouter();
-  const [officerId, setOfficerId] = useState('v.ramaswamy@gem.gov.in');
+  const [officerId, setOfficerId] = useState('abcd@gmail.com');
   const [password, setPassword] = useState('••••••••••••');
   const [authMode, setAuthMode] = useState<'CREDENTIALS' | 'PARICHAY' | 'DSC'>('CREDENTIALS');
   const [isLoading, setIsLoading] = useState(false);
@@ -33,10 +33,9 @@ export default function LoginPage() {
       setLoginSuccess(true);
       if (typeof window !== 'undefined') {
         localStorage.setItem('gem_officer_session', JSON.stringify({
-          name: 'Shri V. Ramaswamy',
-          designation: 'Joint Director (GeM Procurement)',
+          name: 'ABCD',
           department: 'Ministry of Commerce & Industry / MeitY',
-          email: 'v.ramaswamy@gem.gov.in',
+          email: 'abcd@gmail.com',
           officerId: 'GEM-OFF-2024-8841',
           dscValid: true,
           authenticatedAt: new Date().toISOString(),
@@ -51,7 +50,7 @@ export default function LoginPage() {
   return (
     <div className="min-h-[80vh] flex flex-col justify-center py-6 sm:px-6 lg:px-8">
       <div className="sm:mx-auto sm:w-full sm:max-w-md text-center space-y-3">
-        {/* Emblem / GeM Badge */}
+        {/* GeM Badge */}
         <div className="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-linear-to-br from-blue-900 to-blue-700 text-white font-black text-2xl shadow-md ring-4 ring-blue-100">
           GeM
         </div>
@@ -84,11 +83,11 @@ export default function LoginPage() {
             </div>
             <div className="flex items-center space-x-3">
               <div className="w-9 h-9 rounded-full bg-blue-900 text-white flex items-center justify-center font-bold text-xs shrink-0">
-                VR
+                AB
               </div>
               <div className="min-w-0 flex-1 text-xs">
-                <div className="font-bold text-slate-900 truncate">Shri V. Ramaswamy</div>
-                <div className="text-[11px] text-slate-500 truncate">Joint Director (GeM Procurement)</div>
+                <div className="font-bold text-slate-900 truncate">ABCD</div>
+                <div className="text-[11px] text-slate-500 truncate">abcd@gmail.com</div>
               </div>
             </div>
             <button
@@ -106,7 +105,7 @@ export default function LoginPage() {
                 <span>Authenticating Officer...</span>
               ) : (
                 <>
-                  <span>1-Click Sign In as Joint Director</span>
+                  <span>1-Click Sign In as ABCD</span>
                   <ArrowRight className="w-3.5 h-3.5" />
                 </>
               )}
@@ -165,7 +164,7 @@ export default function LoginPage() {
                       onChange={(e) => setOfficerId(e.target.value)}
                       required
                       className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-xs text-slate-900 focus:outline-hidden focus:ring-2 focus:ring-blue-600 font-medium"
-                      placeholder="officer@gem.gov.in"
+                      placeholder="abcd@gmail.com"
                     />
                   </div>
                 </div>
