@@ -1,0 +1,226 @@
+// Prisma Schema for GeM Automated Verification and Compliance Assistant
+// Target: PostgreSQL (Compatible with Supabase / RDS / Local Postgres)
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum RequirementCategory {
+  FINANCIAL
+  EXPERIENCE
+  STATUTORY
+  TECHNICAL
+  OEM
+}
+
+enum RuleType {
+  NUMERIC_GTE
+  DATE_BEFORE
+  EXACT_MATCH
+  EXISTS
+}
+
+enum RiskLevel {
+  LOW
+  MEDIUM
+  HIGH
+}
+
+enum OfficerDecision {
+  PENDING
+  QUALIFIED
+  DISQUALIFIED
+  CLARIFICATION_REQUESTED
+}
+
+enum DocumentType {
+  GST_CERT
+  UDYAM
+  UDYAM_CERT
+  OEM_AUTH
+  FINANCIAL_AUDIT
+  AFFIDAVIT_BLACKLIST
+  WORK_ORDER_EXPERIENCE
+  TECHNICAL_BID
+  PAN_CERT
+  BANK_GUARANTEE
+  OTHER
+}
+
+enum ComplianceStatus {
+  COMPLIANT
+  NON_COMPLIANT
+  INCONSISTENT
+  MISSING_DOC
+  FLAGGED
+}
+
+enum AuditActor {
+  SYSTEM
+  OFFICER
+}
+
+model Tender {
+  id               String        @id @default(uuid())
+  tender_number    String        @unique
+  title            String
+  department       String
+  estimated_budget Decimal       @db.Decimal(15, 2)
+  deadline         DateTime
+  created_at       DateTime      @default(now())
+
+  // Relationships
+  requirements       Requirement[]
+  required_documents TenderRequiredDocument[]
+  bidders            Bidder[]
+  audit_logs         AuditLog[]
+
+  @@index([tender_number])
+  @@index([deadline])
+  @@map("tenders")
+}
+
+model TenderRequiredDocument {
+  id            String       @id @default(uuid())
+  tender_id     String
+  document_type DocumentType
+  display_name  String
+  storage_path  String?
+  file_size     Int?
+  is_mandatory  Boolean      @default(true)
+  created_at    DateTime     @default(now())
+
+  // Relationships
+  tender        Tender       @relation(fields: [tender_id], references: [id], onDelete: Cascade)
+
+  @@index([tender_id])
+  @@index([document_type])
+  @@map("tender_required_documents")
+}
+
+model Requirement {
+  id                 String              @id @default(uuid())
+  tender_id          String
+  clause_code        String              // e.g. "R001"
+  category           RequirementCategory
+  rule_type          RuleType
+  threshold_value    String
+  is_mandatory       Boolean             @default(true)
+  created_at         DateTime            @default(now())
+
+  // Relationships
+  tender             Tender              @relation(fields: [tender_id], references: [id], onDelete: Cascade)
+  evidences          Evidence[]
+  compliance_results ComplianceResult[]
+
+  @@unique([tender_id, clause_code])
+  @@index([tender_id])
+  @@index([category])
+  @@map("requirements")
+}
+
+model Bidder {
+  id                 String             @id @default(uuid())
+  tender_id          String
+  company_name       String
+  gst_number         String
+  pan_number         String
+  udyam_registration String?
+  overall_score      Decimal            @default(0.00) @db.Decimal(5, 2)
+  risk_level         RiskLevel          @default(LOW)
+  officer_decision   OfficerDecision    @default(PENDING)
+  created_at         DateTime           @default(now())
+  updated_at         DateTime           @updatedAt
+
+  // Relationships
+  tender             Tender             @relation(fields: [tender_id], references: [id], onDelete: Cascade)
+  documents          Document[]
+  compliance_results ComplianceResult[]
+  audit_logs         AuditLog[]
+
+  @@index([tender_id])
+  @@index([gst_number])
+  @@index([pan_number])
+  @@index([risk_level])
+  @@map("bidders")
+}
+
+model Document {
+  id              String       @id @default(uuid())
+  bidder_id       String
+  file_name       String
+  doc_type        DocumentType
+  file_url        String
+  parsed_metadata Json         // JSONB in PostgreSQL: stores OCR extracted fields
+  created_at      DateTime     @default(now())
+
+  // Relationships
+  bidder          Bidder       @relation(fields: [bidder_id], references: [id], onDelete: Cascade)
+  evidences       Evidence[]
+
+  @@index([bidder_id])
+  @@index([doc_type])
+  @@map("documents")
+}
+
+model Evidence {
+  id               String       @id @default(uuid())
+  requirement_id   String
+  document_id      String
+  extracted_value  String
+  source_page      Int
+  snippet_text     String       @db.Text
+  confidence_score Decimal      @db.Decimal(4, 3) // 0.000 to 1.000
+  created_at       DateTime     @default(now())
+
+  // Relationships
+  requirement      Requirement  @relation(fields: [requirement_id], references: [id], onDelete: Cascade)
+  document         Document     @relation(fields: [document_id], references: [id], onDelete: Cascade)
+
+  @@index([requirement_id])
+  @@index([document_id])
+  @@map("evidences")
+}
+
+model ComplianceResult {
+  id                String           @id @default(uuid())
+  requirement_id    String
+  bidder_id         String
+  status            ComplianceStatus
+  risk_weight       Decimal          @db.Decimal(5, 2) // Penalty weight
+  human_explanation String           @db.Text
+  created_at        DateTime         @default(now())
+
+  // Relationships
+  requirement       Requirement      @relation(fields: [requirement_id], references: [id], onDelete: Cascade)
+  bidder            Bidder           @relation(fields: [bidder_id], references: [id], onDelete: Cascade)
+
+  @@unique([requirement_id, bidder_id])
+  @@index([bidder_id])
+  @@index([status])
+  @@map("compliance_results")
+}
+
+model AuditLog {
+  id         String     @id @default(uuid())
+  tender_id  String
+  bidder_id  String
+  actor      AuditActor
+  action     String     // e.g. "OFFICER_APPROVED_QUALIFICATION", "SYSTEM_COMPLIANCE_EVALUATED"
+  timestamp  DateTime   @default(now())
+  metadata   Json       // JSONB: audit trail details, before/after states, IP, remarks
+
+  // Relationships
+  tender     Tender     @relation(fields: [tender_id], references: [id], onDelete: Cascade)
+  bidder     Bidder     @relation(fields: [bidder_id], references: [id], onDelete: Cascade)
+
+  @@index([tender_id])
+  @@index([bidder_id])
+  @@index([timestamp])
+  @@map("audit_logs")
+}

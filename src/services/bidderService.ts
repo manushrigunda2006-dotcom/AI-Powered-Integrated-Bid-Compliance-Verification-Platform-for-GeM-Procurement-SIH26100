@@ -1,0 +1,155 @@
+import { supabase, isSupabaseConfigured } from '../lib/supabase';
+import { MOCK_BIDDERS } from '../lib/mock-data/tender-seed';
+import { Bidder, OfficerDecision, RiskLevel } from '../lib/types';
+import { documentService } from './documentService';
+import { complianceService } from './complianceService';
+import { resolveTenderId, resolveBidderId } from '../lib/idMapper';
+
+export const bidderService = {
+  async getBiddersForTender(tenderId: string): Promise<Bidder[]> {
+    const dbTenderId = resolveTenderId(tenderId);
+
+    if (!isSupabaseConfigured()) {
+      return MOCK_BIDDERS;
+    }
+
+    try {
+      let { data, error } = await (supabase.from('bidders') as any)
+        .select('*')
+        .eq('tender_id', dbTenderId)
+        .order('bidder_code', { ascending: true });
+
+      if (error || !data || data.length === 0) {
+        // Retry fetching all bidders if tender_id matching returned 0
+        const { data: allBidders } = await (supabase.from('bidders') as any)
+          .select('*')
+          .order('bidder_code', { ascending: true });
+        data = allBidders;
+      }
+
+      if (!data || data.length === 0) {
+        return MOCK_BIDDERS;
+      }
+
+      return data.map((b: any) => this.mapDbRowToBidder(b));
+    } catch {
+      return MOCK_BIDDERS;
+    }
+  },
+
+  async getBidder(bidderId: string): Promise<Bidder | null> {
+    const dbBidderId = resolveBidderId(bidderId);
+
+    if (!isSupabaseConfigured()) {
+      return MOCK_BIDDERS.find((b) => b.id === bidderId || b.id.includes(bidderId)) || MOCK_BIDDERS[0];
+    }
+
+    try {
+      let { data, error } = await (supabase.from('bidders') as any)
+        .select('*')
+        .eq('id', dbBidderId)
+        .single();
+
+      if (error || !data) {
+        // Try searching by bidder_code
+        const codeMatch = bidderId.toUpperCase().replace('BIDDER-', 'BIDDER-0');
+        const { data: codeData } = await (supabase.from('bidders') as any)
+          .select('*')
+          .eq('bidder_code', codeMatch)
+          .single();
+
+        data = codeData;
+      }
+
+      if (!data) {
+        const fallback = MOCK_BIDDERS.find((b) => b.id === bidderId || b.id.includes(bidderId));
+        return fallback || MOCK_BIDDERS[0];
+      }
+
+      const bidder = this.mapDbRowToBidder(data);
+      const [docs, compliance] = await Promise.all([
+        documentService.getDocumentsForBidder(bidder.id),
+        complianceService.getComplianceResultsForBidder(bidder.id),
+      ]);
+
+      return {
+        ...bidder,
+        documents: docs,
+        compliance_results: compliance,
+      };
+    } catch {
+      return MOCK_BIDDERS.find((b) => b.id === bidderId || b.id.includes(bidderId)) || MOCK_BIDDERS[0];
+    }
+  },
+
+  async updateBidderStatus(
+    bidderId: string,
+    status: string,
+    decision: OfficerDecision,
+    decisionNotes: string,
+    score?: number,
+    riskLevel?: RiskLevel
+  ): Promise<boolean> {
+    const dbBidderId = resolveBidderId(bidderId);
+
+    if (!isSupabaseConfigured()) {
+      const mockBidder = MOCK_BIDDERS.find((b) => b.id === bidderId || b.id.includes(bidderId));
+      if (mockBidder) {
+        mockBidder.officer_decision = decision;
+        mockBidder.decision_notes = decisionNotes;
+        mockBidder.decision_timestamp = new Date().toISOString();
+        if (score !== undefined) mockBidder.overall_score = score;
+        if (riskLevel !== undefined) mockBidder.risk_level = riskLevel;
+      }
+      return true;
+    }
+
+    try {
+      const updateData: Record<string, unknown> = {
+        status,
+        updated_at: new Date().toISOString(),
+      };
+      if (score !== undefined) updateData.compliance_score = score;
+      if (riskLevel !== undefined) updateData.risk_level = riskLevel;
+
+      const { error } = await (supabase.from('bidders') as any)
+        .update(updateData)
+        .eq('id', dbBidderId);
+
+      if (error) {
+        console.error('Failed to update bidder status:', error);
+        return false;
+      }
+
+      return true;
+    } catch (err) {
+      console.error('Error updating bidder:', err);
+      return false;
+    }
+  },
+
+  mapDbRowToBidder(row: any): Bidder {
+    let decision: OfficerDecision = 'PENDING';
+    if (row.status === 'ELIGIBLE') decision = 'QUALIFIED';
+    else if (row.status === 'DISQUALIFIED' || row.status === 'DEBARRED') decision = 'DISQUALIFIED';
+    else if (row.status === 'REVIEW_REQUIRED' || row.status === 'MISMATCH') decision = 'CLARIFICATION_REQUESTED';
+
+    return {
+      id: row.id,
+      tender_id: row.tender_id,
+      company_name: row.company_name,
+      gst_number: row.gstin,
+      pan_number: row.pan,
+      udyam_registration: row.udyam_number || '',
+      cin_number: `U72900${row.gstin.substring(0, 2)}2018PTC${row.bidder_code.replace('BIDDER-', '30000')}`,
+      contact_person: `${row.company_name.split(' ')[0]} Representative`,
+      contact_email: row.email,
+      submission_date: row.created_at,
+      overall_score: row.compliance_score ?? 0,
+      risk_level: (row.risk_level as RiskLevel) || 'LOW',
+      officer_decision: decision,
+      decision_notes: undefined,
+      decision_timestamp: undefined,
+    };
+  },
+};

@@ -1,0 +1,147 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 240" fill="none">
+  <defs>
+    <!-- Soft atmospheric fade gradient into the hero background -->
+    <linearGradient id="fadeBottom" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#E3EFFD" stop-opacity="0" />
+      <stop offset="70%" stop-color="#E3EFFD" stop-opacity="0.3" />
+      <stop offset="100%" stop-color="#E3EFFD" stop-opacity="0.85" />
+    </linearGradient>
+    <linearGradient id="domeGrad" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#7B93B2" />
+      <stop offset="35%" stop-color="#CBD5E1" />
+      <stop offset="70%" stop-color="#94A3B8" />
+      <stop offset="100%" stop-color="#64748B" />
+    </linearGradient>
+    <linearGradient id="sandstoneWall" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#F1E3D3" />
+      <stop offset="100%" stop-color="#D9C2A7" />
+    </linearGradient>
+    <linearGradient id="redSandstoneBase" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#C26A5A" />
+      <stop offset="100%" stop-color="#9E4D3E" />
+    </linearGradient>
+    <linearGradient id="skyAtmosphere" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#EAF4FF" stop-opacity="0.2" />
+      <stop offset="100%" stop-color="#E3EFFD" stop-opacity="0.8" />
+    </linearGradient>
+  </defs>
+
+  <!-- Sky Backing -->
+  <rect width="500" height="240" fill="url(#skyAtmosphere)" />
+
+  <!-- Background Flanking Wings (Rashtrapati Bhavan / North & South Block Classical Colonnade) -->
+  <g id="flanking-wings" opacity="0.92">
+    <!-- Left Wing -->
+    <rect x="20" y="110" width="160" height="85" fill="url(#sandstoneWall)" />
+    <rect x="15" y="105" width="170" height="7" fill="#C9B194" />
+    <rect x="18" y="190" width="164" height="20" fill="url(#redSandstoneBase)" />
+    <!-- Left Wing Pillars / Windows -->
+    <g fill="#A89279">
+      <rect x="30" y="120" width="10" height="60" rx="1" />
+      <rect x="50" y="120" width="10" height="60" rx="1" />
+      <rect x="70" y="120" width="10" height="60" rx="1" />
+      <rect x="90" y="120" width="10" height="60" rx="1" />
+      <rect x="110" y="120" width="10" height="60" rx="1" />
+      <rect x="130" y="120" width="10" height="60" rx="1" />
+      <rect x="150" y="120" width="10" height="60" rx="1" />
+    </g>
+
+    <!-- Right Wing -->
+    <rect x="320" y="110" width="160" height="85" fill="url(#sandstoneWall)" />
+    <rect x="315" y="105" width="170" height="7" fill="#C9B194" />
+    <rect x="318" y="190" width="164" height="20" fill="url(#redSandstoneBase)" />
+    <!-- Right Wing Pillars / Windows -->
+    <g fill="#A89279">
+      <rect x="340" y="120" width="10" height="60" rx="1" />
+      <rect x="360" y="120" width="10" height="60" rx="1" />
+      <rect x="380" y="120" width="10" height="60" rx="1" />
+      <rect x="400" y="120" width="10" height="60" rx="1" />
+      <rect x="420" y="120" width="10" height="60" rx="1" />
+      <rect x="440" y="120" width="10" height="60" rx="1" />
+      <rect x="460" y="120" width="10" height="60" rx="1" />
+    </g>
+  </g>
+
+  <!-- Central Building with Classical Grand Portico -->
+  <g id="central-structure">
+    <!-- Main Center Block -->
+    <rect x="170" y="90" width="160" height="110" fill="url(#sandstoneWall)" />
+    <rect x="165" y="85" width="170" height="8" fill="#C9B194" />
+    <!-- Classical Pediment / Cornice -->
+    <polygon points="160,85 250,55 340,85" fill="#E6D3BE" stroke="#B89F82" stroke-width="2" />
+    <polygon points="175,83 250,59 325,83" fill="#D4BEA5" />
+
+    <!-- Grand Classical Colonnade / Columns -->
+    <g fill="#EFE5D9" stroke="#C4AD94" stroke-width="0.8">
+      <!-- 6 Grand Corinthian/Lutyens Pillars -->
+      <rect x="185" y="88" width="12" height="102" rx="1" />
+      <rect x="208" y="88" width="12" height="102" rx="1" />
+      <rect x="231" y="88" width="12" height="102" rx="1" />
+      <rect x="257" y="88" width="12" height="102" rx="1" />
+      <rect x="280" y="88" width="12" height="102" rx="1" />
+      <rect x="303" y="88" width="12" height="102" rx="1" />
+    </g>
+
+    <!-- Entrance Archway & Bronze Portal -->
+    <path d="M238 150 Q250 138 262 150 L262 195 L238 195 Z" fill="#475569" />
+    <path d="M242 154 Q250 145 258 154 L258 195 L242 195 Z" fill="#1E293B" />
+
+    <!-- Red Sandstone High Plinth / Steps -->
+    <rect x="160" y="190" width="180" height="22" fill="url(#redSandstoneBase)" />
+    <rect x="150" y="205" width="200" height="8" fill="#8B4032" />
+  </g>
+
+  <!-- Grand Central Copper-Patina / Sandstone Dome -->
+  <g id="central-dome">
+    <!-- Dome Drum / Rotunda Base -->
+    <rect x="210" y="42" width="80" height="20" fill="#E4D3BF" stroke="#B8A185" stroke-width="1" />
+    <!-- Drum Windows / Mini pillars -->
+    <g fill="#7A6854">
+      <rect x="216" y="47" width="5" height="11" rx="1" />
+      <rect x="228" y="47" width="5" height="11" rx="1" />
+      <rect x="240" y="47" width="5" height="11" rx="1" />
+      <rect x="255" y="47" width="5" height="11" rx="1" />
+      <rect x="267" y="47" width="5" height="11" rx="1" />
+      <rect x="279" y="47" width="5" height="11" rx="1" />
+    </g>
+    <!-- Drum Cornice -->
+    <rect x="206" y="40" width="88" height="4" rx="1" fill="#CBB79F" />
+
+    <!-- Classical Stupa-Inspired Great Dome -->
+    <path d="M208 40 C208 8, 292 8, 292 40 Z" fill="url(#domeGrad)" stroke="#52647C" stroke-width="1.2" />
+    
+    <!-- Dome Finial / Kalash & Mast Base -->
+    <rect x="247" y="10" width="6" height="8" fill="#CBD5E1" />
+    <circle cx="250" cy="9" r="3.5" fill="#E2E8F0" />
+    <line x1="250" y1="9" x2="250" y2="-12" stroke="#475569" stroke-width="1.5" />
+
+    <!-- Indian National Flag (Tricolor with Ashoka Chakra) fluttering on top staff -->
+    <g id="indian-flag" transform="translate(250, -12)">
+      <!-- Saffron Band -->
+      <path d="M0 0 Q10 -3 20 0 Q25 2 30 -1 L30 5 Q25 8 20 6 Q10 3 0 6 Z" fill="#FF9933" />
+      <!-- White Band -->
+      <path d="M0 6 Q10 3 20 6 Q25 8 30 5 L30 11 Q25 14 20 12 Q10 9 0 12 Z" fill="#FFFFFF" />
+      <!-- Green Band -->
+      <path d="M0 12 Q10 9 20 12 Q25 14 30 11 L30 17 Q25 20 20 18 Q10 15 0 18 Z" fill="#138808" />
+      <!-- Ashoka Chakra on White Band -->
+      <circle cx="15" cy="9" r="2.2" fill="none" stroke="#000080" stroke-width="0.7" />
+      <circle cx="15" cy="9" r="0.6" fill="#000080" />
+    </g>
+  </g>
+
+  <!-- Greenery & Trees Foreground Framing -->
+  <g id="greenery" opacity="0.95">
+    <!-- Left Trees Canopy -->
+    <path d="M5 210 Q20 170 50 185 Q75 160 100 180 Q120 165 140 190 Q155 180 165 215 Z" fill="#2E6F40" />
+    <path d="M20 215 Q40 180 65 195 Q90 175 115 190 Q135 180 150 215 Z" fill="#3D8B53" opacity="0.8" />
+    <path d="M50 220 Q70 190 95 200 Q120 185 135 220 Z" fill="#52A469" opacity="0.7" />
+
+    <!-- Right Trees Canopy -->
+    <path d="M335 215 Q345 180 365 190 Q385 165 410 180 Q435 160 460 185 Q485 170 500 210 Z" fill="#2E6F40" />
+    <path d="M350 215 Q365 180 390 190 Q415 175 440 195 Q465 180 485 215 Z" fill="#3D8B53" opacity="0.8" />
+    <path d="M370 220 Q390 185 415 200 Q440 190 460 220 Z" fill="#52A469" opacity="0.7" />
+  </g>
+
+  <!-- Foreground Atmospheric Gradient to melt smoothly into #E3EFFD background -->
+  <rect x="0" y="160" width="500" height="80" fill="url(#fadeBottom)" />
+</svg>
