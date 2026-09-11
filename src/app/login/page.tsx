@@ -51,7 +51,7 @@ export default function LoginPage() {
     <div className="min-h-[80vh] flex flex-col justify-center py-6 sm:px-6 lg:px-8">
       <div className="sm:mx-auto sm:w-full sm:max-w-md text-center space-y-3">
         {/* GeM Badge */}
-        <div className="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-linear-to-br from-blue-900 to-blue-700 text-white font-black text-2xl shadow-md ring-4 ring-blue-100">
+        <div className="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-gradient-to-br from-blue-900 to-blue-700 text-white font-black text-2xl shadow-md ring-4 ring-blue-100">
           GeM
         </div>
 
@@ -71,7 +71,7 @@ export default function LoginPage() {
       <div className="mt-6 sm:mx-auto sm:w-full sm:max-w-md">
         <div className="bg-white py-6 px-6 sm:px-8 shadow-xl border border-slate-200 rounded-3xl space-y-5">
           {/* Quick Demo 1-Click Login Card */}
-          <div className="p-4 rounded-2xl bg-linear-to-r from-blue-50 to-indigo-50 border border-blue-200 space-y-2">
+          <div className="p-4 rounded-2xl bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-200 space-y-2">
             <div className="flex items-center justify-between">
               <span className="text-[10px] uppercase font-bold text-blue-800 flex items-center space-x-1">
                 <Sparkles className="w-3 h-3 text-blue-600" />

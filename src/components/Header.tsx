@@ -119,7 +119,7 @@ export function Header() {
                 onClick={() => setIsGfrDialogOpen(true)}
                 aria-label="View GFR Rule 151 compliance status"
                 aria-haspopup="dialog"
-                className="flex items-center space-x-1 px-2.5 py-1 rounded-full bg-[#ECFDF5] text-[#15803D] border border-[#BBF7D0] text-[10px] font-bold cursor-pointer hover:bg-[#DCFCE7] hover:border-[#86EFAC] focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-[#16A34A] focus-visible:ring-offset-1 transition-colors"
+                className="flex items-center space-x-1 px-2.5 py-1 rounded-full bg-[#ECFDF5] text-[#15803D] border border-[#BBF7D0] text-[10px] font-bold cursor-pointer hover:bg-[#DCFCE7] hover:border-[#86EFAC] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#16A34A] focus-visible:ring-offset-1 transition-colors"
               >
                 <CheckCircle2 className="w-3 h-3 text-[#16A34A] shrink-0" />
                 <span>{gfrDetails?.badgeLabel || 'GFR Rule 151 Compliant'}</span>

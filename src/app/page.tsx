@@ -606,7 +606,7 @@ export default function HomePage() {
       {/* INTERACTIVE MODAL 3: Cross-Entity Levenshtein Demo                         */}
       {/* ========================================================================= */}
       {activeModal === 'crosscheck' && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-xs">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm">
           <div className="bg-white rounded-2xl max-w-lg w-full p-5 shadow-2xl border border-[#D9E3EF] space-y-3.5 animate-in fade-in zoom-in-95 duration-150">
             <div className="flex items-center justify-between border-b border-slate-100 pb-2.5">
               <div className="flex items-center space-x-2">

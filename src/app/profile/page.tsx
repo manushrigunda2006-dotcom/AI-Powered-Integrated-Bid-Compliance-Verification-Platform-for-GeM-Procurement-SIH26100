@@ -104,7 +104,7 @@ export default function OfficerProfilePage() {
       <div className="bg-white rounded-3xl border border-slate-200 p-6 sm:p-8 shadow-xs">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
           <div className="flex items-start space-x-5">
-            <div className="w-20 h-20 rounded-2xl bg-linear-to-br from-blue-900 to-blue-700 text-white font-black text-2xl flex items-center justify-center ring-4 ring-blue-100 shadow-md shrink-0">
+            <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-blue-900 to-blue-700 text-white font-black text-2xl flex items-center justify-center ring-4 ring-blue-100 shadow-md shrink-0">
               AB
             </div>
             <div className="space-y-1.5">
