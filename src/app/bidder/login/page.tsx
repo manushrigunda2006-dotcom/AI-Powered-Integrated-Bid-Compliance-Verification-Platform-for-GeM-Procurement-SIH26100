@@ -16,9 +16,11 @@ import {
 } from 'lucide-react';
 import { setBidderSession } from '@/lib/authGuard';
 import { MOCK_BIDDERS } from '@/lib/mock-data/tender-seed';
+import { useLanguage } from '@/lib/i18n/LanguageContext';
 
 export default function BidderLoginPage() {
   const router = useRouter();
+  const { t } = useLanguage();
   const [selectedBidderId, setSelectedBidderId] = useState('bidder-01');
   const [customEmail, setCustomEmail] = useState('contact@abcd.example');
   const [gstin, setGstin] = useState('07AAAAA0000A1Z5');
@@ -85,6 +87,8 @@ export default function BidderLoginPage() {
     }, 500);
   };
 
+  const selectedBidderObj = MOCK_BIDDERS.find((b) => b.id === selectedBidderId) || MOCK_BIDDERS[0];
+
   return (
     <div className="min-h-[80vh] flex flex-col justify-center py-6 sm:px-6 lg:px-8">
       {/* Top back to role selection */}
@@ -94,7 +98,7 @@ export default function BidderLoginPage() {
           className="inline-flex items-center space-x-1.5 text-xs text-slate-500 hover:text-slate-900 font-semibold transition-colors"
         >
           <ArrowLeft className="w-4 h-4" />
-          <span>Back to Role Selection</span>
+          <span>{t('nav.back')} / {t('nav.role_selection')}</span>
         </Link>
       </div>
 
@@ -106,13 +110,13 @@ export default function BidderLoginPage() {
 
         <div>
           <span className="bg-blue-100 text-blue-900 text-[11px] font-bold px-3 py-1 rounded-full border border-blue-200 uppercase tracking-wider">
-            Vendor Portal • Bidder Access
+            {t('bidder.login_badge')}
           </span>
           <h2 className="mt-2 text-2xl sm:text-3xl font-black text-slate-900 tracking-tight">
-            Bidder Portal Sign-In
+            {t('bidder.login_title')}
           </h2>
           <p className="text-xs text-slate-500 mt-1 max-w-sm mx-auto">
-            Access your tenders, track automated compliance pre-screening, and inspect evaluation standings.
+            {t('bidder.login_desc')}
           </p>
         </div>
       </div>
@@ -130,7 +134,7 @@ export default function BidderLoginPage() {
                   : 'text-slate-500 hover:text-slate-900'
               }`}
             >
-              1-Click Demo Personas
+              {t('bidder.demo_tab')}
             </button>
             <button
               type="button"
@@ -141,21 +145,48 @@ export default function BidderLoginPage() {
                   : 'text-slate-500 hover:text-slate-900'
               }`}
             >
-              Custom GSTIN / Email
+              {t('bidder.cred_tab')}
             </button>
           </div>
 
           {/* TAB 1: 1-Click Demo Bidders */}
           {authTab === 'DEMO' && (
-            <div className="space-y-3">
+            <div className="space-y-4">
+              {/* Dropdown for all 20 Bidders */}
+              <div className="p-3 bg-slate-50 rounded-2xl border border-slate-200 space-y-2">
+                <label className="block text-[11px] font-bold text-slate-700">
+                  {t('bidder.all_bidders_select')}
+                </label>
+                <select
+                  value={selectedBidderId}
+                  onChange={(e) => setSelectedBidderId(e.target.value)}
+                  className="w-full text-xs font-medium bg-white border border-slate-300 rounded-xl px-3 py-2 text-slate-800 focus:outline-hidden focus:ring-2 focus:ring-blue-600 cursor-pointer"
+                >
+                  {MOCK_BIDDERS.map((b, idx) => (
+                    <option key={b.id} value={b.id}>
+                      Bidder {String(idx + 1).padStart(2, '0')} • {b.company_name} ({b.overall_score}% • {b.officer_decision})
+                    </option>
+                  ))}
+                </select>
+
+                <button
+                  type="button"
+                  onClick={() => handleDemoLogin(selectedBidderId)}
+                  disabled={isLoading || loginSuccess}
+                  className="w-full mt-1 py-2 px-3 bg-blue-900 hover:bg-blue-800 disabled:bg-slate-400 text-white font-bold text-xs rounded-xl shadow-xs transition-all flex items-center justify-center space-x-1.5 cursor-pointer"
+                >
+                  <span>Sign in as {selectedBidderObj.company_name} →</span>
+                </button>
+              </div>
+
               <div className="flex items-center justify-between text-[11px] text-slate-500 font-semibold px-0.5">
-                <span>Select a Bidder Persona:</span>
-                <span className="text-[10px] text-blue-700 bg-blue-50 px-2 py-0.5 rounded-full border border-blue-200">
-                  SIH Demo Data
+                <span>{t('bidder.select_persona')}</span>
+                <span className="text-[10px] text-blue-700 bg-blue-50 px-2 py-0.5 rounded-full border border-blue-200 font-mono">
+                  20 Bidders Ready
                 </span>
               </div>
 
-              {/* Bidder 1 */}
+              {/* Quick Persona 1 */}
               <button
                 type="button"
                 onClick={() => handleDemoLogin('bidder-01')}
@@ -164,7 +195,7 @@ export default function BidderLoginPage() {
               >
                 <div className="flex items-center justify-between">
                   <span className="font-bold text-xs text-slate-900 group-hover:text-emerald-900 transition-colors">
-                    ABCD Technologies
+                    ABCD Technologies (Bidder 01)
                   </span>
                   <span className="text-[9px] font-bold px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 border border-emerald-300 flex items-center space-x-1">
                     <CheckCircle2 className="w-2.5 h-2.5" />
@@ -173,11 +204,11 @@ export default function BidderLoginPage() {
                 </div>
                 <div className="text-[10.5px] text-slate-600 mt-1 flex justify-between">
                   <span>GSTIN: 07AAAAA0000A1Z5</span>
-                  <span className="font-semibold text-emerald-700">Sign in as Bidder 1 →</span>
+                  <span className="font-semibold text-emerald-700">Quick Sign In →</span>
                 </div>
               </button>
 
-              {/* Bidder 2 */}
+              {/* Quick Persona 2 */}
               <button
                 type="button"
                 onClick={() => handleDemoLogin('bidder-02')}
@@ -186,7 +217,7 @@ export default function BidderLoginPage() {
               >
                 <div className="flex items-center justify-between">
                   <span className="font-bold text-xs text-slate-900 group-hover:text-amber-900 transition-colors">
-                    BCDE Solutions
+                    BCDE Solutions (Bidder 02)
                   </span>
                   <span className="text-[9px] font-bold px-2 py-0.5 rounded-full bg-amber-100 text-amber-800 border border-amber-300 flex items-center space-x-1">
                     <AlertTriangle className="w-2.5 h-2.5" />
@@ -195,11 +226,11 @@ export default function BidderLoginPage() {
                 </div>
                 <div className="text-[10.5px] text-slate-600 mt-1 flex justify-between">
                   <span>Name Mismatch on MAF</span>
-                  <span className="font-semibold text-amber-700">Sign in as Bidder 2 →</span>
+                  <span className="font-semibold text-amber-700">Quick Sign In →</span>
                 </div>
               </button>
 
-              {/* Bidder 3 */}
+              {/* Quick Persona 3 */}
               <button
                 type="button"
                 onClick={() => handleDemoLogin('bidder-03')}
@@ -208,7 +239,7 @@ export default function BidderLoginPage() {
               >
                 <div className="flex items-center justify-between">
                   <span className="font-bold text-xs text-slate-900 group-hover:text-red-900 transition-colors">
-                    CDEF Industries
+                    CDEF Industries (Bidder 03)
                   </span>
                   <span className="text-[9px] font-bold px-2 py-0.5 rounded-full bg-red-100 text-red-800 border border-red-300 flex items-center space-x-1">
                     <XCircle className="w-2.5 h-2.5" />
@@ -217,7 +248,7 @@ export default function BidderLoginPage() {
                 </div>
                 <div className="text-[10.5px] text-slate-600 mt-1 flex justify-between">
                   <span>CPPP Blacklisted / Cancelled GST</span>
-                  <span className="font-semibold text-red-700">Sign in as Bidder 3 →</span>
+                  <span className="font-semibold text-red-700">Quick Sign In →</span>
                 </div>
               </button>
 

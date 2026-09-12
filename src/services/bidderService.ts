@@ -38,10 +38,31 @@ export const bidderService = {
   },
 
   async getBidder(bidderId: string): Promise<Bidder | null> {
+    const findInMock = (id: string): Bidder => {
+      const clean = id.toLowerCase().trim();
+      let found = MOCK_BIDDERS.find((b) => b.id.toLowerCase() === clean);
+      if (found) return found;
+
+      const matchPadded = clean.match(/(\d{1,2})$/);
+      if (matchPadded) {
+        const num = parseInt(matchPadded[1], 10);
+        if (num >= 1 && num <= 20) {
+          const targetId = `bidder-${num < 10 ? `0${num}` : num}`;
+          found = MOCK_BIDDERS.find((b) => b.id === targetId);
+          if (found) return found;
+        }
+      }
+
+      found = MOCK_BIDDERS.find(
+        (b) => clean.includes(b.id.toLowerCase()) || b.id.toLowerCase().includes(clean) || b.company_name.toLowerCase().includes(clean)
+      );
+      return found || MOCK_BIDDERS[0];
+    };
+
     const dbBidderId = resolveBidderId(bidderId);
 
     if (!isSupabaseConfigured()) {
-      return MOCK_BIDDERS.find((b) => b.id === bidderId || b.id.includes(bidderId)) || MOCK_BIDDERS[0];
+      return findInMock(bidderId);
     }
 
     try {
@@ -62,8 +83,7 @@ export const bidderService = {
       }
 
       if (!data) {
-        const fallback = MOCK_BIDDERS.find((b) => b.id === bidderId || b.id.includes(bidderId));
-        return fallback || MOCK_BIDDERS[0];
+        return findInMock(bidderId);
       }
 
       const bidder = this.mapDbRowToBidder(data);
@@ -78,7 +98,7 @@ export const bidderService = {
         compliance_results: compliance,
       };
     } catch {
-      return MOCK_BIDDERS.find((b) => b.id === bidderId || b.id.includes(bidderId)) || MOCK_BIDDERS[0];
+      return findInMock(bidderId);
     }
   },
 

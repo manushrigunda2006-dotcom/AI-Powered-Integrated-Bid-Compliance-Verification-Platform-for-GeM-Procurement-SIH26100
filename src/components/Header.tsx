@@ -23,10 +23,13 @@ import {
 import { useAuth, logout } from '@/lib/authGuard';
 import { GfrComplianceDialog } from './GfrComplianceDialog';
 import { gfrComplianceService, GfrStatusDetails } from '@/services/gfrComplianceService';
+import { useLanguage } from '@/lib/i18n/LanguageContext';
+import { LanguageSelector } from './LanguageSelector';
 
 export function Header() {
   const router = useRouter();
   const { session, role, isAuthenticated, isOfficer, isBidder } = useAuth();
+  const { t } = useLanguage();
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const [isGfrDialogOpen, setIsGfrDialogOpen] = useState(false);
   const [gfrDetails, setGfrDetails] = useState<GfrStatusDetails | null>(null);
@@ -82,21 +85,21 @@ export function Header() {
               <div className="flex flex-col justify-center leading-tight">
                 <div className="flex items-center space-x-1.5">
                   <span className="font-bold text-[14px] sm:text-[15px] text-[#102F5F] tracking-tight">
-                    Government e-Marketplace
+                    {t('app.title', 'Government e-Marketplace')}
                   </span>
                   {isBidder && (
                     <span className="bg-blue-100 text-blue-900 text-[9px] font-bold px-1.5 py-0.2 rounded-md">
-                      Bidder Portal
+                      {t('app.bidder_portal', 'Bidder Portal')}
                     </span>
                   )}
                   {isOfficer && (
                     <span className="bg-amber-100 text-amber-900 text-[9px] font-bold px-1.5 py-0.2 rounded-md">
-                      Officer Portal
+                      {t('app.officer_portal', 'Officer Portal')}
                     </span>
                   )}
                 </div>
                 <span className="text-[9px] text-[#64748B] font-medium hidden sm:inline-block mt-0.5">
-                  Automated Procurement Verification &amp; Compliance Engine (SIH Edition)
+                  {t('app.subtitle', 'Automated Procurement Verification & Compliance Engine (SIH Edition)')}
                 </span>
               </div>
             </Link>
@@ -112,7 +115,7 @@ export function Header() {
                   className="text-[#334155] hover:text-[#102F5F] transition-colors flex items-center space-x-1 px-2 py-1 rounded-md hover:bg-slate-100"
                 >
                   <LayoutDashboard className="w-3.5 h-3.5 text-[#64748B]" />
-                  <span className="text-[11px] font-semibold">Officer Dashboard</span>
+                  <span className="text-[11px] font-semibold">{t('nav.officer_dashboard', 'Officer Dashboard')}</span>
                 </Link>
 
                 <Link
@@ -120,7 +123,7 @@ export function Header() {
                   className="text-[#334155] hover:text-[#102F5F] transition-colors flex items-center space-x-1 px-2 py-1 rounded-md hover:bg-slate-100"
                 >
                   <FileText className="w-3.5 h-3.5 text-[#64748B]" />
-                  <span className="text-[11px] font-semibold">Existing Tenders</span>
+                  <span className="text-[11px] font-semibold">{t('nav.existing_tenders', 'Existing Tenders')}</span>
                 </Link>
 
                 <Link
@@ -128,7 +131,7 @@ export function Header() {
                   className="text-[#334155] hover:text-[#102F5F] transition-colors flex items-center space-x-1 px-2 py-1 rounded-md hover:bg-slate-100"
                 >
                   <PlusCircle className="w-3.5 h-3.5 text-[#16A34A]" />
-                  <span className="text-[11px] font-semibold">Create Tender</span>
+                  <span className="text-[11px] font-semibold">{t('nav.create_tender', 'Create Tender')}</span>
                 </Link>
 
                 <button
@@ -138,7 +141,7 @@ export function Header() {
                   className="flex items-center space-x-1 px-2.5 py-1 rounded-full bg-[#ECFDF5] text-[#15803D] border border-[#BBF7D0] text-[10px] font-bold cursor-pointer hover:bg-[#DCFCE7] transition-colors"
                 >
                   <CheckCircle2 className="w-3 h-3 text-[#16A34A] shrink-0" />
-                  <span>{gfrDetails?.badgeLabel || 'GFR Rule 151 Compliant'}</span>
+                  <span>{gfrDetails?.badgeLabel || t('nav.gfr_compliant', 'GFR Rule 151 Compliant')}</span>
                 </button>
 
                 <Link
@@ -147,7 +150,7 @@ export function Header() {
                   title="Cryptographic Audit Logs"
                 >
                   <Lock className="w-3 h-3 text-[#64748B]" />
-                  <span>Audit Trail</span>
+                  <span>{t('nav.audit_trail', 'Audit Trail')}</span>
                 </Link>
               </nav>
             )}
@@ -160,7 +163,7 @@ export function Header() {
                   className="text-[#334155] hover:text-[#102F5F] transition-colors flex items-center space-x-1 px-2 py-1 rounded-md hover:bg-slate-100"
                 >
                   <LayoutDashboard className="w-3.5 h-3.5 text-blue-900" />
-                  <span className="text-[11px] font-semibold">Bidder Dashboard</span>
+                  <span className="text-[11px] font-semibold">{t('nav.bidder_dashboard', 'Bidder Dashboard')}</span>
                 </Link>
 
                 <Link
@@ -168,7 +171,7 @@ export function Header() {
                   className="text-[#334155] hover:text-[#102F5F] transition-colors flex items-center space-x-1 px-2 py-1 rounded-md hover:bg-slate-100"
                 >
                   <Briefcase className="w-3.5 h-3.5 text-[#64748B]" />
-                  <span className="text-[11px] font-semibold">Available Tenders</span>
+                  <span className="text-[11px] font-semibold">{t('nav.available_tenders', 'Available Tenders')}</span>
                 </Link>
 
                 <Link
@@ -176,7 +179,7 @@ export function Header() {
                   className="text-[#334155] hover:text-[#102F5F] transition-colors flex items-center space-x-1 px-2 py-1 rounded-md hover:bg-slate-100"
                 >
                   <FileCheck2 className="w-3.5 h-3.5 text-emerald-600" />
-                  <span className="text-[11px] font-semibold">My Submissions</span>
+                  <span className="text-[11px] font-semibold">{t('nav.my_submissions', 'My Submissions')}</span>
                 </Link>
 
                 <Link
@@ -184,7 +187,7 @@ export function Header() {
                   className="text-[#334155] hover:text-[#102F5F] transition-colors flex items-center space-x-1 px-2 py-1 rounded-md hover:bg-slate-100"
                 >
                   <Clock className="w-3.5 h-3.5 text-blue-700" />
-                  <span className="text-[11px] font-semibold">My Activity Logs</span>
+                  <span className="text-[11px] font-semibold">{t('nav.my_logs', 'My Activity Logs')}</span>
                 </Link>
               </nav>
             )}
@@ -196,10 +199,13 @@ export function Header() {
                   href="/role-selection"
                   className="px-3 py-1.5 bg-blue-900 hover:bg-blue-800 text-white rounded-lg font-bold text-xs shadow-xs transition-colors"
                 >
-                  Select Portal Role
+                  {t('nav.role_selection', 'Select Portal Role')}
                 </Link>
               </nav>
             )}
+
+            {/* MULTILINGUAL LANGUAGE SELECTOR */}
+            <LanguageSelector />
 
             {isAuthenticated && <div className="h-4 w-px bg-slate-200 hidden md:block" />}
 
@@ -285,7 +291,7 @@ export function Header() {
                           className="w-full flex items-center space-x-2 px-3 py-1.5 text-[11px] font-medium text-[#334155] hover:text-[#102F5F] hover:bg-slate-50 rounded-lg transition-colors cursor-pointer"
                         >
                           <LayoutDashboard className="w-3.5 h-3.5 text-[#64748B]" />
-                          <span>Officer Dashboard</span>
+                          <span>{t('nav.officer_dashboard', 'Officer Dashboard')}</span>
                         </Link>
 
                         <Link
@@ -294,7 +300,7 @@ export function Header() {
                           className="w-full flex items-center space-x-2 px-3 py-1.5 text-[11px] font-medium text-[#334155] hover:text-[#102F5F] hover:bg-slate-50 rounded-lg transition-colors cursor-pointer"
                         >
                           <User className="w-3.5 h-3.5 text-[#64748B]" />
-                          <span>View Officer Profile &amp; DSC</span>
+                          <span>{t('nav.profile', 'View Officer Profile & DSC')}</span>
                         </Link>
 
                         <Link
@@ -303,7 +309,7 @@ export function Header() {
                           className="w-full flex items-center space-x-2 px-3 py-1.5 text-[11px] font-medium text-[#334155] hover:text-[#102F5F] hover:bg-slate-50 rounded-lg transition-colors cursor-pointer"
                         >
                           <FolderGit2 className="w-3.5 h-3.5 text-[#64748B]" />
-                          <span>Existing Tenders</span>
+                          <span>{t('nav.existing_tenders', 'Existing Tenders')}</span>
                         </Link>
 
                         <Link
@@ -312,7 +318,7 @@ export function Header() {
                           className="w-full flex items-center space-x-2 px-3 py-1.5 text-[11px] font-medium text-[#334155] hover:text-[#102F5F] hover:bg-slate-50 rounded-lg transition-colors cursor-pointer"
                         >
                           <PlusCircle className="w-3.5 h-3.5 text-[#16A34A]" />
-                          <span>Create Tender RFP</span>
+                          <span>{t('nav.create_tender', 'Create Tender RFP')}</span>
                         </Link>
 
                         <Link
@@ -321,7 +327,7 @@ export function Header() {
                           className="w-full flex items-center space-x-2 px-3 py-1.5 text-[11px] font-medium text-[#334155] hover:text-[#102F5F] hover:bg-slate-50 rounded-lg transition-colors cursor-pointer"
                         >
                           <Lock className="w-3.5 h-3.5 text-[#64748B]" />
-                          <span>Immutable Audit Trail</span>
+                          <span>{t('nav.audit_trail', 'Immutable Audit Trail')}</span>
                         </Link>
 
                         <button
@@ -330,7 +336,7 @@ export function Header() {
                           className="w-full flex items-center space-x-2 px-3 py-1.5 text-[11px] font-semibold text-[#DC2626] hover:bg-red-50 rounded-lg transition-colors text-left cursor-pointer"
                         >
                           <LogOut className="w-3.5 h-3.5 text-[#DC2626]" />
-                          <span>Log Out</span>
+                          <span>{t('nav.logout', 'Log Out')}</span>
                         </button>
                       </div>
                     )}
@@ -344,7 +350,7 @@ export function Header() {
                           className="w-full flex items-center space-x-2 px-3 py-1.5 text-[11px] font-medium text-[#334155] hover:text-[#102F5F] hover:bg-slate-50 rounded-lg transition-colors cursor-pointer"
                         >
                           <LayoutDashboard className="w-3.5 h-3.5 text-blue-900" />
-                          <span>Bidder Dashboard</span>
+                          <span>{t('nav.bidder_dashboard', 'Bidder Dashboard')}</span>
                         </Link>
 
                         <Link
@@ -353,7 +359,7 @@ export function Header() {
                           className="w-full flex items-center space-x-2 px-3 py-1.5 text-[11px] font-medium text-[#334155] hover:text-[#102F5F] hover:bg-slate-50 rounded-lg transition-colors cursor-pointer"
                         >
                           <Building2 className="w-3.5 h-3.5 text-[#64748B]" />
-                          <span>Company Profile</span>
+                          <span>{t('nav.company_profile', 'Company Profile')}</span>
                         </Link>
 
                         <Link
@@ -362,7 +368,7 @@ export function Header() {
                           className="w-full flex items-center space-x-2 px-3 py-1.5 text-[11px] font-medium text-[#334155] hover:text-[#102F5F] hover:bg-slate-50 rounded-lg transition-colors cursor-pointer"
                         >
                           <Briefcase className="w-3.5 h-3.5 text-[#64748B]" />
-                          <span>Available Tenders</span>
+                          <span>{t('nav.available_tenders', 'Available Tenders')}</span>
                         </Link>
 
                         <Link
@@ -371,7 +377,7 @@ export function Header() {
                           className="w-full flex items-center space-x-2 px-3 py-1.5 text-[11px] font-medium text-[#334155] hover:text-[#102F5F] hover:bg-slate-50 rounded-lg transition-colors cursor-pointer"
                         >
                           <Clock className="w-3.5 h-3.5 text-[#64748B]" />
-                          <span>My Activity Logs</span>
+                          <span>{t('nav.my_logs', 'My Activity Logs')}</span>
                         </Link>
 
                         <button
@@ -380,7 +386,7 @@ export function Header() {
                           className="w-full flex items-center space-x-2 px-3 py-1.5 text-[11px] font-semibold text-[#DC2626] hover:bg-red-50 rounded-lg transition-colors text-left cursor-pointer"
                         >
                           <LogOut className="w-3.5 h-3.5 text-[#DC2626]" />
-                          <span>Log Out</span>
+                          <span>{t('nav.logout', 'Log Out')}</span>
                         </button>
                       </div>
                     )}

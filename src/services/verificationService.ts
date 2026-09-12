@@ -1,6 +1,7 @@
 import { supabase, isSupabaseConfigured } from '../lib/supabase';
-import { ExternalRegistrySummary } from '../lib/types';
+import { ExternalRegistrySummary, Bidder } from '../lib/types';
 import { resolveBidderId } from '../lib/idMapper';
+import { MOCK_BIDDERS } from '../lib/mock-data/tender-seed';
 
 export const verificationService = {
   async getRegistryVerifications(bidderId: string): Promise<ExternalRegistrySummary> {
@@ -119,116 +120,64 @@ export const verificationService = {
   },
 
   getSimulatedSummaryForBidder(bidderId: string): ExternalRegistrySummary {
-    const isBidder3 = bidderId.endsWith('223') || bidderId.includes('03') || bidderId.includes('cdef') || bidderId.includes('defg');
-    const isBidder2 = bidderId.endsWith('222') || bidderId.includes('02') || bidderId.includes('bcde');
+    const clean = (bidderId || '').toLowerCase().trim();
+    let b = MOCK_BIDDERS.find((item) => item.id.toLowerCase() === clean);
 
-    if (isBidder3) {
-      return {
-        gstn: {
-          gstin: '33CCCCC0000C1ZM',
-          legal_name: 'CDEF Industries',
-          trade_name: 'CDEF Industries',
-          status: 'CANCELLED',
-          registration_date: '2015-05-10',
-          taxpayer_type: 'Regular',
-          filing_frequency: 'MONTHLY',
-          tax_compliance_score: 34,
-          matched_pan: 'CCCCC0000C',
-          state_jurisdiction: 'Tamil Nadu',
-          is_verified: false,
-        },
-        udyam: {
-          udyam_number: 'UDYAM-CC-03-0000003',
-          enterprise_name: 'CDEF Industries',
-          msme_category: 'Medium',
-          major_activity: 'Services',
-          registration_date: '2020-09-12',
-          social_category: 'General',
-          women_owned: false,
-          is_verified: true,
-        },
-        debarment: {
-          pan_cin: 'CCCCC0000C',
-          is_blacklisted: true,
-          status: 'DEBARRED',
-          debarring_agency: 'Central Procurement Authority / Debarment Wing',
-          order_number: 'CPA/PROC/DEBAR/2023/001',
-          reason: 'Critical non-performance & debarment order CPA/PROC/DEBAR/2023/001',
-          is_verified: true,
-        },
-        checked_at: new Date().toISOString(),
-        overall_registry_status: 'FAILED',
-      };
+    if (!b) {
+      const matchPadded = clean.match(/(\d{1,2})$/);
+      if (matchPadded) {
+        const num = parseInt(matchPadded[1], 10);
+        if (num >= 1 && num <= 20) {
+          const targetId = `bidder-${num < 10 ? `0${num}` : num}`;
+          b = MOCK_BIDDERS.find((item) => item.id === targetId);
+        }
+      }
     }
 
-    if (isBidder2) {
-      return {
-        gstn: {
-          gstin: '27BBBBB0000B1ZQ',
-          legal_name: 'BCDE Solutions',
-          trade_name: 'BCDE Solutions',
-          status: 'ACTIVE',
-          registration_date: '2019-02-10',
-          taxpayer_type: 'Regular',
-          filing_frequency: 'MONTHLY',
-          tax_compliance_score: 84,
-          matched_pan: 'BBBBB0000B',
-          state_jurisdiction: 'Maharashtra',
-          is_verified: true,
-        },
-        udyam: {
-          udyam_number: 'UDYAM-BB-02-0000002',
-          enterprise_name: 'BCDE Solutions',
-          msme_category: 'Small',
-          major_activity: 'Services',
-          registration_date: '2020-11-20',
-          social_category: 'General',
-          women_owned: false,
-          is_verified: true,
-        },
-        debarment: {
-          pan_cin: 'BBBBB0000B',
-          is_blacklisted: false,
-          status: 'CLEAR',
-          is_verified: true,
-        },
-        checked_at: new Date().toISOString(),
-        overall_registry_status: 'PASSED',
-      };
+    if (!b) {
+      b = MOCK_BIDDERS.find(
+        (item) => clean.includes(item.id.toLowerCase()) || item.company_name.toLowerCase().includes(clean)
+      ) || MOCK_BIDDERS[0];
     }
+
+    const isDebarred = b.risk_level === 'HIGH' && (b.id === 'bidder-03' || b.id === 'bidder-19' || b.id === 'bidder-20');
+    const isCancelledGst = b.risk_level === 'HIGH' && (b.id === 'bidder-03' || b.id === 'bidder-18' || b.id === 'bidder-20');
 
     return {
       gstn: {
-        gstin: '07AAAAA0000A1Z5',
-        legal_name: 'ABCD Technologies',
-        trade_name: 'ABCD Technologies',
-        status: 'ACTIVE',
+        gstin: b.gst_number,
+        legal_name: b.company_name,
+        trade_name: b.company_name,
+        status: isCancelledGst ? 'CANCELLED' : 'ACTIVE',
         registration_date: '2017-08-14',
         taxpayer_type: 'Regular',
         filing_frequency: 'MONTHLY',
-        tax_compliance_score: 98,
-        matched_pan: 'AAAAA0000A',
-        state_jurisdiction: 'Delhi',
-        is_verified: true,
+        tax_compliance_score: isCancelledGst ? 34 : Math.min(99, Math.max(70, b.overall_score)),
+        matched_pan: b.pan_number,
+        state_jurisdiction: `${b.company_name.split(' ')[0]} Tax Division`,
+        is_verified: !isCancelledGst,
       },
       udyam: {
-        udyam_number: 'UDYAM-AA-01-0000001',
-        enterprise_name: 'ABCD Technologies',
-        msme_category: 'Medium',
+        udyam_number: b.udyam_registration || `UDYAM-XX-00-0000001`,
+        enterprise_name: b.company_name,
+        msme_category: b.overall_score > 85 ? 'Medium' : 'Small',
         major_activity: 'Services',
         registration_date: '2020-07-15',
         social_category: 'General',
         women_owned: false,
-        is_verified: true,
+        is_verified: b.overall_score >= 40,
       },
       debarment: {
-        pan_cin: 'AAAAA0000A',
-        is_blacklisted: false,
-        status: 'CLEAR',
+        pan_cin: b.pan_number,
+        is_blacklisted: isDebarred,
+        status: isDebarred ? 'DEBARRED' : 'CLEAR',
+        debarring_agency: isDebarred ? 'Central Procurement Authority / Debarment Wing' : undefined,
+        order_number: isDebarred ? 'CPA/PROC/DEBAR/2024/042' : undefined,
+        reason: isDebarred ? 'Statutory debarment order CPA/PROC/DEBAR/2024/042' : undefined,
         is_verified: true,
       },
       checked_at: new Date().toISOString(),
-      overall_registry_status: 'PASSED',
+      overall_registry_status: isDebarred || isCancelledGst ? 'FAILED' : 'PASSED',
     };
   },
 };

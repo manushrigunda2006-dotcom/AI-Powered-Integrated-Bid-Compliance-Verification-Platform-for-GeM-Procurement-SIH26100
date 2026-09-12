@@ -20,8 +20,10 @@ import { useBidderAuth } from '@/lib/authGuard';
 import { auditService } from '@/services/auditService';
 import { AuditLog } from '@/lib/types';
 import { formatDate } from '@/lib/utils';
+import { useLanguage } from '@/lib/i18n/LanguageContext';
 
 export default function BidderLogsPage() {
+  const { t } = useLanguage();
   const { session, isAuthenticated, isAuthorized, isLoading } = useBidderAuth(true);
   const [logs, setLogs] = useState<AuditLog[]>([]);
   const [loadingLogs, setLoadingLogs] = useState(true);
@@ -85,7 +87,7 @@ export default function BidderLogsPage() {
           <div>
             <div className="flex items-center space-x-2">
               <h1 className="text-2xl font-black text-slate-900 tracking-tight">
-                My Bidder Activity &amp; Verification Logs
+                {t('nav.my_logs')}
               </h1>
               <span className="bg-blue-100 text-blue-900 text-xs font-bold px-2.5 py-0.5 rounded-full border border-blue-200">
                 Bidder Isolation Enforced

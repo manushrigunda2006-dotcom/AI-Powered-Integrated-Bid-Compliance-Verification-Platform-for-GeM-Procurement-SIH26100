@@ -17,9 +17,11 @@ import {
   AlertCircle
 } from 'lucide-react';
 import { setOfficerSession } from '@/lib/authGuard';
+import { useLanguage } from '@/lib/i18n/LanguageContext';
 
 export default function OfficerLoginPage() {
   const router = useRouter();
+  const { t } = useLanguage();
   const [officerId, setOfficerId] = useState('abcd@gmail.com');
   const [password, setPassword] = useState('••••••••••••');
   const [authMode, setAuthMode] = useState<'CREDENTIALS' | 'PARICHAY' | 'DSC'>('CREDENTIALS');
@@ -58,7 +60,7 @@ export default function OfficerLoginPage() {
           className="inline-flex items-center space-x-1.5 text-xs text-slate-500 hover:text-slate-900 font-semibold transition-colors"
         >
           <ArrowLeft className="w-4 h-4" />
-          <span>Back to Role Selection</span>
+          <span>{t('nav.back')} / {t('nav.role_selection')}</span>
         </Link>
       </div>
 
@@ -70,13 +72,13 @@ export default function OfficerLoginPage() {
 
         <div>
           <span className="bg-amber-100 text-amber-900 text-[11px] font-bold px-3 py-1 rounded-full border border-amber-200 uppercase tracking-wider">
-            Procurement Authority • Officer Portal
+            {t('officer.login_badge')}
           </span>
           <h2 className="mt-2 text-2xl sm:text-3xl font-black text-slate-900 tracking-tight">
-            Government Officer Login
+            {t('officer.login_title')}
           </h2>
           <p className="text-xs text-slate-500 mt-1 max-w-sm mx-auto">
-            Secure access for Government Evaluators, Tender Authorities, and Bid Adjudication Officers.
+            {t('officer.login_desc')}
           </p>
         </div>
       </div>
@@ -88,7 +90,7 @@ export default function OfficerLoginPage() {
             <div className="flex items-center justify-between">
               <span className="text-[10px] uppercase font-bold text-amber-900 flex items-center space-x-1">
                 <Sparkles className="w-3 h-3 text-amber-600" />
-                <span>SIH Evaluator Demo Access</span>
+                <span>{t('officer.demo_tab')}</span>
               </span>
               <span className="text-[9px] bg-emerald-100 text-emerald-800 font-bold px-1.5 py-0.5 rounded-full">
                 Authorized
@@ -118,7 +120,7 @@ export default function OfficerLoginPage() {
                 <span>Authenticating Officer...</span>
               ) : (
                 <>
-                  <span>1-Click Sign In as Officer ABCD</span>
+                  <span>{t('officer.btn_signin')}</span>
                   <ArrowRight className="w-3.5 h-3.5" />
                 </>
               )}

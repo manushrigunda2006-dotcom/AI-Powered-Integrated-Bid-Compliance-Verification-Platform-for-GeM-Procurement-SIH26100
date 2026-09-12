@@ -18,13 +18,22 @@ import {
   Building2,
   X,
   Activity,
-  AlertTriangle
+  AlertTriangle,
+  Search,
+  Filter
 } from 'lucide-react';
 import { useOfficerAuth } from '@/lib/authGuard';
+import { useLanguage } from '@/lib/i18n/LanguageContext';
+import { MOCK_BIDDERS } from '@/lib/mock-data/tender-seed';
 
 export default function OfficerDashboardPage() {
   const { session, isAuthenticated, isAuthorized, isLoading } = useOfficerAuth(true);
+  const { t } = useLanguage();
   const tenderId = 'tender-gem-2026-cloud';
+
+  // Bidder filtering and search states for all 20 bidders
+  const [bidderSearch, setBidderSearch] = useState('');
+  const [riskFilter, setRiskFilter] = useState<'ALL' | 'LOW' | 'MEDIUM' | 'HIGH'>('ALL');
 
   // Interactive modal state for feature inspection
   const [activeModal, setActiveModal] = useState<'engine' | 'adapters' | 'crosscheck' | null>(null);
@@ -64,6 +73,19 @@ export default function OfficerDashboardPage() {
 
   const similarityResult = calculateSimilarity(entity1, entity2);
 
+  const lowCount = MOCK_BIDDERS.filter((b) => b.risk_level === 'LOW').length;
+  const medCount = MOCK_BIDDERS.filter((b) => b.risk_level === 'MEDIUM').length;
+  const highCount = MOCK_BIDDERS.filter((b) => b.risk_level === 'HIGH').length;
+
+  const filteredBidders = MOCK_BIDDERS.filter((b) => {
+    const matchesRisk = riskFilter === 'ALL' ? true : b.risk_level === riskFilter;
+    const matchesSearch =
+      b.company_name.toLowerCase().includes(bidderSearch.toLowerCase()) ||
+      b.id.toLowerCase().includes(bidderSearch.toLowerCase()) ||
+      b.gst_number.toLowerCase().includes(bidderSearch.toLowerCase());
+    return matchesRisk && matchesSearch;
+  });
+
   if (isLoading || !isAuthorized) {
     return (
       <div className="min-h-[60vh] flex items-center justify-center">
@@ -92,14 +114,12 @@ export default function OfficerDashboardPage() {
 
             {/* Hero Main Heading */}
             <h1 className="text-[24px] sm:text-[28px] lg:text-[31px] font-extrabold text-[#0B2E59] tracking-tight leading-[1.1] max-w-[680px]">
-              Automated Verification &amp; Compliance<br className="hidden sm:inline" />
-              {' '}Assistant for Government Procurement<br className="hidden sm:inline" />
-              {' '}(GeM)
+              {t('officer.dash_heading', 'Automated Verification & Compliance Assistant for Government Procurement (GeM)')}
             </h1>
 
             {/* Hero Description */}
             <p className="text-[#365A7D] text-[11px] sm:text-[11.5px] leading-[1.5] max-w-[620px] font-normal">
-              AI-powered procurement compliance verification platform that helps officers evaluate tender and bidder documents, apply deterministic compliance rules, detect cross-document inconsistencies, assess risk, and maintain an explainable audit trail.
+              {t('officer.dash_desc', 'AI-powered procurement compliance verification platform that helps officers evaluate tender and bidder documents, apply deterministic compliance rules, detect cross-document inconsistencies, assess risk, and maintain an explainable audit trail.')}
             </p>
 
             {/* Hero Buttons */}
@@ -109,7 +129,7 @@ export default function OfficerDashboardPage() {
                 href="/tenders"
                 className="inline-flex items-center justify-center h-[38px] px-4.5 bg-[#FFAA00] hover:bg-[#F59E0B] text-[#111827] font-bold text-[12.5px] rounded-[10px] shadow-xs transition-all transform hover:-translate-y-0.5 cursor-pointer"
               >
-                <span>Launch Officer Verification Portal</span>
+                <span>{t('officer.launch_portal', 'Launch Officer Verification Portal')}</span>
                 <ArrowRight className="w-3.5 h-3.5 ml-1.5 text-[#111827]" />
               </Link>
 
@@ -118,7 +138,7 @@ export default function OfficerDashboardPage() {
                 href="/tenders/11111111-1111-1111-1111-111111111111/bidders/22222222-2222-2222-2222-222222222221/verification"
                 className="inline-flex items-center justify-center h-[38px] px-4 bg-[#FFFFFF] hover:bg-slate-50 text-[#123B73] font-bold text-[12.5px] rounded-[10px] border border-[#D7E3F0] shadow-2xs transition-colors cursor-pointer"
               >
-                <span>Open Hero Verification Screen</span>
+                <span>{t('officer.open_hero', 'Open Hero Verification Screen')}</span>
                 <ExternalLink className="w-3.5 h-3.5 ml-1.5 text-[#123B73]" />
               </Link>
             </div>
@@ -350,10 +370,10 @@ export default function OfficerDashboardPage() {
         <div className="flex items-center justify-between">
           <div>
             <h2 className="text-[18px] font-bold text-[#0F2F63] tracking-tight">
-              Active GeM Tenders Pending Adjudication
+              {t('officer.active_tenders_heading', 'Active GeM Tenders Pending Adjudication')}
             </h2>
             <p className="text-[10.5px] text-[#64748B]">
-              Procurement packets queued for automated verification and officer sign-off
+              {t('officer.active_tenders_desc', 'Procurement packets queued for automated verification and officer sign-off')}
             </p>
           </div>
           <span className="bg-[#EAF4FF] text-[#1D4ED8] font-bold text-[10.5px] px-3 py-0.5 rounded-full border border-[#D8E6F5]">
@@ -401,79 +421,136 @@ export default function OfficerDashboardPage() {
                 href={`/tenders/${tenderId}/bidders`}
                 className="px-3.5 py-2 bg-[#1E3A8A] hover:bg-[#172554] text-[#FFFFFF] text-[11px] font-bold rounded-[8px] shadow-2xs transition-colors flex items-center space-x-1.5 cursor-pointer"
               >
-                <span>Review 3 Bidders</span>
+                <span>{t('officer.review_bidders_btn', { count: MOCK_BIDDERS.length })}</span>
                 <ArrowRight className="w-3.5 h-3.5" />
               </Link>
             </div>
           </div>
 
-          {/* BIDDER CARDS (Three compact cards inside the tender card) */}
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-3.5 border-t border-[#E7EEF6] text-xs">
-            {/* BIDDER 1 */}
-            <Link
-              href={`/tenders/${tenderId}/bidders/BIDDER-ABCD-001/verification`}
-              className="p-3 bg-[#FFFFFF] rounded-[10px] border border-[#D9E3EF] hover:border-[#1D4ED8] hover:shadow-2xs transition-all space-y-1.5 block cursor-pointer group"
-            >
-              <div className="flex items-center justify-between">
-                <span className="font-mono text-[9.5px] text-[#64748B] font-bold">
-                  BIDDER-ABCD-001
-                </span>
-                <span className="text-[9.5px] font-bold px-2 py-0.5 rounded-full bg-[#ECFDF5] text-[#15803D] border border-[#BBF7D0]">
-                  LOW RISK
-                </span>
-              </div>
-              <div className="font-bold text-[#0F2F63] group-hover:text-[#1D4ED8] transition-colors truncate text-[12px]">
-                ABCD Technologies
-              </div>
-              <div className="text-[10.5px] text-[#64748B] flex justify-between pt-0.5">
-                <span>Score: <strong className="text-[#0F2F63]">100/100</strong></span>
-                <span className="text-[#1D4ED8] font-bold">Inspect →</span>
-              </div>
-            </Link>
+          {/* SEARCH & RISK FILTERS FOR 20 BIDDERS */}
+          <div className="pt-3 border-t border-[#E7EEF6] flex flex-col sm:flex-row sm:items-center justify-between gap-2.5">
+            <div className="relative flex-1 max-w-sm">
+              <Search className="w-3.5 h-3.5 text-slate-400 absolute left-2.5 top-2.5" />
+              <input
+                type="text"
+                placeholder={t('officer.search_bidders_placeholder', 'Search by company name, GSTIN, or bidder ID...')}
+                value={bidderSearch}
+                onChange={(e) => setBidderSearch(e.target.value)}
+                className="w-full pl-8 pr-3 py-1.5 text-[11px] rounded-lg border border-slate-200 focus:outline-hidden focus:ring-1 focus:ring-blue-600 bg-slate-50/60"
+              />
+            </div>
 
-            {/* BIDDER 2 */}
-            <Link
-              href={`/tenders/${tenderId}/bidders/BIDDER-BCDE-002/verification`}
-              className="p-3 bg-[#FFFFFF] rounded-[10px] border border-[#D9E3EF] hover:border-[#D97706] hover:shadow-2xs transition-all space-y-1.5 block cursor-pointer group"
-            >
-              <div className="flex items-center justify-between">
-                <span className="font-mono text-[9.5px] text-[#64748B] font-bold">
-                  BIDDER-BCDE-002
-                </span>
-                <span className="text-[9.5px] font-bold px-2 py-0.5 rounded-full bg-[#FEF3C7] text-[#B45309] border border-[#FDE68A]">
-                  MEDIUM RISK
-                </span>
-              </div>
-              <div className="font-bold text-[#0F2F63] group-hover:text-[#D97706] transition-colors truncate text-[12px]">
-                BCDE Solutions
-              </div>
-              <div className="text-[10.5px] text-[#64748B] flex justify-between pt-0.5">
-                <span>Score: <strong className="text-[#0F2F63]">85/100</strong></span>
-                <span className="text-[#D97706] font-bold">Inspect →</span>
-              </div>
-            </Link>
+            <div className="flex items-center space-x-1 overflow-x-auto text-[10.5px]">
+              <button
+                type="button"
+                onClick={() => setRiskFilter('ALL')}
+                className={`px-2.5 py-1 rounded-md font-bold transition-all cursor-pointer ${
+                  riskFilter === 'ALL'
+                    ? 'bg-blue-900 text-white'
+                    : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                }`}
+              >
+                {t('officer.filter_all', { count: MOCK_BIDDERS.length })}
+              </button>
+              <button
+                type="button"
+                onClick={() => setRiskFilter('LOW')}
+                className={`px-2.5 py-1 rounded-md font-bold transition-all cursor-pointer ${
+                  riskFilter === 'LOW'
+                    ? 'bg-emerald-700 text-white'
+                    : 'bg-emerald-50 text-emerald-700 hover:bg-emerald-100'
+                }`}
+              >
+                {t('officer.filter_low', { count: lowCount })}
+              </button>
+              <button
+                type="button"
+                onClick={() => setRiskFilter('MEDIUM')}
+                className={`px-2.5 py-1 rounded-md font-bold transition-all cursor-pointer ${
+                  riskFilter === 'MEDIUM'
+                    ? 'bg-amber-600 text-white'
+                    : 'bg-amber-50 text-amber-700 hover:bg-amber-100'
+                }`}
+              >
+                {t('officer.filter_med', { count: medCount })}
+              </button>
+              <button
+                type="button"
+                onClick={() => setRiskFilter('HIGH')}
+                className={`px-2.5 py-1 rounded-md font-bold transition-all cursor-pointer ${
+                  riskFilter === 'HIGH'
+                    ? 'bg-red-700 text-white'
+                    : 'bg-red-50 text-red-700 hover:bg-red-100'
+                }`}
+              >
+                {t('officer.filter_high', { count: highCount })}
+              </button>
+            </div>
+          </div>
 
-            {/* BIDDER 3 */}
-            <Link
-              href={`/tenders/${tenderId}/bidders/BIDDER-CDEF-003/verification`}
-              className="p-3 bg-[#FFFFFF] rounded-[10px] border border-[#D9E3EF] hover:border-[#DC2626] hover:shadow-2xs transition-all space-y-1.5 block cursor-pointer group"
-            >
-              <div className="flex items-center justify-between">
-                <span className="font-mono text-[9.5px] text-[#64748B] font-bold">
-                  BIDDER-CDEF-003
-                </span>
-                <span className="text-[9.5px] font-bold px-2 py-0.5 rounded-full bg-[#FEF2F2] text-[#DC2626] border border-[#FECACA]">
-                  HIGH RISK
-                </span>
-              </div>
-              <div className="font-bold text-[#0F2F63] group-hover:text-[#DC2626] transition-colors truncate text-[12px]">
-                CDEF Industries
-              </div>
-              <div className="text-[10.5px] text-[#64748B] flex justify-between pt-0.5">
-                <span>Score: <strong className="text-[#0F2F63]">2/100</strong></span>
-                <span className="text-[#DC2626] font-bold">Inspect →</span>
-              </div>
-            </Link>
+          {/* DYNAMIC 20 BIDDERS GRID */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2.5 pt-1 text-xs max-h-[460px] overflow-y-auto pr-1">
+            {filteredBidders.map((b, idx) => {
+              const codePadded = b.id.replace('bidder-', '').padStart(3, '0');
+              const codePrefix = b.company_name.split(' ')[0];
+              const code = `BIDDER-${codePrefix}-${codePadded}`;
+              const isLow = b.risk_level === 'LOW';
+              const isMed = b.risk_level === 'MEDIUM';
+
+              return (
+                <Link
+                  key={b.id}
+                  href={`/tenders/${tenderId}/bidders/${b.id}/verification`}
+                  className={`p-2.5 bg-[#FFFFFF] rounded-[10px] border hover:shadow-2xs transition-all space-y-1.5 block cursor-pointer group ${
+                    isLow
+                      ? 'border-[#D9E3EF] hover:border-[#1D4ED8]'
+                      : isMed
+                      ? 'border-[#FDE68A] hover:border-[#D97706]'
+                      : 'border-[#FECACA] hover:border-[#DC2626]'
+                  }`}
+                >
+                  <div className="flex items-center justify-between">
+                    <span className="font-mono text-[9px] text-[#64748B] font-bold">
+                      {code}
+                    </span>
+                    <span
+                      className={`text-[8.5px] font-bold px-1.5 py-0.2 rounded-full border ${
+                        isLow
+                          ? 'bg-[#ECFDF5] text-[#15803D] border-[#BBF7D0]'
+                          : isMed
+                          ? 'bg-[#FEF3C7] text-[#B45309] border-[#FDE68A]'
+                          : 'bg-[#FEF2F2] text-[#DC2626] border-[#FECACA]'
+                      }`}
+                    >
+                      {isLow
+                        ? t('status.low_risk', 'LOW RISK')
+                        : isMed
+                        ? t('status.medium_risk', 'MEDIUM RISK')
+                        : t('status.high_risk', 'HIGH RISK')}
+                    </span>
+                  </div>
+                  <div className="font-bold text-[#0F2F63] group-hover:text-[#1D4ED8] transition-colors truncate text-[11.5px]">
+                    {b.company_name}
+                  </div>
+                  <div className="text-[10px] text-[#64748B] flex justify-between pt-0.5">
+                    <span>
+                      Score: <strong className="text-[#0F2F63]">{b.overall_score}/100</strong>
+                    </span>
+                    <span
+                      className={`${
+                        isLow
+                          ? 'text-[#1D4ED8]'
+                          : isMed
+                          ? 'text-[#D97706]'
+                          : 'text-[#DC2626]'
+                      } font-bold`}
+                    >
+                      Inspect →
+                    </span>
+                  </div>
+                </Link>
+              );
+            })}
           </div>
         </div>
       </div>

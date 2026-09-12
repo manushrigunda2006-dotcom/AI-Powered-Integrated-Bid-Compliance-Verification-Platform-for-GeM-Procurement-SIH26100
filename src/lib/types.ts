@@ -106,6 +106,7 @@ export interface Bidder {
   contact_email: string;
   submission_date: string;
   overall_score: number;          // 0 to 100
+  compliance_score?: number;     // Alias for overall_score
   risk_level: RiskLevel;
   officer_decision: OfficerDecision;
   decision_notes?: string;

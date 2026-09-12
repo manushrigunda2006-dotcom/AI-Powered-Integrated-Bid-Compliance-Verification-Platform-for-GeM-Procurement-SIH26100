@@ -19,9 +19,11 @@ import {
 } from 'lucide-react';
 import { useBidderAuth, logout } from '@/lib/authGuard';
 import { MOCK_BIDDERS } from '@/lib/mock-data/tender-seed';
+import { useLanguage } from '@/lib/i18n/LanguageContext';
 
 export default function BidderProfilePage() {
   const router = useRouter();
+  const { t } = useLanguage();
   const { session, isAuthenticated, isAuthorized, isLoading } = useBidderAuth(true);
 
   if (isLoading || !isAuthorized || !session) {
@@ -52,10 +54,10 @@ export default function BidderProfilePage() {
       {/* Breadcrumb Navigation */}
       <nav className="flex items-center space-x-2 text-xs text-slate-500 font-medium">
         <Link href="/bidder/dashboard" className="text-blue-900 hover:underline font-bold">
-          Bidder Dashboard
+          {t('nav.bidder_dashboard')}
         </Link>
         <span>/</span>
-        <span className="text-slate-800 font-bold">Company Profile</span>
+        <span className="text-slate-800 font-bold">{t('nav.company_profile')}</span>
       </nav>
 
       {/* Hero Bidder Identification Card */}
@@ -93,7 +95,7 @@ export default function BidderProfilePage() {
               className="px-4 py-2 bg-red-50 hover:bg-red-100 text-red-700 text-xs font-bold rounded-xl transition-colors flex items-center space-x-1.5 cursor-pointer"
             >
               <LogOut className="w-4 h-4 text-red-600" />
-              <span>Sign Out</span>
+              <span>{t('nav.logout')}</span>
             </button>
           </div>
         </div>

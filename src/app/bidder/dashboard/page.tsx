@@ -26,9 +26,11 @@ import { bidderService } from '@/services/bidderService';
 import { MOCK_TENDER, MOCK_BIDDERS } from '@/lib/mock-data/tender-seed';
 import { Bidder, Tender } from '@/lib/types';
 import { formatIndianCurrency, formatDate } from '@/lib/utils';
+import { useLanguage } from '@/lib/i18n/LanguageContext';
 
 export default function BidderDashboardPage() {
   const router = useRouter();
+  const { t } = useLanguage();
   const { session, isAuthenticated, isAuthorized, isLoading } = useBidderAuth(true);
 
   const [bidderData, setBidderData] = useState<Bidder | null>(null);
@@ -81,7 +83,7 @@ export default function BidderDashboardPage() {
         <div>
           <div className="flex items-center space-x-2">
             <span className="bg-blue-100 text-blue-900 font-mono text-[10.5px] font-bold px-2.5 py-0.5 rounded-md">
-              BIDDER PORTAL
+              {t('app.bidder_portal')}
             </span>
             <span className="bg-emerald-100 text-emerald-800 text-[10.5px] font-bold px-2 py-0.5 rounded-md flex items-center space-x-1">
               <span className="w-1.5 h-1.5 rounded-full bg-emerald-600 animate-pulse" />
@@ -102,14 +104,14 @@ export default function BidderDashboardPage() {
             className="px-4 py-2 bg-white border border-slate-200 hover:border-blue-500 hover:text-blue-900 text-slate-700 rounded-xl text-xs font-bold shadow-xs transition-all flex items-center space-x-1.5 cursor-pointer"
           >
             <Clock className="w-3.5 h-3.5" />
-            <span>My Activity Logs</span>
+            <span>{t('nav.my_logs')}</span>
           </Link>
           <Link
             href="/bidder/profile"
             className="px-4 py-2 bg-blue-900 hover:bg-blue-800 text-white rounded-xl text-xs font-bold shadow-xs transition-all flex items-center space-x-1.5 cursor-pointer"
           >
             <Building2 className="w-3.5 h-3.5" />
-            <span>Company Profile</span>
+            <span>{t('nav.company_profile')}</span>
           </Link>
         </div>
       </div>
@@ -153,7 +155,7 @@ export default function BidderDashboardPage() {
           <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200 flex items-center justify-between">
             <div>
               <span className="text-[10.5px] uppercase font-bold text-slate-400 block">
-                Verification Score
+                {t('bidder.overall_score')}
               </span>
               <span className="text-2xl font-black text-slate-900">
                 {bidder.overall_score}/100
@@ -168,30 +170,34 @@ export default function BidderDashboardPage() {
                   : 'bg-red-100 text-red-800'
               }`}
             >
-              {bidder.risk_level} RISK
+              {bidder.risk_level === 'LOW'
+                ? t('status.low_risk')
+                : bidder.risk_level === 'MEDIUM'
+                ? t('status.medium_risk')
+                : t('status.high_risk')}
             </span>
           </div>
 
           {/* Status Box 2: Standing */}
           <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200">
             <span className="text-[10.5px] uppercase font-bold text-slate-400 block">
-              Official GeM Standing
+              {t('bidder.officer_decision')}
             </span>
             <div className="flex items-center space-x-1.5 mt-1">
               {isLowRisk ? (
                 <>
                   <CheckCircle2 className="w-4 h-4 text-emerald-600" />
-                  <span className="font-bold text-emerald-700">Recommended for Technical Qualification</span>
+                  <span className="font-bold text-emerald-700">{t('status.qualified')}</span>
                 </>
               ) : isMediumRisk ? (
                 <>
                   <AlertTriangle className="w-4 h-4 text-amber-600" />
-                  <span className="font-bold text-amber-700">Clarification Required from Bidder</span>
+                  <span className="font-bold text-amber-700">{t('status.clarification')}</span>
                 </>
               ) : (
                 <>
                   <XCircle className="w-4 h-4 text-red-600" />
-                  <span className="font-bold text-red-700">Statutory Non-Compliance Detected</span>
+                  <span className="font-bold text-red-700">{t('status.disqualified')}</span>
                 </>
               )}
             </div>
@@ -231,7 +237,7 @@ export default function BidderDashboardPage() {
                 Official GeM Clarification Notice Issued
               </h3>
               <p className="text-xs text-amber-800 leading-relaxed">
-                The Procurement Evaluation Authority has flagged an inconsistency between your GST Registration legal name (<strong>{bidder.company_name}</strong>) and the legal name appearing on your submitted OEM Manufacturer Authorization Form (<strong>BCDE Solutions Technologies</strong>).
+                The Procurement Evaluation Authority has flagged an inconsistency between your GST Registration legal name (<strong>{bidder.company_name}</strong>) and the legal name appearing on your submitted OEM Manufacturer Authorization Form (<strong>{bidder.company_name} Systems</strong>).
               </p>
               <div className="p-3 bg-white/80 rounded-xl border border-amber-200 text-xs text-amber-900 font-mono mt-2">
                 &ldquo;Please furnish Board Resolution or Registrar of Companies (ROC) name amendment certificate confirming corporate continuity.&rdquo;
@@ -280,7 +286,7 @@ export default function BidderDashboardPage() {
               <div className="flex items-center space-x-2">
                 <FileCheck2 className="w-5 h-5 text-blue-900" />
                 <h3 className="text-sm font-bold text-slate-900">
-                  Submitted Document Packets
+                  {t('bidder.my_documents')}
                 </h3>
               </div>
               <span className="text-[10.5px] font-bold text-slate-500">
@@ -321,7 +327,7 @@ export default function BidderDashboardPage() {
               <div className="flex items-center space-x-2">
                 <ShieldCheck className="w-5 h-5 text-blue-900" />
                 <h3 className="text-sm font-bold text-slate-900">
-                  Clause-by-Clause Compliance Status
+                  {t('verify.compliance_clauses')}
                 </h3>
               </div>
               <span className="text-[10px] text-slate-400 font-semibold">

@@ -21,10 +21,12 @@ import {
 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/lib/authGuard';
+import { useLanguage } from '@/lib/i18n/LanguageContext';
 
 export default function ExistingTendersPage() {
   const router = useRouter();
   const { isBidder, isLoading: authLoading } = useAuth();
+  const { t } = useLanguage();
   const [tenders, setTenders] = useState<Tender[]>([]);
 
   useEffect(() => {
@@ -207,10 +209,10 @@ export default function ExistingTendersPage() {
               </div>
               <div className="p-2.5 bg-slate-50 rounded-xl">
                 <span className="text-[10px] uppercase font-bold text-slate-400 block">
-                  Enrolled Bidders
+                  {t('tender.enrolled_bidders', 'Enrolled Bidders')}
                 </span>
                 <span className="text-xs font-bold text-blue-900">
-                  3 Bidder Packets Ready
+                  20 Bidder Packets Ready
                 </span>
               </div>
             </div>

@@ -22,9 +22,11 @@ import {
   FileCheck
 } from 'lucide-react';
 import { useAuth } from '@/lib/authGuard';
+import { useLanguage } from '@/lib/i18n/LanguageContext';
 
 export default function TenderDetailsPage() {
   const { isBidder, isOfficer } = useAuth();
+  const { t } = useLanguage();
   const params = useParams();
   const router = useRouter();
   const rawId = (params?.id as string) || 'tender-gem-2026-cloud';
@@ -117,7 +119,7 @@ export default function TenderDetailsPage() {
                 className="inline-flex items-center space-x-2 px-6 py-3.5 bg-blue-900 hover:bg-blue-800 text-white font-black text-xs rounded-xl shadow-md transition-all transform hover:-translate-y-0.5 cursor-pointer"
               >
                 <Users className="w-4 h-4" />
-                <span>Proceed to Bidders Evaluation (3 Enrolled)</span>
+                <span>Proceed to Bidders Evaluation (20 Enrolled)</span>
                 <ChevronRight className="w-4 h-4" />
               </Link>
             )}

@@ -11,8 +11,12 @@ import {
   FileCheck2,
   Scale
 } from 'lucide-react';
+import { useLanguage } from '@/lib/i18n/LanguageContext';
+import { LanguageSelector } from '@/components/LanguageSelector';
 
 export default function RoleSelectionPage() {
+  const { t } = useLanguage();
+
   return (
     <div className="min-h-[78vh] flex flex-col justify-center py-6 sm:px-6 lg:px-8">
       {/* Header / Branding */}
@@ -28,11 +32,16 @@ export default function RoleSelectionPage() {
             <span>National Procurement Portal • SIH Edition</span>
           </span>
           <h1 className="mt-3 text-2xl sm:text-4xl font-black text-slate-900 tracking-tight">
-            Welcome to the Procurement Compliance Platform
+            {t('role.welcome', 'Welcome to the Procurement Compliance Platform')}
           </h1>
           <p className="text-xs sm:text-sm text-slate-600 mt-2 max-w-lg mx-auto leading-relaxed">
-            Please select your role below to access your dedicated, secure portal.
+            {t('role.select_prompt', 'Please select your role below to access your dedicated, secure portal.')}
           </p>
+
+          {/* Expanded Language Selector on Landing */}
+          <div className="pt-3 flex justify-center">
+            <LanguageSelector variant="expanded" />
+          </div>
         </div>
       </div>
 
@@ -53,10 +62,10 @@ export default function RoleSelectionPage() {
 
               <div>
                 <h2 className="text-xl font-black text-slate-900 group-hover:text-blue-900 transition-colors">
-                  Bidder Login
+                  {t('role.bidder_title', 'Bidder Login')}
                 </h2>
                 <p className="text-xs text-slate-600 mt-1.5 leading-relaxed">
-                  Access your tenders, submissions, compliance status and verification results.
+                  {t('role.bidder_desc', 'Access your tenders, submissions, compliance status and verification results.')}
                 </p>
               </div>
 
@@ -81,7 +90,7 @@ export default function RoleSelectionPage() {
                 href="/bidder/login"
                 className="w-full py-3 px-4 bg-blue-900 hover:bg-blue-800 text-white text-xs font-bold rounded-xl shadow-xs transition-all flex items-center justify-center space-x-2 cursor-pointer group-hover:shadow-md"
               >
-                <span>Continue to Bidder Login</span>
+                <span>{t('role.bidder_btn', 'Enter as Bidder →')}</span>
                 <ArrowRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
               </Link>
             </div>
@@ -95,16 +104,16 @@ export default function RoleSelectionPage() {
                   <ShieldCheck className="w-6 h-6 text-amber-700" />
                 </div>
                 <span className="text-[10px] uppercase font-bold tracking-wider px-2.5 py-1 rounded-full bg-amber-100 text-amber-800">
-                  Role: Officer
+                  {t('role.officer_badge', 'Procurement Authority')}
                 </span>
               </div>
 
               <div>
                 <h2 className="text-xl font-black text-slate-900 group-hover:text-amber-800 transition-colors">
-                  Government Officer Login
+                  {t('role.officer_title', 'Government Officer Login')}
                 </h2>
                 <p className="text-xs text-slate-600 mt-1.5 leading-relaxed">
-                  Review tenders, verify bidders, inspect compliance results and adjudication logs.
+                  {t('role.officer_desc', 'Review tenders, verify bidder eligibility, run compliance engine and audit bids.')}
                 </p>
               </div>
 
@@ -129,7 +138,7 @@ export default function RoleSelectionPage() {
                 href="/officer/login"
                 className="w-full py-3 px-4 bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold rounded-xl shadow-xs transition-all flex items-center justify-center space-x-2 cursor-pointer group-hover:shadow-md"
               >
-                <span>Continue to Officer Login</span>
+                <span>{t('role.officer_btn', 'Enter as Government Officer →')}</span>
                 <ArrowRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
               </Link>
             </div>

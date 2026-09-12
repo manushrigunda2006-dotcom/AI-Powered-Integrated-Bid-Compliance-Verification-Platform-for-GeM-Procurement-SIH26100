@@ -41,9 +41,11 @@ import {
 import { GeminiAiInsights } from '@/components/GeminiAiInsights';
 import { GeminiFullEvaluationResult } from '@/lib/gemini/types';
 import { useOfficerAuth } from '@/lib/authGuard';
+import { useLanguage } from '@/lib/i18n/LanguageContext';
 
 export default function BidderVerificationPage() {
   const { session, isAuthenticated, isAuthorized, isLoading: authLoading } = useOfficerAuth(true);
+  const { t } = useLanguage();
   const params = useParams();
   const router = useRouter();
 
@@ -355,41 +357,58 @@ export default function BidderVerificationPage() {
           </span>
         </nav>
 
-        {/* Bidder Switcher Bar */}
+        {/* Bidder Switcher Bar for all 20 Bidders */}
         <div className="flex items-center space-x-2">
-          <span className="text-xs font-bold text-slate-400 uppercase tracking-wider">
-            Quick Switch:
+          <span className="text-xs font-bold text-slate-400 uppercase tracking-wider hidden sm:inline-block">
+            {t('verify.quick_switch', 'Quick Switch:')}
           </span>
-          <div className="flex items-center space-x-1 bg-slate-100 p-1 rounded-xl">
-            {(biddersList.length > 0 ? biddersList : [
-              { id: '22222222-2222-2222-2222-222222222221', company_name: 'Bidder 1 (Eligible)', status: 'ELIGIBLE' },
-              { id: '22222222-2222-2222-2222-222222222222', company_name: 'Bidder 2 (Mismatch)', status: 'REVIEW_REQUIRED' },
-              { id: '22222222-2222-2222-2222-222222222223', company_name: 'Bidder 3 (Debarred)', status: 'DISQUALIFIED' },
-            ]).map((b, idx) => {
-              const active = b.id === bidder.id || bidderId.includes(b.id) || b.id.includes(bidderId);
-              const label =
-                idx === 0
-                  ? 'Bidder 1 (Eligible)'
-                  : idx === 1
-                  ? 'Bidder 2 (Mismatch)'
-                  : 'Bidder 3 (Debarred)';
+          <div className="flex items-center space-x-1.5">
+            {/* Prev Button */}
+            <button
+              type="button"
+              onClick={() => {
+                const list = biddersList.length > 0 ? biddersList : [
+                  { id: 'bidder-01', company_name: 'ABCD Technologies', risk_level: 'LOW' },
+                ];
+                const curIdx = list.findIndex((b) => b.id === bidder?.id || bidderId.includes(b.id) || b.id.includes(bidderId));
+                const prev = curIdx > 0 ? list[curIdx - 1] : list[list.length - 1];
+                if (prev) router.push(`/tenders/${tenderId}/bidders/${prev.id}/verification`);
+              }}
+              className="px-2.5 py-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold transition-all cursor-pointer shadow-2xs"
+              title="Previous Bidder"
+            >
+              {t('verify.prev', '← Prev')}
+            </button>
 
-              return (
-                <button
-                  key={b.id}
-                  onClick={() =>
-                    router.push(`/tenders/${tenderId}/bidders/${b.id}/verification`)
-                  }
-                  className={`px-3 py-1 rounded-lg text-xs font-bold transition-all ${
-                    active
-                      ? 'bg-blue-900 text-white shadow-xs'
-                      : 'text-slate-600 hover:bg-slate-200'
-                  }`}
-                >
-                  {label}
-                </button>
-              );
-            })}
+            {/* Dropdown for All 20 Bidders */}
+            <select
+              value={biddersList.find((b) => b.id === bidder?.id || bidderId.includes(b.id) || b.id.includes(bidderId))?.id || bidder?.id || bidderId}
+              onChange={(e) => router.push(`/tenders/${tenderId}/bidders/${e.target.value}/verification`)}
+              className="bg-white border border-slate-300 text-slate-800 text-xs font-bold rounded-lg px-2.5 py-1.5 focus:ring-2 focus:ring-blue-600 focus:outline-hidden max-w-[240px] sm:max-w-[280px] truncate cursor-pointer shadow-2xs"
+            >
+              {biddersList.map((b, idx) => (
+                <option key={b.id} value={b.id}>
+                  {idx + 1}. {b.company_name} ({b.risk_level || 'LOW'})
+                </option>
+              ))}
+            </select>
+
+            {/* Next Button */}
+            <button
+              type="button"
+              onClick={() => {
+                const list = biddersList.length > 0 ? biddersList : [
+                  { id: 'bidder-01', company_name: 'ABCD Technologies', risk_level: 'LOW' },
+                ];
+                const curIdx = list.findIndex((b) => b.id === bidder?.id || bidderId.includes(b.id) || b.id.includes(bidderId));
+                const next = curIdx < list.length - 1 ? list[curIdx + 1] : list[0];
+                if (next) router.push(`/tenders/${tenderId}/bidders/${next.id}/verification`);
+              }}
+              className="px-2.5 py-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold transition-all cursor-pointer shadow-2xs"
+              title="Next Bidder"
+            >
+              {t('verify.next', 'Next →')}
+            </button>
           </div>
 
           <button

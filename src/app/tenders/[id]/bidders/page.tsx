@@ -28,8 +28,10 @@ import {
 import { tenderService } from '@/services/tenderService';
 import { bidderService } from '@/services/bidderService';
 import { useOfficerAuth } from '@/lib/authGuard';
+import { useLanguage } from '@/lib/i18n/LanguageContext';
 
 export default function TenderBiddersPage() {
+  const { t } = useLanguage();
   const { session, isAuthenticated, isAuthorized, isLoading: authLoading } = useOfficerAuth(true);
   const params = useParams();
   const rawTenderId = (params?.id as string) || '11111111-1111-1111-1111-111111111111';
@@ -127,17 +129,17 @@ export default function TenderBiddersPage() {
     <div className="space-y-6">
       {/* Breadcrumb Navigation */}
       <nav className="flex items-center space-x-2 text-xs text-slate-500 font-medium">
-        <Link href="/" className="hover:text-blue-900 transition-colors">
-          GeM Home
+        <Link href="/officer/dashboard" className="hover:text-blue-900 transition-colors">
+          {t('nav.officer_dashboard')}
         </Link>
         <span>/</span>
         <Link href="/tenders" className="hover:text-blue-900 transition-colors">
-          Tenders
+          {t('nav.existing_tenders')}
         </Link>
         <span>/</span>
         <span className="text-slate-800 font-bold">{tender.tender_number}</span>
         <span>/</span>
-        <span className="text-blue-900 font-bold">Bidder Packets</span>
+        <span className="text-blue-900 font-bold">{t('tender.enrolled_bidders')}</span>
       </nav>
 
       {/* Tender RFP Hero Banner */}
@@ -175,7 +177,7 @@ export default function TenderBiddersPage() {
               className="inline-flex items-center space-x-2 px-4 py-2.5 bg-blue-900 hover:bg-blue-800 disabled:bg-slate-400 text-white text-xs font-bold rounded-xl shadow-xs transition-colors"
             >
               <RefreshCw className={`w-3.5 h-3.5 ${isAuditing ? 'animate-spin' : ''}`} />
-              <span>{isAuditing ? 'Auditing Packets...' : 'Re-run Compliance Engine'}</span>
+              <span>{isAuditing ? 'Auditing Packets...' : t('tender.rerun_engine')}</span>
             </button>
             <span className="text-[11px] text-slate-400">
               Deterministic rule checks + Registry adapters
@@ -187,7 +189,7 @@ export default function TenderBiddersPage() {
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-3 border-t border-slate-100 text-xs">
           <div className="p-3 bg-slate-50 rounded-xl">
             <span className="text-[10px] uppercase font-bold text-slate-400 block">
-              Estimated Tender Value
+              {t('tender.estimated_budget')}
             </span>
             <span className="text-base font-black text-slate-900">
               {tender.budget_formatted}
@@ -195,7 +197,7 @@ export default function TenderBiddersPage() {
           </div>
           <div className="p-3 bg-slate-50 rounded-xl">
             <span className="text-[10px] uppercase font-bold text-slate-400 block">
-              Bid Closing Deadline
+              {t('tender.closing_deadline')}
             </span>
             <span className="text-sm font-bold text-slate-800">
               {formatDate(tender.deadline)}
@@ -203,7 +205,7 @@ export default function TenderBiddersPage() {
           </div>
           <div className="p-3 bg-slate-50 rounded-xl">
             <span className="text-[10px] uppercase font-bold text-slate-400 block">
-              Mandatory Clauses
+              {t('tender.compliance_clauses')}
             </span>
             <span className="text-sm font-bold text-slate-800">
               {tender.requirements?.filter((r) => r.is_mandatory).length || 5} Clauses (Strict)
@@ -211,10 +213,10 @@ export default function TenderBiddersPage() {
           </div>
           <div className="p-3 bg-slate-50 rounded-xl">
             <span className="text-[10px] uppercase font-bold text-slate-400 block">
-              Total Submissions
+              {t('tender.enrolled_bidders')}
             </span>
             <span className="text-sm font-bold text-slate-800">
-              {bidders.length} Bidders Enrolled
+              {t('tender.bidders_enrolled', { count: bidders.length })}
             </span>
           </div>
         </div>
@@ -225,7 +227,7 @@ export default function TenderBiddersPage() {
         <div className="bg-white rounded-xl border border-emerald-200 p-4 shadow-xs flex items-center justify-between">
           <div>
             <span className="text-xs font-semibold text-emerald-800 block">
-              Eligible / Compliant
+              {t('tender.eligible')}
             </span>
             <span className="text-2xl font-black text-emerald-700">
               {qualifiedCount}
@@ -242,7 +244,7 @@ export default function TenderBiddersPage() {
         <div className="bg-white rounded-xl border border-amber-200 p-4 shadow-xs flex items-center justify-between">
           <div>
             <span className="text-xs font-semibold text-amber-800 block">
-              Review / Clarification Required
+              {t('tender.review_required')}
             </span>
             <span className="text-2xl font-black text-amber-600">
               {reviewCount}
@@ -259,7 +261,7 @@ export default function TenderBiddersPage() {
         <div className="bg-white rounded-xl border border-rose-200 p-4 shadow-xs flex items-center justify-between">
           <div>
             <span className="text-xs font-semibold text-rose-800 block">
-              Disqualified / High Risk
+              {t('tender.disqualified')}
             </span>
             <span className="text-2xl font-black text-rose-600">
               {disqualifiedCount}

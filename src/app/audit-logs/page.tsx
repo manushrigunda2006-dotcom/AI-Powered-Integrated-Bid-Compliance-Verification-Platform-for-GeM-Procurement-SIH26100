@@ -24,8 +24,10 @@ import {
   AlertTriangle,
 } from 'lucide-react';
 import { useOfficerAuth } from '@/lib/authGuard';
+import { useLanguage } from '@/lib/i18n/LanguageContext';
 
 export default function AuditLogsPage() {
+  const { t } = useLanguage();
   const { session, isAuthenticated, isAuthorized, isLoading: authLoading } = useOfficerAuth(true);
   const [logs, setLogs] = useState<AuditLog[]>([]);
   const [loading, setLoading] = useState(true);
@@ -126,20 +128,20 @@ export default function AuditLogsPage() {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div className="flex items-center space-x-3">
           <Link
-            href="/"
+            href="/officer/dashboard"
             className="p-2 rounded-xl bg-white border border-slate-200 hover:border-slate-300 text-slate-600 hover:text-slate-900 transition-colors shadow-xs cursor-pointer"
-            title="Back to Procurement Portal"
+            title="Back to Officer Dashboard"
           >
             <ArrowLeft className="w-5 h-5" />
           </Link>
           <div>
             <div className="flex items-center space-x-2">
               <h1 className="text-2xl font-black text-slate-900 tracking-tight">
-                GeM Compliance Audit & Verification Trail
+                {t('nav.audit_trail')}
               </h1>
               <span className="bg-emerald-100 text-emerald-800 text-xs font-bold px-2.5 py-0.5 rounded-full border border-emerald-200 flex items-center space-x-1">
                 <Lock className="w-3 h-3" />
-                <span>Immutable</span>
+                <span>{t('nav.gfr_compliant')}</span>
               </span>
             </div>
             <p className="text-xs text-slate-600">

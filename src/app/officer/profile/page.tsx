@@ -23,9 +23,11 @@ import {
   BadgeAlert
 } from 'lucide-react';
 import { useOfficerAuth, logout } from '@/lib/authGuard';
+import { useLanguage } from '@/lib/i18n/LanguageContext';
 
 export default function OfficerProfilePage() {
   const router = useRouter();
+  const { t } = useLanguage();
   const { session, isAuthenticated, isAuthorized, isLoading } = useOfficerAuth(true);
 
   const officer = {
@@ -103,11 +105,11 @@ export default function OfficerProfilePage() {
     <div className="space-y-6">
       {/* Breadcrumb Navigation */}
       <nav className="flex items-center space-x-2 text-xs text-slate-500 font-medium">
-        <Link href="/" className="text-blue-900 hover:underline font-bold">
-          Procurement Dashboard
+        <Link href="/officer/dashboard" className="text-blue-900 hover:underline font-bold">
+          {t('nav.officer_dashboard')}
         </Link>
         <span>/</span>
-        <span className="text-slate-800 font-bold">Officer Profile & PKI Standing</span>
+        <span className="text-slate-800 font-bold">{t('nav.profile')}</span>
       </nav>
 
       {/* Hero Officer Identification Card */}
@@ -152,7 +154,7 @@ export default function OfficerProfilePage() {
               className="px-5 py-2.5 bg-blue-900 hover:bg-blue-800 text-white text-xs font-bold rounded-xl shadow-xs transition-colors flex items-center space-x-1.5 cursor-pointer"
             >
               <FileText className="w-3.5 h-3.5" />
-              <span>Review Active Tenders</span>
+              <span>{t('nav.existing_tenders')}</span>
             </Link>
 
             <button
@@ -161,7 +163,7 @@ export default function OfficerProfilePage() {
               className="px-4 py-2 bg-rose-50 hover:bg-rose-100 text-rose-700 text-xs font-bold rounded-xl transition-colors flex items-center space-x-1.5 cursor-pointer border border-rose-200"
             >
               <LogOut className="w-3.5 h-3.5 text-rose-600" />
-              <span>Sign Out Session</span>
+              <span>{t('nav.logout')}</span>
             </button>
           </div>
         </div>

@@ -68,6 +68,34 @@ const DEBARRED_IDENTIFIERS_DATABASE: Record<string, Partial<DebarmentVerificatio
     reason: 'Submission of falsified OEM authorization certificates in tender CPA/IT/2023/001.',
     is_verified: true,
   },
+  // Bidder 19: STUV Solutions
+  'SSSSS0000S': {
+    pan_cin: 'SSSSS0000S',
+    is_blacklisted: true,
+    status: 'DEBARRED',
+    debarring_agency: 'Central Procurement Authority / Debarment Wing',
+    order_number: 'CPA/PROC/DEBAR/2024/042',
+    debarment_period: {
+      start_date: '2024-02-01',
+      end_date: '2027-01-31',
+    },
+    reason: 'Statutory non-performance debarment order CPA/PROC/DEBAR/2024/042.',
+    is_verified: true,
+  },
+  // Bidder 20: TUVW Systems
+  'TTTTT0000T': {
+    pan_cin: 'TTTTT0000T',
+    is_blacklisted: true,
+    status: 'DEBARRED',
+    debarring_agency: 'Central Procurement Authority / Debarment Wing',
+    order_number: 'CPA/PROC/DEBAR/2024/099',
+    debarment_period: {
+      start_date: '2024-05-01',
+      end_date: '2027-04-30',
+    },
+    reason: 'Critical integrity violation and document fabrication order CPA/PROC/DEBAR/2024/099.',
+    is_verified: true,
+  },
 };
 
 export class DebarmentAdapter extends VerificationAdapter<DebarmentAdapterInput, DebarmentVerificationResult> {
