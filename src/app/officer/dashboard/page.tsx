@@ -57,7 +57,7 @@ export default function OfficerDashboardPage() {
       <div className="min-h-[60vh] flex items-center justify-center">
         <div className="flex flex-col items-center space-y-3">
           <div className="w-9 h-9 border-3 border-blue-900 border-t-transparent rounded-full animate-spin" />
-          <p className="text-xs font-bold text-slate-500">Verifying Officer Credentials &amp; Access...</p>
+          <p className="text-xs font-bold text-slate-500">{t('Verifying Officer Credentials & Access...')}</p>
         </div>
       </div>
     );
@@ -75,7 +75,7 @@ export default function OfficerDashboardPage() {
             {/* Top SIH Badge */}
             <div className="inline-flex items-center self-start bg-[#DCEBFF] text-[#1D4ED8] text-[9.5px] font-bold px-2.5 py-0.5 rounded-full border border-blue-200/60 shadow-2xs">
               <span className="w-2 h-2 rounded-full bg-[#16A34A] mr-1.5 animate-pulse" />
-              <span>Smart India Hackathon (SIH) Prototype</span>
+              <span>{t('Smart India Hackathon (SIH) Prototype')}</span>
             </div>
 
             {/* Hero Main Heading */}
@@ -116,12 +116,12 @@ export default function OfficerDashboardPage() {
               <div className="flex items-center justify-between text-[10.5px] font-bold text-[#0F2F63]">
                 <span className="flex items-center space-x-1.5">
                   <CheckCircle2 className="w-3.5 h-3.5 text-[#16A34A]" />
-                  <span>Deterministic Rule Gate</span>
+                  <span>{t('Deterministic Rule Gate')}</span>
                 </span>
-                <span className="bg-[#ECFDF5] text-[#15803D] px-1.5 py-0.2 rounded text-[8.5px] font-bold">Exact Math</span>
+                <span className="bg-[#ECFDF5] text-[#15803D] px-1.5 py-0.2 rounded text-[8.5px] font-bold">{t('Exact Math')}</span>
               </div>
               <p className="text-[10px] text-[#475569] leading-tight">
-                Turnover, experience, and validity evaluated via strict deterministic code.
+                {t('Turnover, experience, and validity evaluated via strict deterministic code.')}
               </p>
             </div>
 
@@ -129,12 +129,12 @@ export default function OfficerDashboardPage() {
               <div className="flex items-center justify-between text-[10.5px] font-bold text-[#0F2F63]">
                 <span className="flex items-center space-x-1.5">
                   <GitCompare className="w-3.5 h-3.5 text-[#D97706]" />
-                  <span>Cross-Document Entity Check</span>
+                  <span>{t('Cross-Document Entity Check')}</span>
                 </span>
-                <span className="bg-[#FEF3C7] text-[#B45309] px-1.5 py-0.2 rounded text-[8.5px] font-bold">Levenshtein</span>
+                <span className="bg-[#FEF3C7] text-[#B45309] px-1.5 py-0.2 rounded text-[8.5px] font-bold">{t('Levenshtein')}</span>
               </div>
               <p className="text-[10px] text-[#475569] leading-tight">
-                Detects legal entity variations across GST, MAF, and audit certificates.
+                {t('Detects legal entity variations across GST, MAF, and audit certificates.')}
               </p>
             </div>
 
@@ -142,12 +142,12 @@ export default function OfficerDashboardPage() {
               <div className="flex items-center justify-between text-[10.5px] font-bold text-[#0F2F63]">
                 <span className="flex items-center space-x-1.5">
                   <LockKeyhole className="w-3.5 h-3.5 text-[#7C3AED]" />
-                  <span>Audit Trail &amp; Evidence</span>
+                  <span>{t('Audit Trail & Evidence')}</span>
                 </span>
-                <span className="bg-[#F3E8FF] text-[#7C3AED] px-1.5 py-0.2 rounded text-[8.5px] font-bold">Sec 65B</span>
+                <span className="bg-[#F3E8FF] text-[#7C3AED] px-1.5 py-0.2 rounded text-[8.5px] font-bold">{t('Sec 65B')}</span>
               </div>
               <p className="text-[10px] text-[#475569] leading-tight">
-                Tamper-evident log with PKI cryptographic officer sign-off.
+                {t('Tamper-evident log with PKI cryptographic officer sign-off.')}
               </p>
             </div>
           </div>
@@ -161,14 +161,14 @@ export default function OfficerDashboardPage() {
         <div className="flex items-center justify-between mb-3">
           <div>
             <h2 className="text-[18px] sm:text-[19px] font-bold text-[#0F2F63] tracking-tight">
-              Procurement Officer Workflow Navigation
+              {t('Procurement Officer Workflow Navigation')}
             </h2>
             <p className="text-[10.5px] text-[#64748B]">
-              End-to-end evaluation lifecycle from RFP drafting to officer adjudication &amp; audit trails
+              {t('End-to-end evaluation lifecycle from RFP drafting to officer adjudication & audit trails')}
             </p>
           </div>
           <span className="text-[10px] font-semibold text-[#64748B] bg-[#F1F5F9] border border-[#E2E8F0] px-2.5 py-0.5 rounded-full">
-            SIH26100 Architecture
+            {t('SIH26100 Architecture')}
           </span>
         </div>
 
@@ -185,19 +185,19 @@ export default function OfficerDashboardPage() {
                   <FileText className="w-4 h-4" />
                 </div>
                 <span className="text-[9.5px] uppercase font-bold text-[#1D4ED8] tracking-wider">
-                  RFP DIRECTORY
+                  {t('RFP DIRECTORY')}
                 </span>
               </div>
               <h3 className="text-[15px] font-bold text-[#0F2F63] group-hover:text-[#1D4ED8] transition-colors leading-tight">
-                Existing Tenders
+                {t('Existing Tenders')}
               </h3>
               <p className="text-[11px] text-[#64748B] leading-relaxed line-clamp-2">
-                Inspect active procurement RFPs, review eligibility criteria, and evaluate enrolled bidder packets.
+                {t('Inspect active procurement RFPs, review eligibility criteria, and evaluate enrolled bidder packets.')}
               </p>
             </div>
 
             <div className="pt-2 border-t border-[#F1F5F9] flex items-center justify-between text-[11px] font-bold text-[#1D4ED8]">
-              <span>Browse Active RFPs</span>
+              <span>{t('Browse Active RFPs')}</span>
               <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
             </div>
           </Link>
@@ -213,19 +213,19 @@ export default function OfficerDashboardPage() {
                   <PlusCircle className="w-4 h-4" />
                 </div>
                 <span className="text-[9.5px] uppercase font-bold text-[#16A34A] tracking-wider">
-                  RFP SPECIFICATION BUILDER
+                  {t('RFP SPECIFICATION BUILDER')}
                 </span>
               </div>
               <h3 className="text-[15px] font-bold text-[#0F2F63] group-hover:text-[#16A34A] transition-colors leading-tight">
-                Create Tender RFP
+                {t('Create Tender RFP')}
               </h3>
               <p className="text-[11px] text-[#64748B] leading-relaxed line-clamp-2">
-                Draft tender specifications, configure deterministic threshold clauses, and enforce GFR Rule 151.
+                {t('Draft tender specifications, configure deterministic threshold clauses, and enforce GFR Rule 151.')}
               </p>
             </div>
 
             <div className="pt-2 border-t border-[#F1F5F9] flex items-center justify-between text-[11px] font-bold text-[#16A34A]">
-              <span>Launch RFP Builder</span>
+              <span>{t('Launch RFP Builder')}</span>
               <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
             </div>
           </Link>
@@ -241,19 +241,19 @@ export default function OfficerDashboardPage() {
                   <UserCircle className="w-4 h-4" />
                 </div>
                 <span className="text-[9.5px] uppercase font-bold text-[#7C3AED] tracking-wider">
-                  OFFICER CREDENTIAL &amp; PKI
+                  {t('OFFICER CREDENTIAL & PKI')}
                 </span>
               </div>
               <h3 className="text-[15px] font-bold text-[#0F2F63] group-hover:text-[#7C3AED] transition-colors leading-tight">
-                Officer Profile &amp; DSC
+                {t('Officer Profile & DSC')}
               </h3>
               <p className="text-[11px] text-[#64748B] leading-relaxed line-clamp-2">
-                Inspect Class-3 PKI digital signature token standing, adjudication statistics, and signed audit trails.
+                {t('Inspect Class-3 PKI digital signature token standing, adjudication statistics, and signed audit trails.')}
               </p>
             </div>
 
             <div className="pt-2 border-t border-[#F1F5F9] flex items-center justify-between text-[11px] font-bold text-[#7C3AED]">
-              <span>View Profile &amp; Security</span>
+              <span>{t('View Profile & Security')}</span>
               <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
             </div>
           </Link>
@@ -275,7 +275,7 @@ export default function OfficerDashboardPage() {
             </p>
           </div>
           <span className="bg-[#EAF4FF] text-[#1D4ED8] font-bold text-[10.5px] px-3 py-0.5 rounded-full border border-[#D8E6F5]">
-            1 Active RFP
+            {t('1 Active RFP')}
           </span>
         </div>
 
@@ -289,26 +289,26 @@ export default function OfficerDashboardPage() {
                   GEM/2026/B/892104
                 </span>
                 <span className="bg-[#ECFDF5] text-[#15803D] border border-[#BBF7D0] text-[10px] font-bold px-2 py-0.5 rounded-full">
-                  Technical Opening Done
+                  {t('Technical Opening Done')}
                 </span>
               </div>
 
               {/* EXACT Tender Title */}
               <h3 className="text-[14px] sm:text-[15px] font-bold text-[#0F2F63] leading-snug">
-                Procurement of High-End Enterprise Cloud Servers &amp; Networking Hardware for National Data Centers
+                {t('Procurement of High-End Enterprise Cloud Servers & Networking Hardware for National Data Centers')}
               </h3>
 
               {/* EXACT Department */}
               <p className="text-[11px] text-[#475569] flex items-center space-x-1.5">
                 <Building2 className="w-3.5 h-3.5 text-[#94A3B8] shrink-0" />
-                <span>Department of Public Procurement &amp; IT Infrastructure</span>
+                <span>{t('Department of Public Procurement & IT Infrastructure')}</span>
               </p>
             </div>
 
             <div className="flex items-center space-x-4 shrink-0 self-start md:self-auto">
               <div className="text-right">
                 <span className="text-[9px] uppercase font-bold text-[#64748B] block tracking-wider">
-                  ESTIMATED BUDGET
+                  {t('ESTIMATED BUDGET')}
                 </span>
                 <span className="text-[15px] font-black text-[#0F2F63]">
                   ₹4.50 Crores

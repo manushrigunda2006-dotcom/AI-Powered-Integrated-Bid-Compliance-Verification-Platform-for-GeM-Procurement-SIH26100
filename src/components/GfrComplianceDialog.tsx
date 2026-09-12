@@ -13,6 +13,7 @@ import {
   FileCheck,
 } from 'lucide-react';
 import { GfrStatusDetails } from '@/services/gfrComplianceService';
+import { useLanguage } from '@/lib/i18n/LanguageContext';
 
 interface GfrComplianceDialogProps {
   isOpen: boolean;
@@ -25,6 +26,7 @@ export function GfrComplianceDialog({
   onClose,
   details,
 }: GfrComplianceDialogProps) {
+  const { t } = useLanguage();
   const dialogRef = useRef<HTMLDivElement>(null);
   const closeButtonRef = useRef<HTMLButtonElement>(null);
 
@@ -111,17 +113,17 @@ export function GfrComplianceDialog({
                 id="gfr-dialog-title"
                 className="text-base sm:text-[17px] font-bold text-[#0F172A] tracking-tight leading-none"
               >
-                GFR Rule 151 Compliance
+                {t('GFR Rule 151 Compliance')}
               </h2>
               <span className="text-[11px] text-[#64748B] font-medium mt-0.5 inline-block">
-                General Financial Rules 2017 • Debarment & Statutory Integrity
+                {t('General Financial Rules 2017 • Debarment & Statutory Integrity')}
               </span>
             </div>
           </div>
           <button
             type="button"
             onClick={onClose}
-            aria-label="Close dialog"
+            aria-label={t('Close')}
             className="text-[#64748B] hover:text-[#0F172A] hover:bg-slate-100 p-1.5 rounded-lg transition-colors cursor-pointer focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-[#16A34A]"
           >
             <X className="w-5 h-5" />
@@ -138,21 +140,21 @@ export function GfrComplianceDialog({
                 <div className="flex items-center space-x-2">
                   <CheckCircle2 className="w-4 h-4 text-[#16A34A] shrink-0" />
                   <span className="text-sm font-bold text-[#15803D] tracking-wide">
-                    ✓ {statusLabel}
+                    ✓ {t(statusLabel)}
                   </span>
                 </div>
                 <span className="text-[10px] font-bold text-[#166534] bg-white/70 px-2 py-0.5 rounded-md border border-[#BBF7D0]">
-                  Clause R004 Verified
+                  {t('Clause R004 Verified')}
                 </span>
               </div>
               <p className="text-xs text-[#166534] font-medium mt-1">
-                {statusCardSubtext}
+                {t(statusCardSubtext)}
               </p>
             </div>
 
             {/* Description */}
             <p className="text-xs text-[#475569] leading-relaxed">
-              {description}
+              {t(description)}
             </p>
           </div>
 
@@ -160,7 +162,7 @@ export function GfrComplianceDialog({
           <div className="space-y-2.5">
             <h3 className="text-[11px] font-bold uppercase tracking-wider text-[#64748B] flex items-center space-x-1.5">
               <FileCheck className="w-3.5 h-3.5 text-[#64748B]" />
-              <span>Verification Summary</span>
+              <span>{t('Verification Summary')}</span>
             </h3>
 
             <div className="p-3 bg-[#F8FAFC] rounded-xl border border-[#E2E8F0] space-y-2 text-xs">
@@ -170,7 +172,7 @@ export function GfrComplianceDialog({
                     <Check className="w-2.5 h-2.5 text-[#16A34A] stroke-[3]" />
                   </div>
                   <span className="text-[#1E293B] font-medium leading-snug">
-                    {item.label}
+                    {t(item.label)}
                   </span>
                 </div>
               ))}
@@ -181,43 +183,43 @@ export function GfrComplianceDialog({
           <div className="space-y-2">
             <h3 className="text-[11px] font-bold uppercase tracking-wider text-[#64748B] flex items-center space-x-1.5">
               <Scale className="w-3.5 h-3.5 text-[#64748B]" />
-              <span>Rule Reference</span>
+              <span>{t('Rule Reference')}</span>
             </h3>
 
             <div className="grid grid-cols-2 gap-2.5 text-xs">
               <div className="p-2.5 bg-[#F8FAFC] rounded-lg border border-[#E2E8F0]">
                 <span className="text-[10px] uppercase font-bold text-[#64748B] block mb-0.5">
-                  Rule
+                  {t('Rule')}
                 </span>
-                <span className="font-semibold text-[#0F172A]">{ruleName}</span>
+                <span className="font-semibold text-[#0F172A]">{t(ruleName)}</span>
               </div>
 
               <div className="p-2.5 bg-[#F8FAFC] rounded-lg border border-[#E2E8F0]">
                 <span className="text-[10px] uppercase font-bold text-[#64748B] block mb-0.5">
-                  Status
+                  {t('Status')}
                 </span>
                 <span className="font-semibold text-[#15803D] flex items-center space-x-1">
                   <CheckCircle2 className="w-3 h-3 text-[#16A34A]" />
-                  <span>{ruleStatus}</span>
+                  <span>{t(ruleStatus)}</span>
                 </span>
               </div>
 
               <div className="p-2.5 bg-[#F8FAFC] rounded-lg border border-[#E2E8F0]">
                 <span className="text-[10px] uppercase font-bold text-[#64748B] block mb-0.5">
-                  Verification Mode
+                  {t('Verification Mode')}
                 </span>
-                <span className="font-semibold text-[#0F172A]">{verificationMode}</span>
+                <span className="font-semibold text-[#0F172A]">{t(verificationMode)}</span>
               </div>
 
               <div className="p-2.5 bg-[#F8FAFC] rounded-lg border border-[#E2E8F0]">
                 <span className="text-[10px] uppercase font-bold text-[#64748B] block mb-0.5">
-                  Decision Authority
+                  {t('Decision Authority')}
                 </span>
-                <span className="font-semibold text-[#0F172A]">{decisionAuthority}</span>
+                <span className="font-semibold text-[#0F172A]">{t(decisionAuthority)}</span>
               </div>
             </div>
             <p className="text-[11px] text-[#64748B] leading-tight">
-              Final qualification or disqualification remains with the authorized procurement officer.
+              {t('Final qualification or disqualification remains with the authorized procurement officer.')}
             </p>
           </div>
 
@@ -225,30 +227,30 @@ export function GfrComplianceDialog({
           <div className="space-y-2">
             <h3 className="text-[11px] font-bold uppercase tracking-wider text-[#64748B] flex items-center space-x-1.5">
               <Clock className="w-3.5 h-3.5 text-[#64748B]" />
-              <span>Audit Information</span>
+              <span>{t('Audit Information')}</span>
             </h3>
 
             <div className="p-3 bg-[#F8FAFC] rounded-xl border border-[#E2E8F0] space-y-2 text-xs">
               <div>
                 <span className="text-[10px] uppercase font-bold text-[#64748B] block">
-                  Verification Source
+                  {t('Verification Source')}
                 </span>
-                <span className="text-[#0F172A] font-medium">{verificationSource}</span>
+                <span className="text-[#0F172A] font-medium">{t(verificationSource)}</span>
               </div>
 
               <div className="border-t border-[#E2E8F0]/70 pt-2">
                 <span className="text-[10px] uppercase font-bold text-[#64748B] block">
-                  Verification Engine
+                  {t('Verification Engine')}
                 </span>
-                <span className="text-[#0F172A] font-medium">{verificationEngine}</span>
+                <span className="text-[#0F172A] font-medium">{t(verificationEngine)}</span>
               </div>
 
               <div className="border-t border-[#E2E8F0]/70 pt-2">
                 <span className="text-[10px] uppercase font-bold text-[#64748B] block">
-                  Verification Time
+                  {t('Verification Time')}
                 </span>
                 <span className="text-[#0F172A] font-medium">
-                  {verificationTime}
+                  {t(verificationTime)}
                 </span>
               </div>
             </div>
@@ -259,9 +261,9 @@ export function GfrComplianceDialog({
             <ShieldCheck className="w-4 h-4 text-[#102F5F] shrink-0 mt-0.5" />
             <div>
               <span className="font-semibold text-[#0F172A] block text-[11.5px] mb-0.5">
-                Human-in-the-Loop Architecture
+                {t('Human-in-the-Loop Architecture')}
               </span>
-              AI-assisted verification only. Final procurement qualification/disqualification remains with the authorized procurement officer.
+              {t('AI-assisted verification only. Final procurement qualification/disqualification remains with the authorized procurement officer.')}
             </div>
           </div>
         </div>
@@ -274,7 +276,7 @@ export function GfrComplianceDialog({
             onClick={onClose}
             className="px-4 py-1.5 bg-[#0F2F63] hover:bg-[#102F5F] text-white text-xs font-semibold rounded-lg shadow-xs transition-colors cursor-pointer focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-[#16A34A]"
           >
-            Close
+            {t('Close')}
           </button>
         </div>
       </div>

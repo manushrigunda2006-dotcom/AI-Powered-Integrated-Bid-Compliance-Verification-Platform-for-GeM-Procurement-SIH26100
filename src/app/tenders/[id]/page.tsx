@@ -59,7 +59,7 @@ export default function TenderDetailsPage() {
     return (
       <div className="flex flex-col items-center justify-center min-h-[50vh] space-y-3">
         <div className="w-10 h-10 border-4 border-blue-900 border-t-transparent rounded-full animate-spin" />
-        <span className="text-xs font-bold text-slate-600">Loading Tender Specifications...</span>
+        <span className="text-xs font-bold text-slate-600">{t('Loading Tender Specifications...')}</span>
       </div>
     );
   }
@@ -71,11 +71,11 @@ export default function TenderDetailsPage() {
       {/* Breadcrumb Navigation */}
       <nav className="flex items-center space-x-2 text-xs text-slate-500 font-medium">
         <Link href="/" className="text-blue-900 hover:underline font-bold">
-          Dashboard
+          {t('Dashboard')}
         </Link>
         <span>/</span>
         <Link href="/tenders" className="text-blue-900 hover:underline font-bold">
-          Existing Tenders
+          {t('Existing Tenders')}
         </Link>
         <span>/</span>
         <span className="text-slate-800 font-bold truncate max-w-xs">{tender.tender_number}</span>
@@ -90,11 +90,11 @@ export default function TenderDetailsPage() {
                 {tender.tender_number}
               </span>
               <span className="bg-slate-100 text-slate-700 text-xs font-semibold px-2.5 py-0.5 rounded-md border border-slate-200">
-                Custom Bid for Services
+                {t('Custom Bid for Services')}
               </span>
               <span className="bg-emerald-50 text-emerald-800 text-xs font-bold px-2.5 py-0.5 rounded-md border border-emerald-200 flex items-center space-x-1">
                 <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-                <span>Technical Opening Phase Active</span>
+                <span>{t('Technical Opening Phase Active')}</span>
               </span>
             </div>
 
@@ -104,7 +104,7 @@ export default function TenderDetailsPage() {
 
             <p className="text-xs sm:text-sm text-slate-600 flex items-center space-x-1.5">
               <Building2 className="w-4 h-4 text-slate-400 shrink-0" />
-              <span>{tender.department}</span>
+              <span>{t(tender.department)}</span>
             </p>
           </div>
 
@@ -116,7 +116,7 @@ export default function TenderDetailsPage() {
                 className="inline-flex items-center space-x-2 px-6 py-3.5 bg-blue-900 hover:bg-blue-800 text-white font-black text-xs rounded-xl shadow-md transition-all transform hover:-translate-y-0.5 cursor-pointer"
               >
                 <FileCheck className="w-4 h-4" />
-                <span>View My Bid &amp; Compliance Status</span>
+                <span>{t('View My Bid & Compliance Status')}</span>
                 <ChevronRight className="w-4 h-4" />
               </Link>
             ) : (
@@ -125,12 +125,12 @@ export default function TenderDetailsPage() {
                 className="inline-flex items-center space-x-2 px-6 py-3.5 bg-blue-900 hover:bg-blue-800 text-white font-black text-xs rounded-xl shadow-md transition-all transform hover:-translate-y-0.5 cursor-pointer"
               >
                 <Users className="w-4 h-4" />
-                <span>Proceed to Bidders Evaluation (20 Enrolled)</span>
+                <span>{t('Proceed to Bidders Evaluation (20 Enrolled)')}</span>
                 <ChevronRight className="w-4 h-4" />
               </Link>
             )}
             <span className="text-[11px] text-slate-400">
-              {isBidder ? 'Track your proposal verification status' : 'Click to view compliance matrix & audit trail'}
+              {isBidder ? t('Track your proposal verification status') : t('Click to view compliance matrix & audit trail')}
             </span>
           </div>
         </div>
@@ -139,7 +139,7 @@ export default function TenderDetailsPage() {
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-4 border-t border-slate-100 text-xs">
           <div className="p-3.5 bg-slate-50 rounded-2xl">
             <span className="text-[10px] uppercase font-bold text-slate-400 block mb-1">
-              Estimated RFP Budget
+              {t('Estimated RFP Budget')}
             </span>
             <span className="text-lg font-black text-slate-900">
               {tender.budget_formatted || formatIndianCurrency(tender.estimated_budget)}
@@ -148,7 +148,7 @@ export default function TenderDetailsPage() {
 
           <div className="p-3.5 bg-slate-50 rounded-2xl">
             <span className="text-[10px] uppercase font-bold text-slate-400 block mb-1">
-              Bid Closing Date
+              {t('Bid Closing Date')}
             </span>
             <span className="text-sm font-bold text-slate-800">
               {formatDate(tender.deadline)}
@@ -157,20 +157,20 @@ export default function TenderDetailsPage() {
 
           <div className="p-3.5 bg-slate-50 rounded-2xl">
             <span className="text-[10px] uppercase font-bold text-slate-400 block mb-1">
-              Mandatory Clauses
+              {t('Mandatory Clauses')}
             </span>
             <span className="text-sm font-bold text-slate-800">
-              {requirements.filter((r) => r.is_mandatory).length} Strict Clauses
+              {requirements.filter((r) => r.is_mandatory).length} {t('Strict Clauses')}
             </span>
           </div>
 
           <div className="p-3.5 bg-slate-50 rounded-2xl">
             <span className="text-[10px] uppercase font-bold text-slate-400 block mb-1">
-              GFR Compliance
+              {t('GFR Compliance')}
             </span>
             <span className="text-sm font-bold text-emerald-700 flex items-center space-x-1">
               <ShieldCheck className="w-4 h-4" />
-              <span>Rule 151 Enforced</span>
+              <span>{t('Rule 151 Enforced')}</span>
             </span>
           </div>
         </div>
@@ -183,15 +183,15 @@ export default function TenderDetailsPage() {
             <div className="flex items-center space-x-2">
               <FileCheck className="w-5 h-5 text-blue-900" />
               <h2 className="text-lg font-black text-slate-900">
-                Required Bidder Documents
+                {t('Required Bidder Documents')}
               </h2>
             </div>
             <p className="text-xs text-slate-500 mt-0.5">
-              Documents configured by the Procurement Officer that every bidder must submit for this tender.
+              {t('Documents configured by the Procurement Officer that every bidder must submit for this tender.')}
             </p>
           </div>
           <span className="text-xs font-bold text-blue-900 bg-blue-50 px-3 py-1 rounded-full border border-blue-200">
-            {tender.required_documents?.length || 5} Required Files
+            {tender.required_documents?.length || 5} {t('Required Files')}
           </span>
         </div>
 
@@ -216,7 +216,7 @@ export default function TenderDetailsPage() {
                 </span>
                 {doc.is_mandatory && (
                   <span className="bg-rose-100 text-rose-800 text-[10px] font-bold px-1.5 py-0.2 rounded-full uppercase">
-                    Mandatory
+                    {t('Mandatory')}
                   </span>
                 )}
               </div>
@@ -224,8 +224,8 @@ export default function TenderDetailsPage() {
                 {doc.display_name}
               </div>
               <div className="text-[11px] text-slate-500 flex items-center justify-between pt-1 border-t border-slate-200/60">
-                <span>Verified in packet evaluation</span>
-                <span className="text-emerald-700 font-semibold">Enforced ➔</span>
+                <span>{t('Verified in packet evaluation')}</span>
+                <span className="text-emerald-700 font-semibold">{t('Enforced ➔')}</span>
               </div>
             </div>
           ))}
@@ -239,15 +239,15 @@ export default function TenderDetailsPage() {
             <div className="flex items-center space-x-2">
               <Scale className="w-5 h-5 text-blue-900" />
               <h2 className="text-lg font-black text-slate-900">
-                Tender Compliance Clauses & Threshold Matrix
+                {t('Tender Compliance Clauses & Threshold Matrix')}
               </h2>
             </div>
             <p className="text-xs text-slate-500 mt-0.5">
-              Configured deterministic rules used by the engine to evaluate bidder document packets
+              {t('Configured deterministic rules used by the engine to evaluate bidder document packets')}
             </p>
           </div>
           <span className="text-xs font-bold text-blue-900 bg-blue-50 px-3 py-1 rounded-full border border-blue-200">
-            {requirements.length} Configured Rules
+            {requirements.length} {t('Configured Rules')}
           </span>
         </div>
 
@@ -255,13 +255,13 @@ export default function TenderDetailsPage() {
           <table className="w-full text-left text-xs text-slate-600">
             <thead className="bg-slate-50 text-[11px] uppercase font-bold text-slate-500 border-b border-slate-200">
               <tr>
-                <th className="py-3.5 px-4">Clause Code</th>
-                <th className="py-3.5 px-4">Requirement Clause</th>
-                <th className="py-3.5 px-4">Category</th>
-                <th className="py-3.5 px-4">Rule Type</th>
-                <th className="py-3.5 px-4">Threshold Criteria</th>
-                <th className="py-3.5 px-4 text-center">Mandatory</th>
-                <th className="py-3.5 px-4 text-center">Score Weight</th>
+                <th className="py-3.5 px-4">{t('Clause Code')}</th>
+                <th className="py-3.5 px-4">{t('Requirement Clause')}</th>
+                <th className="py-3.5 px-4">{t('Category')}</th>
+                <th className="py-3.5 px-4">{t('Rule Type')}</th>
+                <th className="py-3.5 px-4">{t('Threshold Criteria')}</th>
+                <th className="py-3.5 px-4 text-center">{t('Mandatory')}</th>
+                <th className="py-3.5 px-4 text-center">{t('Score Weight')}</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-100">
@@ -273,35 +273,35 @@ export default function TenderDetailsPage() {
                     </span>
                   </td>
                   <td className="py-3.5 px-4">
-                    <div className="font-bold text-slate-900 text-sm">{req.clause_title}</div>
+                    <div className="font-bold text-slate-900 text-sm">{t(req.clause_title)}</div>
                     <div className="text-[11px] text-slate-500 mt-0.5 max-w-md leading-relaxed">
-                      {req.description}
+                      {t(req.description)}
                     </div>
                   </td>
                   <td className="py-3.5 px-4">
                     <span className="bg-blue-50 text-blue-900 text-[11px] font-bold px-2 py-0.5 rounded-md">
-                      {req.category}
+                      {t(req.category)}
                     </span>
                   </td>
                   <td className="py-3.5 px-4 font-mono text-[11px] font-semibold text-slate-700">
                     {req.rule_type}
                   </td>
                   <td className="py-3.5 px-4 font-bold text-slate-900">
-                    {req.threshold_display || req.threshold_value}
+                    {t(req.threshold_display || req.threshold_value)}
                   </td>
                   <td className="py-3.5 px-4 text-center">
                     {req.is_mandatory ? (
                       <span className="bg-rose-100 text-rose-800 text-[10px] font-bold px-2 py-0.5 rounded-full uppercase">
-                        Mandatory
+                        {t('Mandatory')}
                       </span>
                     ) : (
                       <span className="bg-slate-100 text-slate-600 text-[10px] font-semibold px-2 py-0.5 rounded-full">
-                        Optional
+                        {t('Optional')}
                       </span>
                     )}
                   </td>
                   <td className="py-3.5 px-4 text-center font-bold text-slate-800">
-                    {req.weight} pts
+                    {req.weight} {t('pts')}
                   </td>
                 </tr>
               ))}
@@ -314,14 +314,14 @@ export default function TenderDetailsPage() {
           <div className="flex items-center space-x-2 text-blue-900">
             <ShieldCheck className="w-5 h-5 text-blue-700 shrink-0" />
             <span className="font-semibold">
-              All 6 deterministic compliance rules are linked to OCR page extraction and registry adapters.
+              {t('All 6 deterministic compliance rules are linked to OCR page extraction and registry adapters.')}
             </span>
           </div>
           <Link
             href={`/tenders/${tender.id}/bidders`}
             className="px-5 py-2.5 bg-blue-900 hover:bg-blue-800 text-white font-bold text-xs rounded-xl shadow-xs transition-colors shrink-0 flex items-center space-x-1.5 cursor-pointer"
           >
-            <span>Proceed to Bidders</span>
+            <span>{t('Proceed to Bidders')}</span>
             <ChevronRight className="w-4 h-4" />
           </Link>
         </div>

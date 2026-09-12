@@ -91,10 +91,10 @@ export default function BidderTendersPage() {
       {/* Breadcrumb */}
       <nav className="flex items-center space-x-2 text-xs text-slate-500 font-medium">
         <Link href="/bidder/dashboard" className="text-blue-900 hover:underline font-bold">
-          Bidder Dashboard
+          {t('Bidder Dashboard')}
         </Link>
         <span>/</span>
-        <span className="text-slate-800 font-bold">Available Tenders</span>
+        <span className="text-slate-800 font-bold">{t('Available Tenders')}</span>
       </nav>
 
       {/* Header */}
@@ -102,17 +102,17 @@ export default function BidderTendersPage() {
         <div className="space-y-1.5">
           <div className="flex items-center space-x-2">
             <span className="bg-blue-100 text-blue-900 font-mono text-xs font-bold px-2.5 py-0.5 rounded-md">
-              Active GeM Procurements
+              {t('Active GeM Procurements')}
             </span>
             <span className="bg-emerald-100 text-emerald-800 text-xs font-semibold px-2 py-0.5 rounded-md">
-              {tenders.length} Open RFPs
+              {tenders.length} {t('Open RFPs')}
             </span>
           </div>
           <h1 className="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight">
-            Available Tenders for Bidding
+            {t('Available Tenders for Bidding')}
           </h1>
           <p className="text-xs sm:text-sm text-slate-500 max-w-2xl">
-            Browse published government RFP tenders, review required compliance documents, and upload your submission dossier.
+            {t('Browse published government RFP tenders, review required compliance documents, and upload your submission dossier.')}
           </p>
         </div>
 
@@ -122,13 +122,13 @@ export default function BidderTendersPage() {
             className="inline-flex items-center space-x-1.5 px-4 py-2.5 bg-blue-900 hover:bg-blue-800 text-white font-bold text-xs rounded-xl shadow-xs transition-all shrink-0 cursor-pointer"
           >
             <Upload className="w-3.5 h-3.5" />
-            <span>Upload Documents</span>
+            <span>{t('Upload Documents')}</span>
           </Link>
           <Link
             href="/bidder/dashboard#submissions"
             className="inline-flex items-center space-x-1.5 px-4 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold text-xs rounded-xl transition-all shrink-0 cursor-pointer"
           >
-            <span>My Active Submissions</span>
+            <span>{t('My Active Submissions')}</span>
             <ArrowRight className="w-3.5 h-3.5" />
           </Link>
         </div>
@@ -142,12 +142,12 @@ export default function BidderTendersPage() {
             type="text"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            placeholder="Search tender title, GEM RFP number or ministry..."
+            placeholder={t('Search tender title, GEM RFP number or ministry...')}
             className="w-full pl-9 pr-4 py-2 rounded-xl border border-slate-200 text-xs focus:ring-2 focus:ring-blue-600 focus:outline-hidden"
           />
         </div>
         <div className="text-xs text-slate-500 font-medium">
-          Showing <strong className="text-slate-800">{filteredTenders.length}</strong> available tenders
+          {t('Showing')} <strong className="text-slate-800">{filteredTenders.length}</strong> {t('available tenders')}
         </div>
       </div>
 
@@ -155,11 +155,11 @@ export default function BidderTendersPage() {
       <div className="grid grid-cols-1 gap-4">
         {isLoading ? (
           <div className="p-12 text-center text-xs text-slate-400 bg-white rounded-3xl border border-slate-200">
-            Loading available tenders and requirements...
+            {t('Loading available tenders and requirements...')}
           </div>
         ) : filteredTenders.length === 0 ? (
           <div className="p-12 text-center text-xs text-slate-400 bg-white rounded-3xl border border-slate-200">
-            No tenders found matching your search.
+            {t('No tenders found matching your search.')}
           </div>
         ) : (
           filteredTenders.map((tender) => {
@@ -183,11 +183,11 @@ export default function BidderTendersPage() {
                       {isSubmitted ? (
                         <span className="bg-emerald-50 text-emerald-800 text-xs font-bold px-2.5 py-0.5 rounded-md border border-emerald-200 flex items-center space-x-1">
                           <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
-                          <span>Submitted - {sub.complianceStatus}</span>
+                          <span>{t('Submitted')} - {t(sub.complianceStatus)}</span>
                         </span>
                       ) : (
                         <span className="bg-blue-50 text-blue-800 text-xs font-bold px-2.5 py-0.5 rounded-md border border-blue-200">
-                          Open for Bidding
+                          {t('Open for Bidding')}
                         </span>
                       )}
                     </div>
@@ -196,7 +196,7 @@ export default function BidderTendersPage() {
                     </h2>
                     <div className="flex items-center space-x-1 text-xs text-slate-500">
                       <Building2 className="w-3.5 h-3.5 text-slate-400" />
-                      <span>{tender.department}</span>
+                      <span>{t(tender.department)}</span>
                     </div>
                   </div>
 
@@ -206,14 +206,14 @@ export default function BidderTendersPage() {
                       href={`/bidder/tenders/${tender.id}/submit`}
                       className="px-4 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs font-bold rounded-xl transition-colors cursor-pointer"
                     >
-                      View Tender
+                      {t('View Tender')}
                     </Link>
                     <Link
                       href={`/bidder/tenders/${tender.id}/submit`}
                       className="px-4 py-2.5 bg-blue-900 hover:bg-blue-800 text-white text-xs font-bold rounded-xl shadow-xs transition-colors flex items-center space-x-1.5 cursor-pointer"
                     >
                       <Upload className="w-3.5 h-3.5" />
-                      <span>{isSubmitted ? 'View / Update Dossier' : 'Upload Documents'}</span>
+                      <span>{isSubmitted ? t('View / Update Dossier') : t('Upload Documents')}</span>
                     </Link>
                   </div>
                 </div>
@@ -222,7 +222,7 @@ export default function BidderTendersPage() {
                 <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-3 border-t border-slate-100 text-xs">
                   <div className="p-2.5 bg-slate-50 rounded-xl">
                     <span className="text-[10px] uppercase font-bold text-slate-400 block">
-                      Estimated Budget
+                      {t('Estimated Budget')}
                     </span>
                     <span className="text-sm font-black text-slate-900">
                       {tender.budget_formatted || formatIndianCurrency(tender.estimated_budget)}
@@ -230,7 +230,7 @@ export default function BidderTendersPage() {
                   </div>
                   <div className="p-2.5 bg-slate-50 rounded-xl">
                     <span className="text-[10px] uppercase font-bold text-slate-400 block">
-                      Submission Deadline
+                      {t('Submission Deadline')}
                     </span>
                     <span className="text-xs font-bold text-slate-800">
                       {formatDate(tender.deadline)}
@@ -238,19 +238,19 @@ export default function BidderTendersPage() {
                   </div>
                   <div className="p-2.5 bg-slate-50 rounded-xl">
                     <span className="text-[10px] uppercase font-bold text-slate-400 block">
-                      Required Documents
+                      {t('Required Documents')}
                     </span>
                     <span className="text-xs font-bold text-blue-950 flex items-center space-x-1">
                       <FileText className="w-3 h-3 text-blue-700" />
-                      <span>{totalDocsCount} Required ({mandatoryDocsCount} Mandatory)</span>
+                      <span>{totalDocsCount} {t('Required')} ({mandatoryDocsCount} {t('Mandatory')})</span>
                     </span>
                   </div>
                   <div className="p-2.5 bg-slate-50 rounded-xl">
                     <span className="text-[10px] uppercase font-bold text-slate-400 block">
-                      Procurement Status
+                      {t('Procurement Status')}
                     </span>
                     <span className="text-xs font-bold text-emerald-800">
-                      Active / Open RFP
+                      {t('Active / Open RFP')}
                     </span>
                   </div>
                 </div>

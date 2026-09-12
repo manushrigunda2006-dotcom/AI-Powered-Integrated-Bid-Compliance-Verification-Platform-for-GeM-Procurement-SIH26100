@@ -48,27 +48,27 @@ export function ComplianceMatrix({
   const categories: { label: string; value: string; count: number }[] = [
     { label: t('common.all', 'All'), value: 'ALL', count: safeResults.length },
     {
-      label: 'Financial',
+      label: t('common.financial', 'Financial'),
       value: 'FINANCIAL',
       count: results.filter((r) => r.category === 'FINANCIAL').length,
     },
     {
-      label: 'Experience',
+      label: t('common.experience', 'Experience'),
       value: 'EXPERIENCE',
       count: results.filter((r) => r.category === 'EXPERIENCE').length,
     },
     {
-      label: 'Statutory',
+      label: t('common.statutory', 'Statutory'),
       value: 'STATUTORY',
       count: results.filter((r) => r.category === 'STATUTORY').length,
     },
     {
-      label: 'OEM MAF',
+      label: t('common.oem_maf', 'OEM MAF'),
       value: 'OEM',
       count: results.filter((r) => r.category === 'OEM').length,
     },
     {
-      label: 'Technical',
+      label: t('common.technical', 'Technical'),
       value: 'TECHNICAL',
       count: results.filter((r) => r.category === 'TECHNICAL').length,
     },
@@ -158,7 +158,7 @@ export function ComplianceMatrix({
                   <div>
                     <div className="flex items-center space-x-2">
                       <h4 className="text-sm font-bold text-slate-900">
-                        {result.clause_title}
+                        {t(result.clause_title)}
                       </h4>
                       {result.is_mandatory && (
                         <span className="bg-rose-100 text-rose-800 text-[10px] font-bold px-1.5 py-0.2 rounded-xs border border-rose-200 uppercase">
@@ -166,7 +166,7 @@ export function ComplianceMatrix({
                         </span>
                       )}
                       <span className="bg-slate-100 text-slate-600 text-[10px] font-semibold px-2 py-0.5 rounded-full">
-                        {result.category}
+                        {t(result.category)}
                       </span>
                     </div>
                   </div>
@@ -194,7 +194,7 @@ export function ComplianceMatrix({
                     {t('modal.required_threshold', 'Statutory Threshold')}
                   </span>
                   <span className="font-semibold text-slate-700">
-                    {result.threshold_display}
+                    {t(result.threshold_display)}
                   </span>
                 </div>
                 <div>
@@ -214,14 +214,14 @@ export function ComplianceMatrix({
                         : 'text-rose-700'
                     }`}
                   >
-                    {result.extracted_display}
+                    {t(result.extracted_display)}
                   </span>
                 </div>
               </div>
 
               {/* Plain-English Explanation */}
               <p className="text-xs text-slate-600 leading-relaxed font-normal mb-2.5">
-                {result.human_explanation}
+                {t(result.human_explanation)}
               </p>
 
               {/* AI Statutory Advisory Grounding */}
@@ -233,7 +233,7 @@ export function ComplianceMatrix({
                       <span>{t('ai.recommendations', 'Statutory Citation')}: {clauseExplanations[result.clause_code].gfr_or_gem_rule_ref}</span>
                     </span>
                     <span className="text-[9px] bg-indigo-100 text-indigo-800 font-semibold px-1.5 py-0.2 rounded-xs">
-                      ✨ AI Grounding
+                      ✨ {t('AI Grounding')}
                     </span>
                   </div>
                   <p className="text-[11px] text-slate-700 leading-relaxed font-normal">
@@ -260,7 +260,7 @@ export function ComplianceMatrix({
                     className="inline-flex items-center space-x-1.5 px-3 py-1.5 rounded-lg bg-blue-50 hover:bg-blue-100 text-blue-800 text-xs font-semibold border border-blue-200 transition-colors shadow-2xs cursor-pointer"
                   >
                     <Eye className="w-3.5 h-3.5 text-blue-700" />
-                    <span>{t('verify.view_evidence', 'View Evidence')} (Page {result.evidence.source_page})</span>
+                    <span>{t('verify.view_evidence', 'View Evidence')} ({t('Page')} {result.evidence.source_page})</span>
                   </button>
                 </div>
               )}

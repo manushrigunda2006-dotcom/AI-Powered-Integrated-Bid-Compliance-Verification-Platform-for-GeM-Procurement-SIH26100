@@ -28,6 +28,7 @@ import { gfrComplianceService, GfrStatusDetails } from '@/services/gfrCompliance
 import { useLanguage } from '@/lib/i18n/LanguageContext';
 import { LanguageSelector } from './LanguageSelector';
 import { ThemeToggle } from './ThemeToggle';
+import { NotificationCenter } from './NotificationCenter';
 
 export function Header() {
   const router = useRouter();
@@ -79,7 +80,7 @@ export function Header() {
   const homeHref = isBidder ? '/bidder/dashboard' : isOfficer ? '/officer/dashboard' : '/role-selection';
 
   return (
-    <header className="border-b border-[#E2E8F0] bg-[#FFFFFF] sticky top-0 z-40">
+    <header className="border-b border-[#E2E8F0] dark:border-slate-800 bg-[#FFFFFF] dark:bg-slate-900 sticky top-0 z-40">
       <div className="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-[58px] sm:h-[62px]">
           {/* HEADER LEFT BRANDING */}
@@ -87,7 +88,7 @@ export function Header() {
             <Link href={homeHref} className="flex items-center space-x-2.5 group">
               <div className="flex flex-col justify-center leading-tight">
                 <div className="flex items-center space-x-1.5">
-                  <span className="font-bold text-[14px] sm:text-[15px] text-[#102F5F] tracking-tight">
+                  <span className="font-bold text-[14px] sm:text-[15px] text-[#102F5F] dark:text-blue-200 tracking-tight">
                     {t('app.title', 'Government e-Marketplace')}
                   </span>
                   {isBidder && (
@@ -101,7 +102,7 @@ export function Header() {
                     </span>
                   )}
                 </div>
-                <span className="text-[9px] text-[#64748B] font-medium hidden sm:inline-block mt-0.5">
+                <span className="text-[9px] text-[#64748B] dark:text-slate-400 font-medium hidden sm:inline-block mt-0.5">
                   {t('app.subtitle', 'Automated Procurement Verification & Compliance Engine (SIH Edition)')}
                 </span>
               </div>
@@ -247,13 +248,16 @@ export function Header() {
               </nav>
             )}
 
+            {/* NOTIFICATION CENTER */}
+            <NotificationCenter />
+
             {/* THEME TOGGLE (LIGHT / DARK) */}
             <ThemeToggle />
 
             {/* MULTILINGUAL LANGUAGE SELECTOR */}
             <LanguageSelector />
 
-            {isAuthenticated && <div className="h-4 w-px bg-slate-200 hidden md:block" />}
+            {isAuthenticated && <div className="h-4 w-px bg-slate-200 dark:bg-slate-700 hidden md:block" />}
 
             {/* PROFILE & LOGOUT DROPDOWN */}
             {isAuthenticated && (
@@ -273,12 +277,12 @@ export function Header() {
                     {isOfficer ? 'AB' : 'AT'}
                   </div>
                   <div className="hidden sm:flex items-center text-left leading-tight">
-                    <span className="text-[11px] font-bold text-[#102F5F] flex items-center space-x-1">
+                    <span className="text-[11px] font-bold text-[#102F5F] dark:text-blue-200 flex items-center space-x-1">
                       <span className="max-w-[120px] truncate">
                         {isOfficer ? (session as any).name || 'Officer ABCD' : (session as any).companyName || 'Bidder'}
                       </span>
                       <ChevronDown
-                        className={`w-3 h-3 text-[#64748B] transition-transform ${
+                        className={`w-3 h-3 text-[#64748B] dark:text-slate-400 transition-transform ${
                           isProfileOpen ? 'rotate-180' : ''
                         }`}
                       />
@@ -288,8 +292,8 @@ export function Header() {
 
                 {/* Profile Dropdown Menu */}
                 {isProfileOpen && (
-                  <div className="absolute right-0 mt-2 w-72 bg-white rounded-xl shadow-lg border border-[#D9E3EF] py-2 z-50 animate-in fade-in slide-in-from-top-2 duration-150">
-                    <div className="px-3.5 py-2.5 border-b border-slate-100 flex items-start space-x-2.5">
+                  <div className="absolute right-0 mt-2 w-72 bg-white dark:bg-slate-900 rounded-xl shadow-lg border border-[#D9E3EF] dark:border-slate-800 py-2 z-50 animate-in fade-in slide-in-from-top-2 duration-150">
+                    <div className="px-3.5 py-2.5 border-b border-slate-100 dark:border-slate-800 flex items-start space-x-2.5">
                       <div
                         className={`w-8 h-8 rounded-full text-white flex items-center justify-center text-xs font-bold shrink-0 ${
                           isOfficer ? 'bg-[#0F2F63]' : 'bg-blue-700'
@@ -299,20 +303,20 @@ export function Header() {
                       </div>
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center space-x-1.5">
-                          <h4 className="text-xs font-bold text-[#102F5F] truncate">
+                          <h4 className="text-xs font-bold text-[#102F5F] dark:text-white truncate">
                             {isOfficer ? (session as any).name || 'Officer ABCD' : (session as any).companyName || 'Bidder'}
                           </h4>
                           <span
                             className={`text-[8.5px] font-bold px-1.5 py-0.2 rounded-full ${
                               isOfficer
-                                ? 'bg-amber-100 text-amber-800'
-                                : 'bg-blue-100 text-blue-900'
+                                ? 'bg-amber-100 dark:bg-amber-950 text-amber-800 dark:text-amber-300'
+                                : 'bg-blue-100 dark:bg-blue-950 text-blue-900 dark:text-blue-300'
                             }`}
                           >
                             {isOfficer ? 'Officer' : 'Bidder'}
                           </span>
                         </div>
-                        <p className="text-[10px] text-[#64748B] flex items-center space-x-1 mt-0.5 truncate">
+                        <p className="text-[10px] text-[#64748B] dark:text-slate-400 flex items-center space-x-1 mt-0.5 truncate">
                           {isOfficer ? (
                             <>
                               <Building2 className="w-3 h-3 text-[#94A3B8] shrink-0" />
@@ -334,7 +338,7 @@ export function Header() {
                         <Link
                           href="/officer/dashboard"
                           onClick={() => setIsProfileOpen(false)}
-                          className="w-full flex items-center space-x-2 px-3 py-1.5 text-[11px] font-medium text-[#334155] hover:text-[#102F5F] hover:bg-slate-50 rounded-lg transition-colors cursor-pointer"
+                          className="w-full flex items-center space-x-2 px-3 py-1.5 text-[11px] font-medium text-[#334155] dark:text-slate-300 hover:text-[#102F5F] dark:hover:text-white hover:bg-slate-50 dark:hover:bg-slate-800 rounded-lg transition-colors cursor-pointer"
                         >
                           <LayoutDashboard className="w-3.5 h-3.5 text-[#64748B]" />
                           <span>{t('nav.officer_dashboard', 'Officer Dashboard')}</span>
@@ -343,7 +347,7 @@ export function Header() {
                         <Link
                           href="/profile"
                           onClick={() => setIsProfileOpen(false)}
-                          className="w-full flex items-center space-x-2 px-3 py-1.5 text-[11px] font-medium text-[#334155] hover:text-[#102F5F] hover:bg-slate-50 rounded-lg transition-colors cursor-pointer"
+                          className="w-full flex items-center space-x-2 px-3 py-1.5 text-[11px] font-medium text-[#334155] dark:text-slate-300 hover:text-[#102F5F] dark:hover:text-white hover:bg-slate-50 dark:hover:bg-slate-800 rounded-lg transition-colors cursor-pointer"
                         >
                           <User className="w-3.5 h-3.5 text-[#64748B]" />
                           <span>{t('nav.profile', 'View Officer Profile & DSC')}</span>
@@ -352,7 +356,7 @@ export function Header() {
                         <Link
                           href="/tenders"
                           onClick={() => setIsProfileOpen(false)}
-                          className="w-full flex items-center space-x-2 px-3 py-1.5 text-[11px] font-medium text-[#334155] hover:text-[#102F5F] hover:bg-slate-50 rounded-lg transition-colors cursor-pointer"
+                          className="w-full flex items-center space-x-2 px-3 py-1.5 text-[11px] font-medium text-[#334155] dark:text-slate-300 hover:text-[#102F5F] dark:hover:text-white hover:bg-slate-50 dark:hover:bg-slate-800 rounded-lg transition-colors cursor-pointer"
                         >
                           <FolderGit2 className="w-3.5 h-3.5 text-[#64748B]" />
                           <span>{t('nav.existing_tenders', 'Existing Tenders')}</span>
@@ -361,7 +365,7 @@ export function Header() {
                         <Link
                           href="/tenders/new"
                           onClick={() => setIsProfileOpen(false)}
-                          className="w-full flex items-center space-x-2 px-3 py-1.5 text-[11px] font-medium text-[#334155] hover:text-[#102F5F] hover:bg-slate-50 rounded-lg transition-colors cursor-pointer"
+                          className="w-full flex items-center space-x-2 px-3 py-1.5 text-[11px] font-medium text-[#334155] dark:text-slate-300 hover:text-[#102F5F] dark:hover:text-white hover:bg-slate-50 dark:hover:bg-slate-800 rounded-lg transition-colors cursor-pointer"
                         >
                           <PlusCircle className="w-3.5 h-3.5 text-[#16A34A]" />
                           <span>{t('nav.create_tender', 'Create Tender RFP')}</span>
@@ -370,7 +374,7 @@ export function Header() {
                         <Link
                           href="/audit-logs"
                           onClick={() => setIsProfileOpen(false)}
-                          className="w-full flex items-center space-x-2 px-3 py-1.5 text-[11px] font-medium text-[#334155] hover:text-[#102F5F] hover:bg-slate-50 rounded-lg transition-colors cursor-pointer"
+                          className="w-full flex items-center space-x-2 px-3 py-1.5 text-[11px] font-medium text-[#334155] dark:text-slate-300 hover:text-[#102F5F] dark:hover:text-white hover:bg-slate-50 dark:hover:bg-slate-800 rounded-lg transition-colors cursor-pointer"
                         >
                           <Lock className="w-3.5 h-3.5 text-[#64748B]" />
                           <span>{t('nav.audit_trail', 'Audit/History')}</span>
@@ -379,7 +383,7 @@ export function Header() {
                         <Link
                           href="/about"
                           onClick={() => setIsProfileOpen(false)}
-                          className="w-full flex items-center space-x-2 px-3 py-1.5 text-[11px] font-medium text-[#334155] hover:text-[#102F5F] hover:bg-slate-50 rounded-lg transition-colors cursor-pointer"
+                          className="w-full flex items-center space-x-2 px-3 py-1.5 text-[11px] font-medium text-[#334155] dark:text-slate-300 hover:text-[#102F5F] dark:hover:text-white hover:bg-slate-50 dark:hover:bg-slate-800 rounded-lg transition-colors cursor-pointer"
                         >
                           <Info className="w-3.5 h-3.5 text-[#64748B]" />
                           <span>{t('nav.about', 'About')}</span>
@@ -402,7 +406,7 @@ export function Header() {
                         <Link
                           href="/bidder/dashboard"
                           onClick={() => setIsProfileOpen(false)}
-                          className="w-full flex items-center space-x-2 px-3 py-1.5 text-[11px] font-medium text-[#334155] hover:text-[#102F5F] hover:bg-slate-50 rounded-lg transition-colors cursor-pointer"
+                          className="w-full flex items-center space-x-2 px-3 py-1.5 text-[11px] font-medium text-[#334155] dark:text-slate-300 hover:text-[#102F5F] dark:hover:text-white hover:bg-slate-50 dark:hover:bg-slate-800 rounded-lg transition-colors cursor-pointer"
                         >
                           <LayoutDashboard className="w-3.5 h-3.5 text-blue-900" />
                           <span>{t('nav.bidder_dashboard', 'Bidder Dashboard')}</span>
@@ -411,7 +415,7 @@ export function Header() {
                         <Link
                           href="/bidder/tenders"
                           onClick={() => setIsProfileOpen(false)}
-                          className="w-full flex items-center space-x-2 px-3 py-1.5 text-[11px] font-medium text-[#334155] hover:text-[#102F5F] hover:bg-slate-50 rounded-lg transition-colors cursor-pointer"
+                          className="w-full flex items-center space-x-2 px-3 py-1.5 text-[11px] font-medium text-[#334155] dark:text-slate-300 hover:text-[#102F5F] dark:hover:text-white hover:bg-slate-50 dark:hover:bg-slate-800 rounded-lg transition-colors cursor-pointer"
                         >
                           <Briefcase className="w-3.5 h-3.5 text-[#64748B]" />
                           <span>{t('nav.available_tenders', 'Available Tenders')}</span>
@@ -420,7 +424,7 @@ export function Header() {
                         <Link
                           href="/bidder/submit"
                           onClick={() => setIsProfileOpen(false)}
-                          className="w-full flex items-center space-x-2 px-3 py-1.5 text-[11px] font-medium text-[#334155] hover:text-[#102F5F] hover:bg-slate-50 rounded-lg transition-colors cursor-pointer"
+                          className="w-full flex items-center space-x-2 px-3 py-1.5 text-[11px] font-medium text-[#334155] dark:text-slate-300 hover:text-[#102F5F] dark:hover:text-white hover:bg-slate-50 dark:hover:bg-slate-800 rounded-lg transition-colors cursor-pointer"
                         >
                           <Upload className="w-3.5 h-3.5 text-blue-700" />
                           <span>{t('nav.upload_docs', 'Upload Documents')}</span>
@@ -429,7 +433,7 @@ export function Header() {
                         <Link
                           href="/bidder/dashboard#submissions"
                           onClick={() => setIsProfileOpen(false)}
-                          className="w-full flex items-center space-x-2 px-3 py-1.5 text-[11px] font-medium text-[#334155] hover:text-[#102F5F] hover:bg-slate-50 rounded-lg transition-colors cursor-pointer"
+                          className="w-full flex items-center space-x-2 px-3 py-1.5 text-[11px] font-medium text-[#334155] dark:text-slate-300 hover:text-[#102F5F] dark:hover:text-white hover:bg-slate-50 dark:hover:bg-slate-800 rounded-lg transition-colors cursor-pointer"
                         >
                           <FileCheck2 className="w-3.5 h-3.5 text-emerald-600" />
                           <span>{t('nav.my_submissions', 'My Submissions')}</span>
@@ -438,7 +442,7 @@ export function Header() {
                         <Link
                           href="/bidder/logs"
                           onClick={() => setIsProfileOpen(false)}
-                          className="w-full flex items-center space-x-2 px-3 py-1.5 text-[11px] font-medium text-[#334155] hover:text-[#102F5F] hover:bg-slate-50 rounded-lg transition-colors cursor-pointer"
+                          className="w-full flex items-center space-x-2 px-3 py-1.5 text-[11px] font-medium text-[#334155] dark:text-slate-300 hover:text-[#102F5F] dark:hover:text-white hover:bg-slate-50 dark:hover:bg-slate-800 rounded-lg transition-colors cursor-pointer"
                         >
                           <Clock className="w-3.5 h-3.5 text-blue-700" />
                           <span>{t('nav.history', 'History')}</span>
@@ -447,7 +451,7 @@ export function Header() {
                         <Link
                           href="/bidder/profile"
                           onClick={() => setIsProfileOpen(false)}
-                          className="w-full flex items-center space-x-2 px-3 py-1.5 text-[11px] font-medium text-[#334155] hover:text-[#102F5F] hover:bg-slate-50 rounded-lg transition-colors cursor-pointer"
+                          className="w-full flex items-center space-x-2 px-3 py-1.5 text-[11px] font-medium text-[#334155] dark:text-slate-300 hover:text-[#102F5F] dark:hover:text-white hover:bg-slate-50 dark:hover:bg-slate-800 rounded-lg transition-colors cursor-pointer"
                         >
                           <Building2 className="w-3.5 h-3.5 text-[#64748B]" />
                           <span>{t('nav.company_profile', 'Profile')}</span>
@@ -456,7 +460,7 @@ export function Header() {
                         <Link
                           href="/about"
                           onClick={() => setIsProfileOpen(false)}
-                          className="w-full flex items-center space-x-2 px-3 py-1.5 text-[11px] font-medium text-[#334155] hover:text-[#102F5F] hover:bg-slate-50 rounded-lg transition-colors cursor-pointer"
+                          className="w-full flex items-center space-x-2 px-3 py-1.5 text-[11px] font-medium text-[#334155] dark:text-slate-300 hover:text-[#102F5F] dark:hover:text-white hover:bg-slate-50 dark:hover:bg-slate-800 rounded-lg transition-colors cursor-pointer"
                         >
                           <Info className="w-3.5 h-3.5 text-[#64748B]" />
                           <span>{t('nav.about', 'About')}</span>

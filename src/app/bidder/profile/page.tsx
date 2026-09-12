@@ -31,7 +31,7 @@ export default function BidderProfilePage() {
       <div className="min-h-[60vh] flex items-center justify-center">
         <div className="flex flex-col items-center space-y-3">
           <div className="w-9 h-9 border-3 border-blue-900 border-t-transparent rounded-full animate-spin" />
-          <p className="text-xs font-bold text-slate-500">Verifying Bidder Credentials &amp; Access...</p>
+          <p className="text-xs font-bold text-slate-500">{t('Verifying Bidder Credentials & Access...')}</p>
         </div>
       </div>
     );
@@ -54,10 +54,10 @@ export default function BidderProfilePage() {
       {/* Breadcrumb Navigation */}
       <nav className="flex items-center space-x-2 text-xs text-slate-500 font-medium">
         <Link href="/bidder/dashboard" className="text-blue-900 hover:underline font-bold">
-          {t('nav.bidder_dashboard')}
+          {t('Bidder Dashboard')}
         </Link>
         <span>/</span>
-        <span className="text-slate-800 font-bold">{t('nav.company_profile')}</span>
+        <span className="text-slate-800 font-bold">{t('Profile')}</span>
       </nav>
 
       {/* Hero Bidder Identification Card */}
@@ -74,7 +74,7 @@ export default function BidderProfilePage() {
                 </span>
                 <span className="bg-emerald-100 text-emerald-800 text-xs font-semibold px-2.5 py-0.5 rounded-md flex items-center space-x-1">
                   <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
-                  <span>GeM Enrolled Vendor</span>
+                  <span>{t('GeM Enrolled Vendor')}</span>
                 </span>
               </div>
               <h1 className="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight">
@@ -95,7 +95,7 @@ export default function BidderProfilePage() {
               className="px-4 py-2 bg-red-50 hover:bg-red-100 text-red-700 text-xs font-bold rounded-xl transition-colors flex items-center space-x-1.5 cursor-pointer"
             >
               <LogOut className="w-4 h-4 text-red-600" />
-              <span>{t('nav.logout')}</span>
+              <span>{t('Log Out')}</span>
             </button>
           </div>
         </div>
@@ -108,25 +108,25 @@ export default function BidderProfilePage() {
           <div className="flex items-center space-x-2 border-b border-slate-100 pb-3">
             <ShieldCheck className="w-5 h-5 text-blue-900" />
             <h2 className="text-sm font-bold text-slate-900">
-              Tax &amp; Corporate Identifiers
+              {t('Tax & Corporate Identifiers')}
             </h2>
           </div>
 
           <div className="space-y-3 text-xs">
             <div className="p-3 bg-slate-50 rounded-xl flex justify-between items-center">
-              <span className="text-slate-500 font-bold">Goods &amp; Services Tax (GSTIN)</span>
+              <span className="text-slate-500 font-bold">{t('Goods & Services Tax (GSTIN)')}</span>
               <span className="font-mono font-bold text-slate-900">{session.gstNumber}</span>
             </div>
             <div className="p-3 bg-slate-50 rounded-xl flex justify-between items-center">
-              <span className="text-slate-500 font-bold">Permanent Account Number (PAN)</span>
+              <span className="text-slate-500 font-bold">{t('Permanent Account Number (PAN)')}</span>
               <span className="font-mono font-bold text-slate-900">{session.panNumber}</span>
             </div>
             <div className="p-3 bg-slate-50 rounded-xl flex justify-between items-center">
-              <span className="text-slate-500 font-bold">MSME / Udyam Registration</span>
+              <span className="text-slate-500 font-bold">{t('MSME / Udyam Registration')}</span>
               <span className="font-mono font-bold text-slate-900">{session.udyamRegistration}</span>
             </div>
             <div className="p-3 bg-slate-50 rounded-xl flex justify-between items-center">
-              <span className="text-slate-500 font-bold">Corporate Identity (CIN)</span>
+              <span className="text-slate-500 font-bold">{t('Corporate Identity (CIN)')}</span>
               <span className="font-mono font-bold text-slate-900">{session.cinNumber}</span>
             </div>
           </div>
@@ -137,26 +137,26 @@ export default function BidderProfilePage() {
           <div className="flex items-center space-x-2 border-b border-slate-100 pb-3">
             <Briefcase className="w-5 h-5 text-blue-900" />
             <h2 className="text-sm font-bold text-slate-900">
-              Authorized Representative &amp; Registered Address
+              {t('Authorized Representative & Registered Address')}
             </h2>
           </div>
 
           <div className="space-y-3 text-xs">
             <div className="p-3 bg-slate-50 rounded-xl space-y-1">
               <span className="text-[10px] uppercase font-bold text-slate-400 block">
-                Authorized Signatory
+                {t('Authorized Signatory')}
               </span>
               <span className="font-bold text-slate-900 block">{session.contactPerson}</span>
             </div>
             <div className="p-3 bg-slate-50 rounded-xl space-y-1">
               <span className="text-[10px] uppercase font-bold text-slate-400 block">
-                Official Email Address
+                {t('Official Email Address')}
               </span>
               <span className="font-mono font-semibold text-slate-800 block">{session.email}</span>
             </div>
             <div className="p-3 bg-slate-50 rounded-xl space-y-1">
               <span className="text-[10px] uppercase font-bold text-slate-400 block">
-                Registered Principal Place of Business
+                {t('Registered Principal Place of Business')}
               </span>
               <span className="text-slate-700 block">
                 Connaught Place, Barakhamba Road, New Delhi 110001, India
@@ -169,34 +169,34 @@ export default function BidderProfilePage() {
       {/* Statutory Standing Badges */}
       <div className="bg-white rounded-3xl border border-slate-200 p-6 shadow-xs space-y-4">
         <h3 className="text-sm font-bold text-slate-900">
-          Statutory Standing on Government Registries
+          {t('Statutory Standing on Government Registries')}
         </h3>
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs">
           <div className="p-4 bg-emerald-50/50 rounded-2xl border border-emerald-200 space-y-1">
             <div className="flex items-center justify-between">
-              <span className="text-[10px] font-bold text-emerald-800 uppercase">GSTN Status</span>
+              <span className="text-[10px] font-bold text-emerald-800 uppercase">{t('GSTN Status')}</span>
               <CheckCircle2 className="w-4 h-4 text-emerald-600" />
             </div>
-            <p className="font-bold text-slate-900">Active Form REG-06</p>
-            <p className="text-[11px] text-slate-500">Regular taxpayer with verified filing track record</p>
+            <p className="font-bold text-slate-900">{t('Active Form REG-06')}</p>
+            <p className="text-[11px] text-slate-500">{t('Regular taxpayer with verified filing track record')}</p>
           </div>
 
           <div className="p-4 bg-blue-50/50 rounded-2xl border border-blue-200 space-y-1">
             <div className="flex items-center justify-between">
-              <span className="text-[10px] font-bold text-blue-800 uppercase">MSME Udyam</span>
+              <span className="text-[10px] font-bold text-blue-800 uppercase">{t('MSME Udyam')}</span>
               <CheckCircle2 className="w-4 h-4 text-blue-600" />
             </div>
-            <p className="font-bold text-slate-900">Validated MSE Tier</p>
-            <p className="text-[11px] text-slate-500">Eligible for GFR 153 &amp; PPP-MSE procurement benefits</p>
+            <p className="font-bold text-slate-900">{t('Validated MSE Tier')}</p>
+            <p className="text-[11px] text-slate-500">{t('Eligible for GFR 153 & PPP-MSE procurement benefits')}</p>
           </div>
 
           <div className="p-4 bg-slate-50 rounded-2xl border border-slate-200 space-y-1">
             <div className="flex items-center justify-between">
-              <span className="text-[10px] font-bold text-slate-600 uppercase">CPPP Debarment</span>
+              <span className="text-[10px] font-bold text-slate-600 uppercase">{t('CPPP Debarment')}</span>
               <CheckCircle2 className="w-4 h-4 text-slate-600" />
             </div>
-            <p className="font-bold text-slate-900">Clear Standing</p>
-            <p className="text-[11px] text-slate-500">Zero debarment orders under GFR Rule 151</p>
+            <p className="font-bold text-slate-900">{t('Clear Standing')}</p>
+            <p className="text-[11px] text-slate-500">{t('Zero debarment orders under GFR Rule 151')}</p>
           </div>
         </div>
       </div>

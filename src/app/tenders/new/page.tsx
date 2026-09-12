@@ -4,6 +4,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useOfficerAuth } from '@/lib/authGuard';
+import { useLanguage } from '@/lib/i18n/LanguageContext';
 import { tenderService } from '@/services/tenderService';
 import { tenderRequiredDocumentService, AVAILABLE_DOCUMENT_TYPES } from '@/services/tenderRequiredDocumentService';
 import { storageService, MAX_FILE_SIZE_BYTES, ALLOWED_EXTENSIONS } from '@/services/storageService';
@@ -35,6 +36,7 @@ import {
 
 export default function CreateTenderNewPage() {
   const router = useRouter();
+  const { t } = useLanguage();
   const { session, isAuthenticated, isLoading: authLoading } = useOfficerAuth(true);
 
   // Form State: Basic Information
@@ -472,14 +474,14 @@ export default function CreateTenderNewPage() {
       {/* Breadcrumb Navigation */}
       <nav className="flex items-center space-x-2 text-xs text-slate-500 font-medium">
         <Link href="/" className="text-blue-900 hover:underline font-bold">
-          Dashboard
+          {t('Dashboard')}
         </Link>
         <span>/</span>
         <Link href="/tenders" className="text-blue-900 hover:underline font-bold">
-          Existing Tenders
+          {t('Existing Tenders')}
         </Link>
         <span>/</span>
-        <span className="text-slate-900 font-bold">Create Tender (/tenders/new)</span>
+        <span className="text-slate-900 font-bold">{t('Create Tender')}</span>
       </nav>
 
       {/* Restore Draft Banner */}
@@ -488,7 +490,7 @@ export default function CreateTenderNewPage() {
           <div className="flex items-center space-x-2 text-amber-900">
             <Save className="w-4 h-4 text-amber-700 shrink-0" />
             <span className="font-semibold">
-              An unsubmitted tender draft was found in your local officer session.
+              {t('An unsubmitted tender draft was found in your local officer session.')}
             </span>
           </div>
           <div className="flex items-center space-x-2 shrink-0">
@@ -497,14 +499,14 @@ export default function CreateTenderNewPage() {
               onClick={handleLoadDraft}
               className="px-3 py-1.5 bg-amber-600 hover:bg-amber-700 text-white font-bold rounded-lg transition-colors cursor-pointer"
             >
-              Restore Draft
+              {t('Restore Draft')}
             </button>
             <button
               type="button"
               onClick={handleDiscardDraft}
               className="px-3 py-1.5 bg-white border border-amber-300 text-amber-900 font-bold rounded-lg hover:bg-amber-100 transition-colors cursor-pointer"
             >
-              Discard
+              {t('Discard')}
             </button>
           </div>
         </div>
@@ -515,18 +517,18 @@ export default function CreateTenderNewPage() {
         <div className="space-y-1.5 max-w-2xl">
           <div className="flex items-center space-x-2">
             <span className="bg-blue-100 text-blue-900 font-mono text-xs font-bold px-2.5 py-0.5 rounded-md">
-              GeM RFP Creator
+              {t('GeM RFP Creator')}
             </span>
             <span className="bg-emerald-100 text-emerald-800 text-xs font-semibold px-2.5 py-0.5 rounded-md flex items-center space-x-1">
               <ShieldCheck className="w-3.5 h-3.5 text-emerald-600" />
-              <span>GFR Rule 151 Enforced</span>
+              <span>{t('GFR Rule 151 Enforced')}</span>
             </span>
           </div>
           <h1 className="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight">
-            Create Government Procurement Tender RFP
+            {t('Create Government Procurement Tender RFP')}
           </h1>
           <p className="text-xs sm:text-sm text-slate-500">
-            Define basic procurement specifications, configure mandatory deterministic compliance clauses, and specify the exact document packet every bidder must submit.
+            {t('Define basic procurement specifications, configure mandatory deterministic compliance clauses, and specify the exact document packet every bidder must submit.')}
           </p>
         </div>
 
@@ -537,7 +539,7 @@ export default function CreateTenderNewPage() {
             className="px-4 py-2.5 bg-gradient-to-r from-indigo-700 to-blue-700 hover:from-indigo-800 hover:to-blue-800 text-white text-xs font-bold rounded-xl shadow-xs transition-colors flex items-center space-x-1.5 cursor-pointer"
           >
             <Sparkles className="w-3.5 h-3.5 text-amber-300" />
-            <span>✨ Auto-Fill with Gemini</span>
+            <span>{t('✨ Auto-Fill with Gemini')}</span>
           </button>
 
           <button
@@ -546,14 +548,14 @@ export default function CreateTenderNewPage() {
             className="px-4 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs font-bold rounded-xl transition-colors flex items-center space-x-1.5 cursor-pointer border border-slate-300"
           >
             <Save className="w-3.5 h-3.5 text-slate-600" />
-            <span>Save Draft</span>
+            <span>{t('Save Draft')}</span>
           </button>
           <Link
             href="/tenders"
             className="px-4 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold rounded-xl transition-colors flex items-center space-x-1.5 cursor-pointer"
           >
             <ArrowLeft className="w-3.5 h-3.5" />
-            <span>Cancel</span>
+            <span>{t('Cancel')}</span>
           </Link>
         </div>
       </div>
@@ -568,10 +570,10 @@ export default function CreateTenderNewPage() {
               </div>
               <div>
                 <h3 className="text-sm font-black text-slate-900">
-                  Gemini AI RFP Specification Parser
+                  {t('Gemini AI RFP Specification Parser')}
                 </h3>
                 <p className="text-xs text-slate-500">
-                  Paste raw tender document text or government RFP specifications to automatically generate compliance clauses and required documents.
+                  {t('Paste raw tender document text or government RFP specifications to automatically generate compliance clauses and required documents.')}
                 </p>
               </div>
             </div>
@@ -581,7 +583,7 @@ export default function CreateTenderNewPage() {
                 onClick={handleLoadSampleRfp}
                 className="px-3 py-1.5 bg-white border border-indigo-200 hover:bg-indigo-50 text-indigo-900 text-xs font-bold rounded-lg transition-colors cursor-pointer"
               >
-                Load Sample GeM RFP
+                {t('Load Sample GeM RFP')}
               </button>
               <button
                 type="button"
@@ -597,13 +599,13 @@ export default function CreateTenderNewPage() {
             rows={5}
             value={rfpInputText}
             onChange={(e) => setRfpInputText(e.target.value)}
-            placeholder="Paste raw tender / RFP notice text here (e.g. Scope of work, eligibility turnover, technical criteria, mandatory certificates)..."
+            placeholder={t('Paste raw tender / RFP notice text here (e.g. Scope of work, eligibility turnover, technical criteria, mandatory certificates)...')}
             className="w-full p-3.5 text-xs rounded-2xl border border-indigo-200 bg-white text-slate-900 focus:outline-hidden focus:ring-2 focus:ring-indigo-600 leading-relaxed font-mono"
           />
 
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pt-1">
             <span className="text-[11px] text-slate-500">
-              ⚡ Powered by Google Gemini AI • GFR 2017 & GeM GTC Compliant • Non-Authoritative
+              {t('⚡ Powered by Google Gemini AI • GFR 2017 & GeM GTC Compliant • Non-Authoritative')}
             </span>
             <button
               type="button"
@@ -614,12 +616,12 @@ export default function CreateTenderNewPage() {
               {isAiRfpAnalyzing ? (
                 <>
                   <RotateCcw className="w-3.5 h-3.5 animate-spin text-indigo-200" />
-                  <span>Analyzing RFP with Gemini...</span>
+                  <span>{t('Analyzing RFP with Gemini...')}</span>
                 </>
               ) : (
                 <>
                   <Sparkles className="w-3.5 h-3.5 text-amber-300" />
-                  <span>Extract & Populate Tender Specifications</span>
+                  <span>{t('Extract & Populate Tender Specifications')}</span>
                 </>
               )}
             </button>
@@ -635,14 +637,14 @@ export default function CreateTenderNewPage() {
           <div className="bg-white rounded-3xl border border-slate-200 p-6 shadow-xs space-y-4">
             <div className="flex items-center space-x-2 pb-3 border-b border-slate-100">
               <Building2 className="w-5 h-5 text-blue-900" />
-              <h2 className="text-base font-bold text-slate-900">1. Basic Tender Information</h2>
+              <h2 className="text-base font-bold text-slate-900">{t('1. Basic Tender Information')}</h2>
             </div>
 
             <div className="space-y-4 text-xs">
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                   <label className="block font-bold text-slate-700 mb-1">
-                    Tender RFP Number *
+                    {t('Tender RFP Number *')}
                   </label>
                   <input
                     type="text"
@@ -660,7 +662,7 @@ export default function CreateTenderNewPage() {
 
                 <div>
                   <label className="block font-bold text-slate-700 mb-1">
-                    Procuring Ministry / Department *
+                    {t('Procuring Ministry / Department *')}
                   </label>
                   <select
                     value={department}
@@ -689,7 +691,7 @@ export default function CreateTenderNewPage() {
                       type="text"
                       value={customDept}
                       onChange={(e) => setCustomDept(e.target.value)}
-                      placeholder="Enter custom department or PSU name..."
+                      placeholder={t('Enter custom department or PSU name...')}
                       className="w-full mt-2 px-3.5 py-2 rounded-xl border border-slate-200 text-slate-900"
                     />
                   )}
@@ -698,14 +700,14 @@ export default function CreateTenderNewPage() {
 
               <div>
                 <label className="block font-bold text-slate-700 mb-1">
-                  Tender RFP Title *
+                  {t('Tender RFP Title *')}
                 </label>
                 <input
                   type="text"
                   required
                   value={title}
                   onChange={(e) => setTitle(e.target.value)}
-                  placeholder="e.g. Procurement of Cloud Infrastructure Services"
+                  placeholder={t('e.g. Procurement of Cloud Infrastructure Services')}
                   className={`w-full px-3.5 py-2.5 rounded-xl border ${
                     formErrors.title ? 'border-rose-400 bg-rose-50' : 'border-slate-200'
                   } text-slate-900 font-bold focus:outline-hidden focus:ring-2 focus:ring-blue-600`}
@@ -718,7 +720,7 @@ export default function CreateTenderNewPage() {
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                   <label className="block font-bold text-slate-700 mb-1">
-                    Estimated RFP Budget (in ₹ Crores) *
+                    {t('Estimated RFP Budget (in ₹ Crores) *')}
                   </label>
                   <div className="relative">
                     <span className="absolute left-3.5 top-2.5 font-bold text-slate-400">₹</span>
@@ -737,7 +739,7 @@ export default function CreateTenderNewPage() {
 
                 <div>
                   <label className="block font-bold text-slate-700 mb-1">
-                    Submission Window (Days from today) *
+                    {t('Submission Window (Days from today) *')}
                   </label>
                   <div className="relative">
                     <input
@@ -750,7 +752,7 @@ export default function CreateTenderNewPage() {
                       className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-slate-900 font-medium focus:outline-hidden focus:ring-2 focus:ring-blue-600"
                     />
                     <span className="text-[10px] text-slate-400 absolute right-3 top-3">
-                      Closes {deadlineFormatted}
+                      {t('Closes')} {deadlineFormatted}
                     </span>
                   </div>
                 </div>
@@ -758,13 +760,13 @@ export default function CreateTenderNewPage() {
 
               <div>
                 <label className="block font-bold text-slate-700 mb-1">
-                  RFP Description & Scope of Work
+                  {t('RFP Description & Scope of Work')}
                 </label>
                 <textarea
                   rows={2}
                   value={description}
                   onChange={(e) => setDescription(e.target.value)}
-                  placeholder="Detailed scope of supply, technical deliverables, and SLA requirements..."
+                  placeholder={t('Detailed scope of supply, technical deliverables, and SLA requirements...')}
                   className="w-full px-3.5 py-2 rounded-xl border border-slate-200 text-slate-900 font-medium focus:outline-hidden focus:ring-2 focus:ring-blue-600"
                 />
               </div>
@@ -776,7 +778,7 @@ export default function CreateTenderNewPage() {
             <div className="flex items-center justify-between pb-3 border-b border-slate-100">
               <div className="flex items-center space-x-2">
                 <Scale className="w-5 h-5 text-blue-900" />
-                <h2 className="text-base font-bold text-slate-900">2. Mandatory Compliance Requirements</h2>
+                <h2 className="text-base font-bold text-slate-900">{t('2. Mandatory Compliance Requirements')}</h2>
               </div>
               <button
                 type="button"
@@ -784,7 +786,7 @@ export default function CreateTenderNewPage() {
                 className="px-3 py-1.5 bg-blue-50 hover:bg-blue-100 text-blue-900 text-xs font-bold rounded-xl transition-colors flex items-center space-x-1 cursor-pointer border border-blue-200"
               >
                 <PlusCircle className="w-3.5 h-3.5" />
-                <span>Add Clause</span>
+                <span>{t('Add Clause')}</span>
               </button>
             </div>
 
@@ -921,10 +923,10 @@ export default function CreateTenderNewPage() {
               <div>
                 <div className="flex items-center space-x-2">
                   <FileCheck className="w-5 h-5 text-blue-900" />
-                  <h2 className="text-base font-bold text-slate-900">3. Required Bidder Documents</h2>
+                  <h2 className="text-base font-bold text-slate-900">{t('3. Required Bidder Documents')}</h2>
                 </div>
                 <p className="text-xs text-slate-500 mt-0.5">
-                  Select the documents that every bidder must submit for this tender.
+                  {t('Select the documents that every bidder must submit for this tender.')}
                 </p>
               </div>
 
@@ -945,7 +947,7 @@ export default function CreateTenderNewPage() {
                   className="px-4 py-2 bg-blue-900 hover:bg-blue-800 disabled:bg-slate-400 text-white text-xs font-bold rounded-xl shadow-xs transition-colors flex items-center space-x-1.5 cursor-pointer"
                 >
                   <Upload className="w-3.5 h-3.5" />
-                  <span>{isUploading ? 'Uploading Document...' : 'Upload Document'}</span>
+                  <span>{isUploading ? t('Uploading Document...') : t('Upload Document')}</span>
                 </button>
               </div>
             </div>
@@ -962,8 +964,8 @@ export default function CreateTenderNewPage() {
               {requiredDocs.length === 0 ? (
                 <div className="p-6 text-center border-2 border-dashed border-slate-200 rounded-2xl text-xs text-slate-400 space-y-1">
                   <FileText className="w-8 h-8 mx-auto text-slate-300" />
-                  <p className="font-bold text-slate-600">No required documents configured yet</p>
-                  <p>Click &quot;Upload Document&quot; above to configure reference templates.</p>
+                  <p className="font-bold text-slate-600">{t('No required documents configured yet')}</p>
+                  <p>{t('Click "Upload Document" above to configure reference templates.')}</p>
                 </div>
               ) : (
                 requiredDocs.map((doc) => (
@@ -979,7 +981,7 @@ export default function CreateTenderNewPage() {
                         </span>
                         {doc.is_mandatory && (
                           <span className="bg-rose-100 text-rose-800 text-[10px] font-bold px-1.5 py-0.2 rounded-full uppercase">
-                            Mandatory
+                            {t('Mandatory')}
                           </span>
                         )}
                       </div>
@@ -989,7 +991,7 @@ export default function CreateTenderNewPage() {
                           {doc.file_size ? `${(doc.file_size / 1024).toFixed(0)} KB` : 'Reference Spec'}
                         </span>
                         <span>•</span>
-                        <span className="text-emerald-700 font-semibold">Configured for Evaluation</span>
+                        <span className="text-emerald-700 font-semibold">{t('Configured for Evaluation')}</span>
                       </div>
                     </div>
 
@@ -1012,10 +1014,10 @@ export default function CreateTenderNewPage() {
                         type="button"
                         onClick={() => setDocToDelete(doc)}
                         className="px-3 py-1.5 bg-rose-50 hover:bg-rose-100 text-rose-700 font-bold rounded-xl transition-colors flex items-center space-x-1 cursor-pointer border border-rose-200"
-                        title="Remove Document"
+                        title={t('Remove Document')}
                       >
                         <Trash2 className="w-3.5 h-3.5" />
-                        <span>Delete</span>
+                        <span>{t('Delete')}</span>
                       </button>
                     </div>
                   </div>
@@ -1026,7 +1028,7 @@ export default function CreateTenderNewPage() {
             <div className="p-3 rounded-xl bg-blue-50/70 border border-blue-200 text-xs text-blue-900 flex items-start space-x-2">
               <Info className="w-4 h-4 text-blue-700 shrink-0 mt-0.5" />
               <p className="text-[11px] leading-relaxed">
-                <strong>Engine Verification Rule:</strong> When a bidder submits their document packet, the compliance engine will automatically verify the presence and authenticity of each required document type listed above. Missing documents are marked <span className="font-mono font-bold text-rose-700">MISSING_DOC</span>.
+                <strong>{t('Engine Verification Rule:')}</strong> {t('When a bidder submits their document packet, the compliance engine will automatically verify the presence and authenticity of each required document type listed above. Missing documents are marked')} <span className="font-mono font-bold text-rose-700">MISSING_DOC</span>.
               </p>
             </div>
           </div>
@@ -1037,10 +1039,10 @@ export default function CreateTenderNewPage() {
           <div className="bg-white rounded-3xl border border-slate-200 p-6 shadow-xs space-y-5 sticky top-20">
             <div className="flex items-center justify-between pb-3 border-b border-slate-100">
               <span className="text-xs font-bold text-slate-500 uppercase tracking-wider">
-                Live Tender Preview
+                {t('Live Tender Preview')}
               </span>
               <span className="bg-emerald-100 text-emerald-800 text-[10px] font-bold px-2 py-0.5 rounded-full">
-                Officer Ready
+                {t('Officer Ready')}
               </span>
             </div>
 
@@ -1059,26 +1061,26 @@ export default function CreateTenderNewPage() {
 
               <div className="space-y-2 pt-3 border-t border-slate-100">
                 <div className="flex justify-between">
-                  <span className="text-slate-500">Estimated Budget:</span>
+                  <span className="text-slate-500">{t('Estimated Budget:')}</span>
                   <span className="font-black text-slate-900">₹{budgetCr.toFixed(2)} Crores</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-slate-500">Submission Deadline:</span>
+                  <span className="text-slate-500">{t('Submission Deadline:')}</span>
                   <span className="font-bold text-slate-900">{deadlineFormatted}</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-slate-500">Compliance Clauses:</span>
-                  <span className="font-bold text-slate-900">{requirements.length} Configured</span>
+                  <span className="text-slate-500">{t('Compliance Clauses:')}</span>
+                  <span className="font-bold text-slate-900">{requirements.length} {t('Configured')}</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-slate-500">Required Bidder Documents:</span>
-                  <span className="font-bold text-blue-900">{requiredDocs.length} Mandatory Files</span>
+                  <span className="text-slate-500">{t('Required Bidder Documents:')}</span>
+                  <span className="font-bold text-blue-900">{requiredDocs.length} {t('Mandatory Files')}</span>
                 </div>
               </div>
 
               {/* Required Documents Pill Preview */}
               <div className="p-3 bg-slate-50 rounded-2xl border border-slate-200 space-y-1 text-[11px]">
-                <span className="text-slate-500 font-bold block mb-1">Required Types:</span>
+                <span className="text-slate-500 font-bold block mb-1">{t('Required Types:')}</span>
                 <div className="flex flex-wrap gap-1">
                   {requiredDocs.map((d) => (
                     <span
@@ -1101,14 +1103,14 @@ export default function CreateTenderNewPage() {
                 {isSuccess ? (
                   <>
                     <CheckCircle2 className="w-4 h-4 text-emerald-300" />
-                    <span>Tender Created! Redirecting...</span>
+                    <span>{t('Tender Created! Redirecting...')}</span>
                   </>
                 ) : isSubmitting ? (
-                  <span>Publishing Tender to GeM...</span>
+                  <span>{t('Publishing Tender to GeM...')}</span>
                 ) : (
                   <>
                     <PlusCircle className="w-4 h-4" />
-                    <span>Create Tender & Enforce Rules</span>
+                    <span>{t('Create Tender & Enforce Rules')}</span>
                   </>
                 )}
               </button>
@@ -1119,7 +1121,7 @@ export default function CreateTenderNewPage() {
                 className="w-full py-2.5 px-4 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold rounded-xl transition-colors flex items-center justify-center space-x-1.5 cursor-pointer"
               >
                 <Save className="w-3.5 h-3.5 text-slate-500" />
-                <span>Save Draft Session</span>
+                <span>{t('Save Draft Session')}</span>
               </button>
             </div>
           </div>
@@ -1136,15 +1138,15 @@ export default function CreateTenderNewPage() {
 
             <div className="text-center space-y-1.5">
               <h3 className="text-base font-bold text-slate-900">
-                Remove this required document?
+                {t('Remove this required document?')}
               </h3>
               <p className="text-xs text-slate-500">
-                Are you sure you want to remove <strong className="text-slate-800">{docToDelete.display_name}</strong> ({docToDelete.document_type}) from the tender&apos;s required document list?
+                {t("Are you sure you want to remove")} <strong className="text-slate-800">{docToDelete.display_name}</strong> ({docToDelete.document_type}) {t("from the tender's required document list?")}
               </p>
               {docToDelete.is_mandatory && (
                 <div className="p-2.5 bg-amber-50 border border-amber-200 rounded-xl text-[11px] text-amber-800 text-left mt-2">
-                  <span className="font-bold block">Warning:</span>
-                  This document is marked as mandatory. Removing it means bidders will no longer be flagged as <span className="font-mono">MISSING_DOC</span> if they omit it.
+                  <span className="font-bold block">{t('Warning:')}</span>
+                  {t('This document is marked as mandatory. Removing it means bidders will no longer be flagged as MISSING_DOC if they omit it.')}
                 </div>
               )}
             </div>
@@ -1155,14 +1157,14 @@ export default function CreateTenderNewPage() {
                 onClick={() => setDocToDelete(null)}
                 className="py-2.5 px-4 bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs font-bold rounded-xl transition-colors cursor-pointer"
               >
-                Cancel
+                {t('Cancel')}
               </button>
               <button
                 type="button"
                 onClick={handleConfirmDelete}
                 className="py-2.5 px-4 bg-rose-600 hover:bg-rose-700 text-white text-xs font-bold rounded-xl shadow-xs transition-colors cursor-pointer"
               >
-                Remove
+                {t('Remove')}
               </button>
             </div>
           </div>
