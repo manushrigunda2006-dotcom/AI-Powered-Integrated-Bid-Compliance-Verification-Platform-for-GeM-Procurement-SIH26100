@@ -344,6 +344,12 @@ export const en: Record<string, string> = {
   'audit.history_cleared_success': 'Audit history cleared successfully.',
   'audit.clearing': 'Clearing...',
 
+  // Theme
+  'theme.light': 'Light',
+  'theme.dark': 'Dark',
+  'theme.toggle': 'Toggle Theme',
+  'theme.switch_to': 'Switch to',
+
   // Profile Pages
   'profile.title': 'Profile & Security Standing',
   'profile.officer_info': 'Government Officer Information',

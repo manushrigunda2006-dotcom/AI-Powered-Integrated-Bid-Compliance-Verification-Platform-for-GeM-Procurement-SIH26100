@@ -26,6 +26,7 @@ import { GfrComplianceDialog } from './GfrComplianceDialog';
 import { gfrComplianceService, GfrStatusDetails } from '@/services/gfrComplianceService';
 import { useLanguage } from '@/lib/i18n/LanguageContext';
 import { LanguageSelector } from './LanguageSelector';
+import { ThemeToggle } from './ThemeToggle';
 
 export function Header() {
   const router = useRouter();
@@ -228,6 +229,9 @@ export function Header() {
                 </Link>
               </nav>
             )}
+
+            {/* THEME TOGGLE (LIGHT / DARK) */}
+            <ThemeToggle />
 
             {/* MULTILINGUAL LANGUAGE SELECTOR */}
             <LanguageSelector />

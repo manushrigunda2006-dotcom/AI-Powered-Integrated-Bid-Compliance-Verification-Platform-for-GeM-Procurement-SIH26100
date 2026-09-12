@@ -446,6 +446,19 @@ export default function AuditLogsPage() {
               </button>
             </div>
           </div>
+
+          {/* Clear History Button alongside Search & Filters */}
+          {isAuthorized && (
+            <button
+              type="button"
+              onClick={() => setIsClearDialogOpen(true)}
+              className="px-3.5 py-1.5 bg-rose-50 hover:bg-rose-100 text-rose-700 hover:text-rose-800 border border-rose-200 hover:border-rose-300 rounded-xl text-xs font-bold shadow-2xs transition-all flex items-center space-x-1.5 cursor-pointer ml-auto"
+              title={t('audit.clear_history', 'Clear History')}
+            >
+              <Trash2 className="w-3.5 h-3.5 text-rose-600" />
+              <span>{t('audit.clear_history', 'Clear History')}</span>
+            </button>
+          )}
         </div>
       </div>
 

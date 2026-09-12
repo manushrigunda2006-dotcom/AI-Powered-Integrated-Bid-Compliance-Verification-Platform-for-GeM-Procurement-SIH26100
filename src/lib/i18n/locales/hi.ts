@@ -344,6 +344,12 @@ export const hi: Record<string, string> = {
   'audit.history_cleared_success': 'ऑडिट इतिहास सफलतापूर्वक साफ़ किया गया।',
   'audit.clearing': 'साफ़ किया जा रहा है...',
 
+  // Theme
+  'theme.light': 'प्रकाश',
+  'theme.dark': 'डार्क',
+  'theme.toggle': 'थीम बदलें',
+  'theme.switch_to': 'बदलें',
+
   // Profile Pages
   'profile.title': 'प्रोफ़ाइल एवं सुरक्षा स्थिति',
   'profile.officer_info': 'सरकारी अधिकारी जानकारी',

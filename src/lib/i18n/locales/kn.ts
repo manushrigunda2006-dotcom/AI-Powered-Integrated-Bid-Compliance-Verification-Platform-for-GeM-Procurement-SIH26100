@@ -344,6 +344,12 @@ export const kn: Record<string, string> = {
   'audit.history_cleared_success': 'ಆಡಿಟ್ ಇತಿಹಾಸವನ್ನು ಯಶಸ್ವಿಯಾಗಿ ಅಳಿಸಲಾಗಿದೆ.',
   'audit.clearing': 'ಅಳಿಸಲಾಗುತ್ತಿದೆ...',
 
+  // Theme
+  'theme.light': 'ಬೆಳಕು',
+  'theme.dark': 'ಡಾರ್ಕ್',
+  'theme.toggle': 'ಥೀಮ್ ಬದಲಾಯಿಸಿ',
+  'theme.switch_to': 'ಬದಲಾಯಿಸಿ',
+
   // Profile Pages
   'profile.title': 'ಪ್ರೊಫೈಲ್ ಮತ್ತು ಭದ್ರತಾ ಸ್ಥಿತಿ',
   'profile.officer_info': 'ಸರ್ಕಾರಿ ಅಧಿಕಾರಿ ಮಾಹಿತಿ',
