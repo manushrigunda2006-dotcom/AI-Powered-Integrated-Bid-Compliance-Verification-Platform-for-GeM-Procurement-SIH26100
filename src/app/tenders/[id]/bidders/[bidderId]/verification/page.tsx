@@ -40,8 +40,10 @@ import {
 } from 'lucide-react';
 import { GeminiAiInsights } from '@/components/GeminiAiInsights';
 import { GeminiFullEvaluationResult } from '@/lib/gemini/types';
+import { useOfficerAuth } from '@/lib/authGuard';
 
 export default function BidderVerificationPage() {
+  const { session, isAuthenticated, isAuthorized, isLoading: authLoading } = useOfficerAuth(true);
   const params = useParams();
   const router = useRouter();
 
@@ -302,6 +304,17 @@ export default function BidderVerificationPage() {
       console.error('Error deleting document:', err);
     }
   };
+
+  if (authLoading || !isAuthorized) {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-[60vh] space-y-3">
+        <div className="w-9 h-9 border-3 border-blue-900 border-t-transparent rounded-full animate-spin" />
+        <span className="text-xs font-bold text-slate-500">
+          Verifying Officer Evaluation Authorization...
+        </span>
+      </div>
+    );
+  }
 
   if (!bidder || !report) {
     return (

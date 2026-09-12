@@ -146,7 +146,7 @@ export function RegistryBadges({ registrySummary, latencyMs }: RegistryBadgeProp
         <div className="p-3 bg-slate-50 rounded-lg border border-slate-200 text-xs space-y-1 animate-fadeIn">
           <div className="font-bold text-slate-800 flex justify-between">
             <span>Udyam MSME Registry Details</span>
-            <span className="text-[10px] text-slate-500">Ministry of MSME</span>
+            <span className="text-[10px] text-slate-500">MSME Registry</span>
           </div>
           <p><strong className="text-slate-600">Enterprise:</strong> {udyam.enterprise_name}</p>
           <p><strong className="text-slate-600">Category:</strong> {udyam.msme_category} Enterprise ({udyam.major_activity})</p>

@@ -13,14 +13,20 @@ import {
   LogOut,
   User,
   FolderGit2,
-  Lock
+  Lock,
+  Clock,
+  Briefcase,
+  ShieldCheck,
+  FileCheck2,
+  LayoutDashboard
 } from 'lucide-react';
-import { supabase, isSupabaseConfigured } from '@/lib/supabase';
+import { useAuth, logout } from '@/lib/authGuard';
 import { GfrComplianceDialog } from './GfrComplianceDialog';
 import { gfrComplianceService, GfrStatusDetails } from '@/services/gfrComplianceService';
 
 export function Header() {
   const router = useRouter();
+  const { session, role, isAuthenticated, isOfficer, isBidder } = useAuth();
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const [isGfrDialogOpen, setIsGfrDialogOpen] = useState(false);
   const [gfrDetails, setGfrDetails] = useState<GfrStatusDetails | null>(null);
@@ -28,15 +34,17 @@ export function Header() {
 
   useEffect(() => {
     let mounted = true;
-    gfrComplianceService.getGfrComplianceStatus().then((details) => {
-      if (mounted) {
-        setGfrDetails(details);
-      }
-    });
+    if (isOfficer) {
+      gfrComplianceService.getGfrComplianceStatus().then((details) => {
+        if (mounted) {
+          setGfrDetails(details);
+        }
+      });
+    }
     return () => {
       mounted = false;
     };
-  }, []);
+  }, [isOfficer]);
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
@@ -57,20 +65,12 @@ export function Header() {
     };
   }, []);
 
-  const handleLogout = async () => {
+  const handleLogout = () => {
     setIsProfileOpen(false);
-    try {
-      if (isSupabaseConfigured()) {
-        await supabase.auth.signOut();
-      }
-    } catch (err) {
-      console.warn('Notice signing out from supabase:', err);
-    }
-    if (typeof window !== 'undefined') {
-      localStorage.removeItem('gem_officer_session');
-    }
-    router.push('/login');
+    logout(router, '/role-selection');
   };
+
+  const homeHref = isBidder ? '/bidder/dashboard' : isOfficer ? '/officer/dashboard' : '/role-selection';
 
   return (
     <header className="border-b border-[#E2E8F0] bg-[#FFFFFF] sticky top-0 z-40">
@@ -78,12 +78,22 @@ export function Header() {
         <div className="flex items-center justify-between h-[58px] sm:h-[62px]">
           {/* HEADER LEFT BRANDING */}
           <div className="flex items-center space-x-3">
-            <Link href="/" className="flex items-center space-x-2.5 group">
+            <Link href={homeHref} className="flex items-center space-x-2.5 group">
               <div className="flex flex-col justify-center leading-tight">
                 <div className="flex items-center space-x-1.5">
                   <span className="font-bold text-[14px] sm:text-[15px] text-[#102F5F] tracking-tight">
                     Government e-Marketplace
                   </span>
+                  {isBidder && (
+                    <span className="bg-blue-100 text-blue-900 text-[9px] font-bold px-1.5 py-0.2 rounded-md">
+                      Bidder Portal
+                    </span>
+                  )}
+                  {isOfficer && (
+                    <span className="bg-amber-100 text-amber-900 text-[9px] font-bold px-1.5 py-0.2 rounded-md">
+                      Officer Portal
+                    </span>
+                  )}
                 </div>
                 <span className="text-[9px] text-[#64748B] font-medium hidden sm:inline-block mt-0.5">
                   Automated Procurement Verification &amp; Compliance Engine (SIH Edition)
@@ -92,159 +102,304 @@ export function Header() {
             </Link>
           </div>
 
-          {/* HEADER NAVIGATION & OFFICER AREA */}
+          {/* HEADER NAVIGATION - ROLE-SPECIFIC */}
           <div className="flex items-center space-x-4 sm:space-x-5">
-            <nav className="hidden md:flex items-center space-x-3 text-[11px] font-medium">
-              {/* FIRST: Existing Tenders */}
-              <Link
-                href="/tenders"
-                className="text-[#334155] hover:text-[#102F5F] transition-colors flex items-center space-x-1 px-2 py-1 rounded-md hover:bg-slate-100"
-              >
-                <FileText className="w-3.5 h-3.5 text-[#64748B]" />
-                <span className="text-[11px] font-semibold">Existing Tenders</span>
-              </Link>
+            {/* 1. GOVERNMENT OFFICER NAVIGATION */}
+            {isOfficer && (
+              <nav className="hidden md:flex items-center space-x-3 text-[11px] font-medium">
+                <Link
+                  href="/officer/dashboard"
+                  className="text-[#334155] hover:text-[#102F5F] transition-colors flex items-center space-x-1 px-2 py-1 rounded-md hover:bg-slate-100"
+                >
+                  <LayoutDashboard className="w-3.5 h-3.5 text-[#64748B]" />
+                  <span className="text-[11px] font-semibold">Officer Dashboard</span>
+                </Link>
 
-              {/* SECOND: Create Tender */}
-              <Link
-                href="/tenders/new"
-                className="text-[#334155] hover:text-[#102F5F] transition-colors flex items-center space-x-1 px-2 py-1 rounded-md hover:bg-slate-100"
-              >
-                <PlusCircle className="w-3.5 h-3.5 text-[#16A34A]" />
-                <span className="text-[11px] font-semibold">Create Tender</span>
-              </Link>
+                <Link
+                  href="/tenders"
+                  className="text-[#334155] hover:text-[#102F5F] transition-colors flex items-center space-x-1 px-2 py-1 rounded-md hover:bg-slate-100"
+                >
+                  <FileText className="w-3.5 h-3.5 text-[#64748B]" />
+                  <span className="text-[11px] font-semibold">Existing Tenders</span>
+                </Link>
 
-              {/* THIRD: GFR Rule 151 Compliant Badge (Clickable & Accessible) */}
-              <button
-                type="button"
-                onClick={() => setIsGfrDialogOpen(true)}
-                aria-label="View GFR Rule 151 compliance status"
-                aria-haspopup="dialog"
-                className="flex items-center space-x-1 px-2.5 py-1 rounded-full bg-[#ECFDF5] text-[#15803D] border border-[#BBF7D0] text-[10px] font-bold cursor-pointer hover:bg-[#DCFCE7] hover:border-[#86EFAC] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#16A34A] focus-visible:ring-offset-1 transition-colors"
-              >
-                <CheckCircle2 className="w-3 h-3 text-[#16A34A] shrink-0" />
-                <span>{gfrDetails?.badgeLabel || 'GFR Rule 151 Compliant'}</span>
-              </button>
+                <Link
+                  href="/tenders/new"
+                  className="text-[#334155] hover:text-[#102F5F] transition-colors flex items-center space-x-1 px-2 py-1 rounded-md hover:bg-slate-100"
+                >
+                  <PlusCircle className="w-3.5 h-3.5 text-[#16A34A]" />
+                  <span className="text-[11px] font-semibold">Create Tender</span>
+                </Link>
 
-              {/* Audit Trail Link */}
-              <Link
-                href="/audit-logs"
-                className="text-[#64748B] hover:text-[#102F5F] transition-colors flex items-center space-x-1 px-2 py-1 rounded-md hover:bg-slate-100 text-[11px] font-semibold"
-                title="Cryptographic Audit Logs"
-              >
-                <Lock className="w-3 h-3 text-[#64748B]" />
-                <span>Audit Trail</span>
-              </Link>
-            </nav>
+                <button
+                  type="button"
+                  onClick={() => setIsGfrDialogOpen(true)}
+                  aria-label="View GFR Rule 151 compliance status"
+                  className="flex items-center space-x-1 px-2.5 py-1 rounded-full bg-[#ECFDF5] text-[#15803D] border border-[#BBF7D0] text-[10px] font-bold cursor-pointer hover:bg-[#DCFCE7] transition-colors"
+                >
+                  <CheckCircle2 className="w-3 h-3 text-[#16A34A] shrink-0" />
+                  <span>{gfrDetails?.badgeLabel || 'GFR Rule 151 Compliant'}</span>
+                </button>
 
-            <div className="h-4 w-px bg-slate-200 hidden md:block" />
+                <Link
+                  href="/audit-logs"
+                  className="text-[#64748B] hover:text-[#102F5F] transition-colors flex items-center space-x-1 px-2 py-1 rounded-md hover:bg-slate-100 text-[11px] font-semibold"
+                  title="Cryptographic Audit Logs"
+                >
+                  <Lock className="w-3 h-3 text-[#64748B]" />
+                  <span>Audit Trail</span>
+                </Link>
+              </nav>
+            )}
 
-            {/* HEADER OFFICER AREA */}
-            <div className="relative" ref={dropdownRef}>
-              <button
-                type="button"
-                onClick={() => setIsProfileOpen((prev) => !prev)}
-                className="flex items-center space-x-2 py-1 text-left focus:outline-hidden cursor-pointer"
-                aria-expanded={isProfileOpen}
-                aria-haspopup="true"
-              >
-                {/* Circular Avatar 30px, #0F2F63 with AB */}
-                <div className="w-[30px] h-[30px] rounded-full bg-[#0F2F63] text-white flex items-center justify-center text-[11px] font-bold shrink-0 shadow-2xs">
-                  AB
-                </div>
-                <div className="hidden sm:flex items-center text-left leading-tight">
-                  <span className="text-[11px] font-bold text-[#102F5F] flex items-center space-x-1">
-                    <span>ABCD</span>
-                    <ChevronDown
-                      className={`w-3 h-3 text-[#64748B] transition-transform ${
-                        isProfileOpen ? 'rotate-180' : ''
-                      }`}
-                    />
-                  </span>
-                </div>
-              </button>
+            {/* 2. BIDDER NAVIGATION */}
+            {isBidder && (
+              <nav className="hidden md:flex items-center space-x-3 text-[11px] font-medium">
+                <Link
+                  href="/bidder/dashboard"
+                  className="text-[#334155] hover:text-[#102F5F] transition-colors flex items-center space-x-1 px-2 py-1 rounded-md hover:bg-slate-100"
+                >
+                  <LayoutDashboard className="w-3.5 h-3.5 text-blue-900" />
+                  <span className="text-[11px] font-semibold">Bidder Dashboard</span>
+                </Link>
 
-              {/* Officer Profile Dropdown Modal */}
-              {isProfileOpen && (
-                <div className="absolute right-0 mt-2 w-72 bg-white rounded-xl shadow-lg border border-[#D9E3EF] py-2 z-50 animate-in fade-in slide-in-from-top-2 duration-150">
-                  <div className="px-3.5 py-2.5 border-b border-slate-100 flex items-start space-x-2.5">
-                    <div className="w-8 h-8 rounded-full bg-[#0F2F63] text-white flex items-center justify-center text-xs font-bold shrink-0">
-                      AB
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <div className="flex items-center space-x-1">
-                        <h4 className="text-xs font-bold text-[#102F5F] truncate">
-                          ABCD
-                        </h4>
-                        <span className="bg-[#ECFDF5] text-[#15803D] text-[9px] font-bold px-1.5 py-0.2 rounded-full">
-                          Active
-                        </span>
+                <Link
+                  href="/bidder/tenders"
+                  className="text-[#334155] hover:text-[#102F5F] transition-colors flex items-center space-x-1 px-2 py-1 rounded-md hover:bg-slate-100"
+                >
+                  <Briefcase className="w-3.5 h-3.5 text-[#64748B]" />
+                  <span className="text-[11px] font-semibold">Available Tenders</span>
+                </Link>
+
+                <Link
+                  href="/bidder/dashboard#submissions"
+                  className="text-[#334155] hover:text-[#102F5F] transition-colors flex items-center space-x-1 px-2 py-1 rounded-md hover:bg-slate-100"
+                >
+                  <FileCheck2 className="w-3.5 h-3.5 text-emerald-600" />
+                  <span className="text-[11px] font-semibold">My Submissions</span>
+                </Link>
+
+                <Link
+                  href="/bidder/logs"
+                  className="text-[#334155] hover:text-[#102F5F] transition-colors flex items-center space-x-1 px-2 py-1 rounded-md hover:bg-slate-100"
+                >
+                  <Clock className="w-3.5 h-3.5 text-blue-700" />
+                  <span className="text-[11px] font-semibold">My Activity Logs</span>
+                </Link>
+              </nav>
+            )}
+
+            {/* 3. UNAUTHENTICATED NAVIGATION */}
+            {!isAuthenticated && (
+              <nav className="flex items-center space-x-2 text-[11px] font-medium">
+                <Link
+                  href="/role-selection"
+                  className="px-3 py-1.5 bg-blue-900 hover:bg-blue-800 text-white rounded-lg font-bold text-xs shadow-xs transition-colors"
+                >
+                  Select Portal Role
+                </Link>
+              </nav>
+            )}
+
+            {isAuthenticated && <div className="h-4 w-px bg-slate-200 hidden md:block" />}
+
+            {/* PROFILE & LOGOUT DROPDOWN */}
+            {isAuthenticated && (
+              <div className="relative" ref={dropdownRef}>
+                <button
+                  type="button"
+                  onClick={() => setIsProfileOpen((prev) => !prev)}
+                  className="flex items-center space-x-2 py-1 text-left focus:outline-hidden cursor-pointer"
+                  aria-expanded={isProfileOpen}
+                  aria-haspopup="true"
+                >
+                  <div
+                    className={`w-[30px] h-[30px] rounded-full text-white flex items-center justify-center text-[11px] font-bold shrink-0 shadow-2xs ${
+                      isOfficer ? 'bg-[#0F2F63]' : 'bg-blue-700'
+                    }`}
+                  >
+                    {isOfficer ? 'AB' : 'AT'}
+                  </div>
+                  <div className="hidden sm:flex items-center text-left leading-tight">
+                    <span className="text-[11px] font-bold text-[#102F5F] flex items-center space-x-1">
+                      <span className="max-w-[120px] truncate">
+                        {isOfficer ? (session as any).name || 'Officer ABCD' : (session as any).companyName || 'Bidder'}
+                      </span>
+                      <ChevronDown
+                        className={`w-3 h-3 text-[#64748B] transition-transform ${
+                          isProfileOpen ? 'rotate-180' : ''
+                        }`}
+                      />
+                    </span>
+                  </div>
+                </button>
+
+                {/* Profile Dropdown Menu */}
+                {isProfileOpen && (
+                  <div className="absolute right-0 mt-2 w-72 bg-white rounded-xl shadow-lg border border-[#D9E3EF] py-2 z-50 animate-in fade-in slide-in-from-top-2 duration-150">
+                    <div className="px-3.5 py-2.5 border-b border-slate-100 flex items-start space-x-2.5">
+                      <div
+                        className={`w-8 h-8 rounded-full text-white flex items-center justify-center text-xs font-bold shrink-0 ${
+                          isOfficer ? 'bg-[#0F2F63]' : 'bg-blue-700'
+                        }`}
+                      >
+                        {isOfficer ? 'AB' : 'AT'}
                       </div>
-                      <p className="text-[10px] text-[#64748B] flex items-center space-x-1 mt-0.5 truncate">
-                        <Building2 className="w-3 h-3 text-[#94A3B8] shrink-0" />
-                        <span className="truncate">Ministry of Commerce & Industry</span>
-                      </p>
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center space-x-1.5">
+                          <h4 className="text-xs font-bold text-[#102F5F] truncate">
+                            {isOfficer ? (session as any).name || 'Officer ABCD' : (session as any).companyName || 'Bidder'}
+                          </h4>
+                          <span
+                            className={`text-[8.5px] font-bold px-1.5 py-0.2 rounded-full ${
+                              isOfficer
+                                ? 'bg-amber-100 text-amber-800'
+                                : 'bg-blue-100 text-blue-900'
+                            }`}
+                          >
+                            {isOfficer ? 'Officer' : 'Bidder'}
+                          </span>
+                        </div>
+                        <p className="text-[10px] text-[#64748B] flex items-center space-x-1 mt-0.5 truncate">
+                          {isOfficer ? (
+                            <>
+                              <Building2 className="w-3 h-3 text-[#94A3B8] shrink-0" />
+                              <span className="truncate">Dept of Public Procurement</span>
+                            </>
+                          ) : (
+                            <>
+                              <ShieldCheck className="w-3 h-3 text-emerald-600 shrink-0" />
+                              <span className="truncate font-mono">{(session as any).gstNumber || 'GST Verified'}</span>
+                            </>
+                          )}
+                        </p>
+                      </div>
                     </div>
+
+                    {/* Officer Dropdown Links */}
+                    {isOfficer && (
+                      <div className="p-1.5 space-y-0.5 text-xs">
+                        <Link
+                          href="/officer/dashboard"
+                          onClick={() => setIsProfileOpen(false)}
+                          className="w-full flex items-center space-x-2 px-3 py-1.5 text-[11px] font-medium text-[#334155] hover:text-[#102F5F] hover:bg-slate-50 rounded-lg transition-colors cursor-pointer"
+                        >
+                          <LayoutDashboard className="w-3.5 h-3.5 text-[#64748B]" />
+                          <span>Officer Dashboard</span>
+                        </Link>
+
+                        <Link
+                          href="/profile"
+                          onClick={() => setIsProfileOpen(false)}
+                          className="w-full flex items-center space-x-2 px-3 py-1.5 text-[11px] font-medium text-[#334155] hover:text-[#102F5F] hover:bg-slate-50 rounded-lg transition-colors cursor-pointer"
+                        >
+                          <User className="w-3.5 h-3.5 text-[#64748B]" />
+                          <span>View Officer Profile &amp; DSC</span>
+                        </Link>
+
+                        <Link
+                          href="/tenders"
+                          onClick={() => setIsProfileOpen(false)}
+                          className="w-full flex items-center space-x-2 px-3 py-1.5 text-[11px] font-medium text-[#334155] hover:text-[#102F5F] hover:bg-slate-50 rounded-lg transition-colors cursor-pointer"
+                        >
+                          <FolderGit2 className="w-3.5 h-3.5 text-[#64748B]" />
+                          <span>Existing Tenders</span>
+                        </Link>
+
+                        <Link
+                          href="/tenders/new"
+                          onClick={() => setIsProfileOpen(false)}
+                          className="w-full flex items-center space-x-2 px-3 py-1.5 text-[11px] font-medium text-[#334155] hover:text-[#102F5F] hover:bg-slate-50 rounded-lg transition-colors cursor-pointer"
+                        >
+                          <PlusCircle className="w-3.5 h-3.5 text-[#16A34A]" />
+                          <span>Create Tender RFP</span>
+                        </Link>
+
+                        <Link
+                          href="/audit-logs"
+                          onClick={() => setIsProfileOpen(false)}
+                          className="w-full flex items-center space-x-2 px-3 py-1.5 text-[11px] font-medium text-[#334155] hover:text-[#102F5F] hover:bg-slate-50 rounded-lg transition-colors cursor-pointer"
+                        >
+                          <Lock className="w-3.5 h-3.5 text-[#64748B]" />
+                          <span>Immutable Audit Trail</span>
+                        </Link>
+
+                        <button
+                          type="button"
+                          onClick={handleLogout}
+                          className="w-full flex items-center space-x-2 px-3 py-1.5 text-[11px] font-semibold text-[#DC2626] hover:bg-red-50 rounded-lg transition-colors text-left cursor-pointer"
+                        >
+                          <LogOut className="w-3.5 h-3.5 text-[#DC2626]" />
+                          <span>Log Out</span>
+                        </button>
+                      </div>
+                    )}
+
+                    {/* Bidder Dropdown Links */}
+                    {isBidder && (
+                      <div className="p-1.5 space-y-0.5 text-xs">
+                        <Link
+                          href="/bidder/dashboard"
+                          onClick={() => setIsProfileOpen(false)}
+                          className="w-full flex items-center space-x-2 px-3 py-1.5 text-[11px] font-medium text-[#334155] hover:text-[#102F5F] hover:bg-slate-50 rounded-lg transition-colors cursor-pointer"
+                        >
+                          <LayoutDashboard className="w-3.5 h-3.5 text-blue-900" />
+                          <span>Bidder Dashboard</span>
+                        </Link>
+
+                        <Link
+                          href="/bidder/profile"
+                          onClick={() => setIsProfileOpen(false)}
+                          className="w-full flex items-center space-x-2 px-3 py-1.5 text-[11px] font-medium text-[#334155] hover:text-[#102F5F] hover:bg-slate-50 rounded-lg transition-colors cursor-pointer"
+                        >
+                          <Building2 className="w-3.5 h-3.5 text-[#64748B]" />
+                          <span>Company Profile</span>
+                        </Link>
+
+                        <Link
+                          href="/bidder/tenders"
+                          onClick={() => setIsProfileOpen(false)}
+                          className="w-full flex items-center space-x-2 px-3 py-1.5 text-[11px] font-medium text-[#334155] hover:text-[#102F5F] hover:bg-slate-50 rounded-lg transition-colors cursor-pointer"
+                        >
+                          <Briefcase className="w-3.5 h-3.5 text-[#64748B]" />
+                          <span>Available Tenders</span>
+                        </Link>
+
+                        <Link
+                          href="/bidder/logs"
+                          onClick={() => setIsProfileOpen(false)}
+                          className="w-full flex items-center space-x-2 px-3 py-1.5 text-[11px] font-medium text-[#334155] hover:text-[#102F5F] hover:bg-slate-50 rounded-lg transition-colors cursor-pointer"
+                        >
+                          <Clock className="w-3.5 h-3.5 text-[#64748B]" />
+                          <span>My Activity Logs</span>
+                        </Link>
+
+                        <button
+                          type="button"
+                          onClick={handleLogout}
+                          className="w-full flex items-center space-x-2 px-3 py-1.5 text-[11px] font-semibold text-[#DC2626] hover:bg-red-50 rounded-lg transition-colors text-left cursor-pointer"
+                        >
+                          <LogOut className="w-3.5 h-3.5 text-[#DC2626]" />
+                          <span>Log Out</span>
+                        </button>
+                      </div>
+                    )}
                   </div>
-
-                  <div className="p-1.5 space-y-0.5 text-xs">
-                    <Link
-                      href="/profile"
-                      onClick={() => setIsProfileOpen(false)}
-                      className="w-full flex items-center space-x-2 px-3 py-1.5 text-[11px] font-medium text-[#334155] hover:text-[#102F5F] hover:bg-slate-50 rounded-lg transition-colors cursor-pointer"
-                    >
-                      <User className="w-3.5 h-3.5 text-[#64748B]" />
-                      <span>View Officer Profile & DSC</span>
-                    </Link>
-
-                    <Link
-                      href="/tenders"
-                      onClick={() => setIsProfileOpen(false)}
-                      className="w-full flex items-center space-x-2 px-3 py-1.5 text-[11px] font-medium text-[#334155] hover:text-[#102F5F] hover:bg-slate-50 rounded-lg transition-colors cursor-pointer"
-                    >
-                      <FolderGit2 className="w-3.5 h-3.5 text-[#64748B]" />
-                      <span>Existing Tenders</span>
-                    </Link>
-
-                    <Link
-                      href="/tenders/new"
-                      onClick={() => setIsProfileOpen(false)}
-                      className="w-full flex items-center space-x-2 px-3 py-1.5 text-[11px] font-medium text-[#334155] hover:text-[#102F5F] hover:bg-slate-50 rounded-lg transition-colors cursor-pointer"
-                    >
-                      <PlusCircle className="w-3.5 h-3.5 text-[#16A34A]" />
-                      <span>Create Tender RFP</span>
-                    </Link>
-
-                    <Link
-                      href="/audit-logs"
-                      onClick={() => setIsProfileOpen(false)}
-                      className="w-full flex items-center space-x-2 px-3 py-1.5 text-[11px] font-medium text-[#334155] hover:text-[#102F5F] hover:bg-slate-50 rounded-lg transition-colors cursor-pointer"
-                    >
-                      <Lock className="w-3.5 h-3.5 text-[#64748B]" />
-                      <span>Immutable Audit Trail</span>
-                    </Link>
-
-                    <button
-                      type="button"
-                      onClick={handleLogout}
-                      className="w-full flex items-center space-x-2 px-3 py-1.5 text-[11px] font-semibold text-[#DC2626] hover:bg-red-50 rounded-lg transition-colors text-left cursor-pointer"
-                    >
-                      <LogOut className="w-3.5 h-3.5 text-[#DC2626]" />
-                      <span>Log Out</span>
-                    </button>
-                  </div>
-                </div>
-              )}
-            </div>
+                )}
+              </div>
+            )}
           </div>
         </div>
       </div>
 
-      {/* GFR RULE 151 COMPLIANCE MODAL */}
-      <GfrComplianceDialog
-        isOpen={isGfrDialogOpen}
-        onClose={() => setIsGfrDialogOpen(false)}
-        details={gfrDetails}
-      />
+      {/* GFR RULE 151 COMPLIANCE MODAL (Officer Only) */}
+      {isOfficer && (
+        <GfrComplianceDialog
+          isOpen={isGfrDialogOpen}
+          onClose={() => setIsGfrDialogOpen(false)}
+          details={gfrDetails}
+        />
+      )}
     </header>
   );
 }

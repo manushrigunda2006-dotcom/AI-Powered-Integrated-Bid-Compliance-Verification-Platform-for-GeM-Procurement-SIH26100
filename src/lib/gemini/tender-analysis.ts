@@ -79,7 +79,7 @@ export async function analyzeRfpWithGemini(rfpText: string): Promise<RfpAnalysis
     return {
       tender_number: parsed.tender_number || ('GEM/2026/B/' + Math.floor(100000 + Math.random() * 900000)),
       title: parsed.title || 'Procurement Tender RFP',
-      department: parsed.department || 'Ministry of Electronics & Information Technology (MeitY)',
+      department: parsed.department || 'Department of Public Procurement & IT Infrastructure',
       estimated_budget: Number(parsed.estimated_budget) || 30000000,
       budget_formatted: parsed.budget_formatted || '₹3.00 Crores',
       deadline_days: Number(parsed.deadline_days) || 30,
@@ -249,11 +249,11 @@ export function getFallbackRfpAnalysis(rfpText: string, isAi: boolean): RfpAnaly
   return {
     tender_number: 'GEM/2026/B/' + Math.floor(100000 + Math.random() * 900000),
     title: rfpText.slice(0, 80).split('\n')[0] || 'Enterprise Procurement Tender RFP',
-    department: textLower.includes('defence')
-      ? 'Ministry of Defence (MoD)'
-      : textLower.includes('transport')
-      ? 'Ministry of Road Transport and Highways (MoRTH)'
-      : 'Ministry of Electronics and Information Technology (MeitY)',
+    department: textLower.includes('surveillance')
+      ? 'Department of Physical Infrastructure & Surveillance'
+      : textLower.includes('datacenter')
+      ? 'Department of Enterprise Systems & Data Infrastructure'
+      : 'Department of Public Procurement & IT Infrastructure',
     estimated_budget: estimatedBudget,
     budget_formatted: budgetFormatted,
     deadline_days: 30,

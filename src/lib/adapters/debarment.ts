@@ -16,30 +16,56 @@ export interface DebarmentAdapterInput {
 // Simulated Central Debarment / CPPP Blacklist Database
 const DEBARRED_IDENTIFIERS_DATABASE: Record<string, Partial<DebarmentVerificationResult>> = {
   // Bidder 3 is debarred!
-  'AAACD9999L': {
-    pan_cin: 'AAACD9999L',
+  'CCCCC0000C': {
+    pan_cin: 'CCCCC0000C',
     is_blacklisted: true,
     status: 'DEBARRED',
-    debarring_agency: 'Ministry of Defence, DGOF Procurement Cell',
-    order_number: 'MOD/PROC/DEBAR/2023/1892',
+    debarring_agency: 'Central Procurement Authority / Debarment Wing',
+    order_number: 'CPA/PROC/DEBAR/2023/001',
     debarment_period: {
       start_date: '2023-08-01',
       end_date: '2026-07-31',
     },
-    reason: 'Submission of falsified OEM authorization certificates in tender DGOF/IT/2023/042.',
+    reason: 'Submission of falsified OEM authorization certificates in tender CPA/IT/2023/001.',
+    is_verified: true,
+  },
+  'U72200CC2015PLC000003': {
+    pan_cin: 'U72200CC2015PLC000003',
+    is_blacklisted: true,
+    status: 'DEBARRED',
+    debarring_agency: 'Central Procurement Authority / Debarment Wing',
+    order_number: 'CPA/PROC/DEBAR/2023/001',
+    debarment_period: {
+      start_date: '2023-08-01',
+      end_date: '2026-07-31',
+    },
+    reason: 'Submission of falsified OEM authorization certificates in tender CPA/IT/2023/001.',
+    is_verified: true,
+  },
+  'AAACD9999L': {
+    pan_cin: 'CCCCC0000C',
+    is_blacklisted: true,
+    status: 'DEBARRED',
+    debarring_agency: 'Central Procurement Authority / Debarment Wing',
+    order_number: 'CPA/PROC/DEBAR/2023/001',
+    debarment_period: {
+      start_date: '2023-08-01',
+      end_date: '2026-07-31',
+    },
+    reason: 'Submission of falsified OEM authorization certificates in tender CPA/IT/2023/001.',
     is_verified: true,
   },
   'U72200TN2015PLC099999': {
-    pan_cin: 'U72200TN2015PLC099999',
+    pan_cin: 'U72200CC2015PLC000003',
     is_blacklisted: true,
     status: 'DEBARRED',
-    debarring_agency: 'Ministry of Defence, DGOF Procurement Cell',
-    order_number: 'MOD/PROC/DEBAR/2023/1892',
+    debarring_agency: 'Central Procurement Authority / Debarment Wing',
+    order_number: 'CPA/PROC/DEBAR/2023/001',
     debarment_period: {
       start_date: '2023-08-01',
       end_date: '2026-07-31',
     },
-    reason: 'Submission of falsified OEM authorization certificates in tender DGOF/IT/2023/042.',
+    reason: 'Submission of falsified OEM authorization certificates in tender CPA/IT/2023/001.',
     is_verified: true,
   },
 };

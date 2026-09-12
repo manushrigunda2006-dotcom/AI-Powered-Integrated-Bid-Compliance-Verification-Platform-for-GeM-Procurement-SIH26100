@@ -21,8 +21,10 @@ import {
   Scale,
   FileCheck
 } from 'lucide-react';
+import { useAuth } from '@/lib/authGuard';
 
 export default function TenderDetailsPage() {
+  const { isBidder, isOfficer } = useAuth();
   const params = useParams();
   const router = useRouter();
   const rawId = (params?.id as string) || 'tender-gem-2026-cloud';
@@ -100,16 +102,27 @@ export default function TenderDetailsPage() {
 
           {/* Primary CTA: Jump to Bidders */}
           <div className="shrink-0 pt-2 lg:pt-0 flex flex-col items-start lg:items-end gap-2">
-            <Link
-              href={`/tenders/${tender.id}/bidders`}
-              className="inline-flex items-center space-x-2 px-6 py-3.5 bg-blue-900 hover:bg-blue-800 text-white font-black text-xs rounded-xl shadow-md transition-all transform hover:-translate-y-0.5 cursor-pointer"
-            >
-              <Users className="w-4 h-4" />
-              <span>Proceed to Bidders Evaluation (3 Enrolled)</span>
-              <ChevronRight className="w-4 h-4" />
-            </Link>
+            {isBidder ? (
+              <Link
+                href="/bidder/dashboard"
+                className="inline-flex items-center space-x-2 px-6 py-3.5 bg-blue-900 hover:bg-blue-800 text-white font-black text-xs rounded-xl shadow-md transition-all transform hover:-translate-y-0.5 cursor-pointer"
+              >
+                <FileCheck className="w-4 h-4" />
+                <span>View My Bid &amp; Compliance Status</span>
+                <ChevronRight className="w-4 h-4" />
+              </Link>
+            ) : (
+              <Link
+                href={`/tenders/${tender.id}/bidders`}
+                className="inline-flex items-center space-x-2 px-6 py-3.5 bg-blue-900 hover:bg-blue-800 text-white font-black text-xs rounded-xl shadow-md transition-all transform hover:-translate-y-0.5 cursor-pointer"
+              >
+                <Users className="w-4 h-4" />
+                <span>Proceed to Bidders Evaluation (3 Enrolled)</span>
+                <ChevronRight className="w-4 h-4" />
+              </Link>
+            )}
             <span className="text-[11px] text-slate-400">
-              Click to view compliance matrix & audit trail
+              {isBidder ? 'Track your proposal verification status' : 'Click to view compliance matrix & audit trail'}
             </span>
           </div>
         </div>

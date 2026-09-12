@@ -70,7 +70,7 @@ export interface Tender {
   id: string;
   tender_number: string;          // e.g. "GEM/2026/B/892104"
   title: string;
-  department: string;             // e.g. "Ministry of Electronics & IT (MeitY)"
+  department: string;             // e.g. "Department of Public Procurement & IT Infrastructure"
   estimated_budget: number;       // Normalized float in INR (e.g. 45000000)
   budget_formatted: string;       // e.g. "₹4.50 Crores"
   deadline: string;               // ISO 8601 string

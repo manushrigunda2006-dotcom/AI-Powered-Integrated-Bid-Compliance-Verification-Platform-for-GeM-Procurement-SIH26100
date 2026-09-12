@@ -111,7 +111,7 @@ export function getFallbackRiskExplanation(
           (report.registry_summary.debarment.order_number || 'CPPP listing')
       );
       gfrNotes.push(
-        'GFR 2017 Rule 151(i): A bidder debarred by any Ministry shall not participate in any procurement across Government of India.'
+        'GFR 2017 Rule 151(i): A bidder debarred by any public authority shall not participate in public procurement.'
       );
     }
     if (report.registry_summary?.gstn?.status === 'CANCELLED') {

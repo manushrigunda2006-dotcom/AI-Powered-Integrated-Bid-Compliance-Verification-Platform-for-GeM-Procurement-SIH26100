@@ -35,7 +35,7 @@ export async function analyzeCrossEntityWithGemini(params: {
   }
 
   const prompt =
-    'You are a Senior Legal & Compliance Officer in the Government of India e-Marketplace (GeM) Procurement Vigilance Cell.\n' +
+    'You are a Senior Legal & Compliance Officer evaluating procurement documentation on the Government e-Marketplace (GeM).\n' +
     'Evaluate this entity name cross-verification mismatch across bidder documents:\n\n' +
     'Bidder Registered Name: "' + companyName + '"\n' +
     'Name on GST REG-06 Certificate: "' + gstEntityName + '"\n' +

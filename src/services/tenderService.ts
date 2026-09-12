@@ -110,7 +110,7 @@ export const tenderService = {
       id: newId,
       tender_number: newTenderNumber,
       title: tender.title || 'Untitled GeM Tender RFP',
-      department: tender.department || 'Ministry of Electronics & Information Technology',
+      department: tender.department || 'Department of Public Procurement & IT Infrastructure',
       description: tender.description || '',
       estimated_budget: budgetNum,
       budget_formatted: budgetFormatted,

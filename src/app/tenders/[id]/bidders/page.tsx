@@ -27,8 +27,10 @@ import {
 } from 'lucide-react';
 import { tenderService } from '@/services/tenderService';
 import { bidderService } from '@/services/bidderService';
+import { useOfficerAuth } from '@/lib/authGuard';
 
 export default function TenderBiddersPage() {
+  const { session, isAuthenticated, isAuthorized, isLoading: authLoading } = useOfficerAuth(true);
   const params = useParams();
   const rawTenderId = (params?.id as string) || '11111111-1111-1111-1111-111111111111';
 
@@ -109,6 +111,17 @@ export default function TenderBiddersPage() {
   const disqualifiedCount = bidders.filter(
     (b) => b.risk_level === 'HIGH' || b.officer_decision === 'DISQUALIFIED'
   ).length;
+
+  if (authLoading || !isAuthorized) {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-[60vh] space-y-3">
+        <div className="w-9 h-9 border-3 border-blue-900 border-t-transparent rounded-full animate-spin" />
+        <span className="text-xs font-bold text-slate-500">
+          Verifying Officer Evaluation Authorization...
+        </span>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-6">

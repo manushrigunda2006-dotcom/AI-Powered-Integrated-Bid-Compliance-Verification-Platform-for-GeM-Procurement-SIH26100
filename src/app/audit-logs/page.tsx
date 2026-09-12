@@ -23,8 +23,10 @@ import {
   Loader2,
   AlertTriangle,
 } from 'lucide-react';
+import { useOfficerAuth } from '@/lib/authGuard';
 
 export default function AuditLogsPage() {
+  const { session, isAuthenticated, isAuthorized, isLoading: authLoading } = useOfficerAuth(true);
   const [logs, setLogs] = useState<AuditLog[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
@@ -38,7 +40,7 @@ export default function AuditLogsPage() {
     async function loadLogs() {
       try {
         setLoading(true);
-        const data = await auditService.getAllAuditLogs();
+        const data = await auditService.getLogsForRole('officer');
         setLogs(data);
       } catch (err) {
         console.error('Failed to load audit logs:', err);
@@ -106,6 +108,17 @@ export default function AuditLogsPage() {
       setIsExporting(false);
     }
   };
+
+  if (authLoading || !isAuthorized) {
+    return (
+      <div className="min-h-[60vh] flex items-center justify-center">
+        <div className="flex flex-col items-center space-y-3">
+          <div className="w-9 h-9 border-3 border-blue-900 border-t-transparent rounded-full animate-spin" />
+          <p className="text-xs font-bold text-slate-500">Verifying Officer Audit Access...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-6 pb-12">

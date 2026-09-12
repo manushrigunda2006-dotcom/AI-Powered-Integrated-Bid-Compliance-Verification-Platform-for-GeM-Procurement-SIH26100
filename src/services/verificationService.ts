@@ -36,25 +36,25 @@ export const verificationService = {
       const msmeRecord = data.find((r: any) => r.registry_type === 'MSME_UDYAM');
       const cpppRecord = data.find((r: any) => r.registry_type === 'CPPP_BLACKLIST');
 
-      const isBidder3 = dbBidderId.endsWith('223') || bidderId.includes('03') || bidderId.includes('defg');
+      const isBidder3 = dbBidderId.endsWith('223') || bidderId.includes('03') || bidderId.includes('cdef') || bidderId.includes('defg');
 
       return {
         gstn: {
-          gstin: gstRecord?.registration_number || (isBidder3 ? '33AAACD9999L1ZM' : '07AAACB1234F1Z8'),
-          legal_name: gstRecord?.verified_name || (isBidder3 ? 'DEFG Systems Limited' : 'BCDE Technologies Private Limited'),
-          trade_name: gstRecord?.verified_name || (isBidder3 ? 'DEFG Systems' : 'BCDE Technologies'),
+          gstin: gstRecord?.registration_number || (isBidder3 ? '33CCCCC0000C1ZM' : '07AAAAA0000A1Z5'),
+          legal_name: gstRecord?.verified_name || (isBidder3 ? 'CDEF Industries' : 'ABCD Technologies'),
+          trade_name: gstRecord?.verified_name || (isBidder3 ? 'CDEF Industries' : 'ABCD Technologies'),
           status: (gstRecord?.status as any) || (isBidder3 ? 'CANCELLED' : 'ACTIVE'),
           registration_date: '2017-08-14',
           taxpayer_type: 'Regular',
           filing_frequency: 'MONTHLY',
           tax_compliance_score: gstRecord?.score ?? (isBidder3 ? 34 : 98),
-          matched_pan: gstRecord?.registration_number?.substring(2, 12) || 'AAACB1234F',
+          matched_pan: gstRecord?.registration_number?.substring(2, 12) || (isBidder3 ? 'CCCCC0000C' : 'AAAAA0000A'),
           state_jurisdiction: isBidder3 ? 'Tamil Nadu' : 'Delhi',
           is_verified: gstRecord?.status === 'ACTIVE',
         },
         udyam: {
-          udyam_number: msmeRecord?.registration_number || 'UDYAM-DL-01-0089123',
-          enterprise_name: msmeRecord?.verified_name || (isBidder3 ? 'DEFG Systems Limited' : 'BCDE Technologies Private Limited'),
+          udyam_number: msmeRecord?.registration_number || (isBidder3 ? 'UDYAM-CC-03-0000003' : 'UDYAM-AA-01-0000001'),
+          enterprise_name: msmeRecord?.verified_name || (isBidder3 ? 'CDEF Industries' : 'ABCD Technologies'),
           msme_category: 'Medium',
           major_activity: 'Services',
           registration_date: '2020-07-15',
@@ -63,12 +63,12 @@ export const verificationService = {
           is_verified: msmeRecord?.status === 'ACTIVE',
         },
         debarment: {
-          pan_cin: cpppRecord?.registration_number || (isBidder3 ? 'AAACD9999L' : 'AAACB1234F'),
+          pan_cin: cpppRecord?.registration_number || (isBidder3 ? 'CCCCC0000C' : 'AAAAA0000A'),
           is_blacklisted: cpppRecord?.status === 'DEBARRED',
           status: cpppRecord?.status === 'DEBARRED' ? 'DEBARRED' : 'CLEAR',
-          debarring_agency: isBidder3 ? 'Ministry of Defence, DGOF Procurement Cell' : undefined,
-          order_number: isBidder3 ? 'MOD/PROC/DEBAR/2023/1892' : undefined,
-          reason: isBidder3 ? 'Critical non-performance & integrity violation order MOD/PROC/DEBAR/2023/1892' : undefined,
+          debarring_agency: isBidder3 ? 'Central Procurement Authority / Debarment Wing' : undefined,
+          order_number: isBidder3 ? 'CPA/PROC/DEBAR/2023/001' : undefined,
+          reason: isBidder3 ? 'Critical non-performance & integrity violation order CPA/PROC/DEBAR/2023/001' : undefined,
           is_verified: true,
         },
         checked_at: gstRecord?.checked_at || new Date().toISOString(),
@@ -119,27 +119,27 @@ export const verificationService = {
   },
 
   getSimulatedSummaryForBidder(bidderId: string): ExternalRegistrySummary {
-    const isBidder3 = bidderId.endsWith('223') || bidderId.includes('03') || bidderId.includes('defg');
-    const isBidder2 = bidderId.endsWith('222') || bidderId.includes('02') || bidderId.includes('cdef');
+    const isBidder3 = bidderId.endsWith('223') || bidderId.includes('03') || bidderId.includes('cdef') || bidderId.includes('defg');
+    const isBidder2 = bidderId.endsWith('222') || bidderId.includes('02') || bidderId.includes('bcde');
 
     if (isBidder3) {
       return {
         gstn: {
-          gstin: '33AAACD9999L1ZM',
-          legal_name: 'DEFG Systems Limited',
-          trade_name: 'DEFG Systems',
+          gstin: '33CCCCC0000C1ZM',
+          legal_name: 'CDEF Industries',
+          trade_name: 'CDEF Industries',
           status: 'CANCELLED',
           registration_date: '2015-05-10',
           taxpayer_type: 'Regular',
           filing_frequency: 'MONTHLY',
           tax_compliance_score: 34,
-          matched_pan: 'AAACD9999L',
+          matched_pan: 'CCCCC0000C',
           state_jurisdiction: 'Tamil Nadu',
           is_verified: false,
         },
         udyam: {
-          udyam_number: 'UDYAM-TN-03-0099881',
-          enterprise_name: 'DEFG Systems Limited',
+          udyam_number: 'UDYAM-CC-03-0000003',
+          enterprise_name: 'CDEF Industries',
           msme_category: 'Medium',
           major_activity: 'Services',
           registration_date: '2020-09-12',
@@ -148,12 +148,12 @@ export const verificationService = {
           is_verified: true,
         },
         debarment: {
-          pan_cin: 'AAACD9999L',
+          pan_cin: 'CCCCC0000C',
           is_blacklisted: true,
           status: 'DEBARRED',
-          debarring_agency: 'Ministry of Defence, DGOF Procurement Cell',
-          order_number: 'MOD/PROC/DEBAR/2023/1892',
-          reason: 'Critical non-performance & debarment order MOD/PROC/DEBAR/2023/1892',
+          debarring_agency: 'Central Procurement Authority / Debarment Wing',
+          order_number: 'CPA/PROC/DEBAR/2023/001',
+          reason: 'Critical non-performance & debarment order CPA/PROC/DEBAR/2023/001',
           is_verified: true,
         },
         checked_at: new Date().toISOString(),
@@ -164,21 +164,21 @@ export const verificationService = {
     if (isBidder2) {
       return {
         gstn: {
-          gstin: '27AABC5678K1ZQ',
-          legal_name: 'CDEF Solutions Private Limited',
-          trade_name: 'CDEF Solutions',
+          gstin: '27BBBBB0000B1ZQ',
+          legal_name: 'BCDE Solutions',
+          trade_name: 'BCDE Solutions',
           status: 'ACTIVE',
           registration_date: '2019-02-10',
           taxpayer_type: 'Regular',
           filing_frequency: 'MONTHLY',
           tax_compliance_score: 84,
-          matched_pan: 'AABCA5678K',
+          matched_pan: 'BBBBB0000B',
           state_jurisdiction: 'Maharashtra',
           is_verified: true,
         },
         udyam: {
-          udyam_number: 'UDYAM-MH-02-0045612',
-          enterprise_name: 'CDEF Solutions Private Limited',
+          udyam_number: 'UDYAM-BB-02-0000002',
+          enterprise_name: 'BCDE Solutions',
           msme_category: 'Small',
           major_activity: 'Services',
           registration_date: '2020-11-20',
@@ -187,7 +187,7 @@ export const verificationService = {
           is_verified: true,
         },
         debarment: {
-          pan_cin: 'AABCA5678K',
+          pan_cin: 'BBBBB0000B',
           is_blacklisted: false,
           status: 'CLEAR',
           is_verified: true,
@@ -199,21 +199,21 @@ export const verificationService = {
 
     return {
       gstn: {
-        gstin: '07AAACB1234F1Z8',
-        legal_name: 'BCDE Technologies Private Limited',
-        trade_name: 'BCDE Technologies',
+        gstin: '07AAAAA0000A1Z5',
+        legal_name: 'ABCD Technologies',
+        trade_name: 'ABCD Technologies',
         status: 'ACTIVE',
         registration_date: '2017-08-14',
         taxpayer_type: 'Regular',
         filing_frequency: 'MONTHLY',
         tax_compliance_score: 98,
-        matched_pan: 'AAACB1234F',
+        matched_pan: 'AAAAA0000A',
         state_jurisdiction: 'Delhi',
         is_verified: true,
       },
       udyam: {
-        udyam_number: 'UDYAM-DL-01-0089123',
-        enterprise_name: 'BCDE Technologies Private Limited',
+        udyam_number: 'UDYAM-AA-01-0000001',
+        enterprise_name: 'ABCD Technologies',
         msme_category: 'Medium',
         major_activity: 'Services',
         registration_date: '2020-07-15',
@@ -222,7 +222,7 @@ export const verificationService = {
         is_verified: true,
       },
       debarment: {
-        pan_cin: 'AAACB1234F',
+        pan_cin: 'AAAAA0000A',
         is_blacklisted: false,
         status: 'CLEAR',
         is_verified: true,

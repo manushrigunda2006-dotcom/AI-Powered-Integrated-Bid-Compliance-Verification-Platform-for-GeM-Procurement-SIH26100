@@ -31,8 +31,8 @@ def test_cross_entity_verification():
 
     # Mild typo / naming variation (Levenshtein > 0 and <= 0.2)
     status_mismatch, ratio_mismatch = cross_verify_entities(
-        "CDEF Solutions Private Limited",
-        "CDEF Solutionz Private Limited"
+        "CDEF Technologies Private Limited",
+        "CDEFA Technologies Private Limited"
     )
     assert status_mismatch == "ENTITY_NAME_MISMATCH"
     assert 0.0 < ratio_mismatch <= 0.20

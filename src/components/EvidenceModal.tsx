@@ -113,7 +113,7 @@ export function EvidenceModal({
 
               {/* Surrounding mock text */}
               <p className="text-[11px] text-slate-400 select-none leading-relaxed blur-[0.6px] mb-3">
-                Government of India • Ministry of Finance • Department of Revenue • Official Public Record Serial No 829104-B. Certified copy issued for technical bid compliance adjudication under General Financial Rules 2017.
+                Public Procurement Portal • Official Digital Record Serial No 829104-B. Certified copy issued for technical bid compliance adjudication under General Procurement Rules.
               </p>
 
               {/* Highlighted Bounding Box */}
@@ -128,7 +128,7 @@ export function EvidenceModal({
 
               {/* Sub-mock text */}
               <p className="text-[11px] text-slate-400 select-none leading-relaxed blur-[0.6px] mt-3">
-                Verified digitally through Public Key Infrastructure (PKI) token. Signature timestamp logged with National Informatics Centre (NIC) Certifying Authority.
+                Verified digitally through Public Key Infrastructure (PKI) token. Signature timestamp logged with Licensed Cryptographic Certifying Authority.
               </p>
             </div>
           </div>

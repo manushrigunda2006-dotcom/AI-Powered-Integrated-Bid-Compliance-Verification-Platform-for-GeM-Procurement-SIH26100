@@ -171,7 +171,7 @@ export const certificate65BService = {
     doc.text('Department:', margin + 3, currentY + 17);
     doc.setFont('helvetica', 'bold');
     doc.setTextColor(15, 23, 42);
-    const deptLines = doc.splitTextToSize(tender.department || 'Ministry of Electronics and Information Technology (MeitY)', colWidth - 26);
+    const deptLines = doc.splitTextToSize(tender.department || 'Department of Public Procurement & IT Infrastructure', colWidth - 26);
     doc.text(deptLines, margin + 26, currentY + 17);
 
     doc.setFont('helvetica', 'normal');

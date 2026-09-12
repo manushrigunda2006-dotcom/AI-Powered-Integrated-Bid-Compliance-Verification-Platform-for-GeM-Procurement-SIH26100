@@ -248,7 +248,7 @@ export class DeterministicRuleEvaluator {
       document_name: gstDoc.file_name,
       extracted_value: `GSTIN: ${bidder.gst_number} | Status: ${gstnRegistry?.status || 'ACTIVE'}`,
       source_page: 1,
-      snippet_text: `Government of India Form GST REG-06: Registration No ${bidder.gst_number}. Legal Name: ${gstDoc.parsed_metadata.extracted_entity_name || bidder.company_name}. Status: Active.`,
+      snippet_text: `Form GST REG-06: Registration No ${bidder.gst_number}. Legal Name: ${gstDoc.parsed_metadata.extracted_entity_name || bidder.company_name}. Status: Active.`,
       confidence_score: 0.99,
       bounding_box: { top: 210, left: 120, width: 510, height: 90 },
     };
@@ -524,7 +524,7 @@ export class DeterministicRuleEvaluator {
       document_name: udyamDoc?.file_name || 'Udyam_Registration_Certificate.pdf',
       extracted_value: `${category} Enterprise (${bidder.udyam_registration})`,
       source_page: 1,
-      snippet_text: `Ministry of Micro, Small and Medium Enterprises: Udyam Registration Certificate ${bidder.udyam_registration}. Category: ${category}. Major Activity: Services.`,
+      snippet_text: `Udyam Registration Certificate ${bidder.udyam_registration}. Category: ${category}. Major Activity: Services.`,
       confidence_score: 0.98,
       bounding_box: { top: 220, left: 110, width: 490, height: 75 },
     };

@@ -101,8 +101,8 @@ export const complianceService = {
   },
 
   getFallbackComplianceResults(bidderId: string): ComplianceResult[] {
-    const isBidder3 = bidderId.endsWith('223') || bidderId.includes('03') || bidderId.includes('defg');
-    const isBidder2 = bidderId.endsWith('222') || bidderId.includes('02') || bidderId.includes('cdef');
+    const isBidder3 = bidderId.endsWith('223') || bidderId.includes('03') || bidderId.includes('cdef') || bidderId.includes('defg');
+    const isBidder2 = bidderId.endsWith('222') || bidderId.includes('02') || bidderId.includes('bcde');
 
     if (isBidder3) {
       return [
@@ -196,7 +196,7 @@ export const complianceService = {
           risk_weight: 15,
           score_contribution: 0,
           threshold_display: 'Zero Debarment / CPPP Clear',
-          extracted_display: 'DEBARRED (MOD Order MOD/PROC/DEBAR/2023/1892)',
+          extracted_display: 'DEBARRED (Debarment Order CPA/PROC/DEBAR/2023/001)',
           human_explanation: 'CRITICAL MANDATORY BREACH: Active debarment listed on CPPP national database.',
           evidence: {
             id: 'ev-03-4',
@@ -206,7 +206,7 @@ export const complianceService = {
             document_name: 'Self_Declaration_Affidavit.pdf',
             extracted_value: 'DEBARRED',
             source_page: 1,
-            snippet_text: 'Listed in CPPP Debarment Database by Ministry of Defence',
+            snippet_text: 'Listed in National Debarment Database by Central Procurement Authority',
             confidence_score: 0.99,
           },
         },
@@ -329,16 +329,16 @@ export const complianceService = {
           score_contribution: 0,
           threshold_display: 'OEM Authorized Partner Certification',
           extracted_display: 'NAME MISMATCH DETECTED',
-          human_explanation: 'OFFICER REVIEW REQUIRED: Legal entity name on MAF ("CDEF Solutions Tech") differs from GST cert ("CDEF Solutions Pvt Ltd").',
+          human_explanation: 'OFFICER REVIEW REQUIRED: Legal entity name on MAF ("BCDE Solutions Technologies") differs from GST cert ("BCDE Solutions").',
           evidence: {
             id: 'ev-02-5',
             requirement_id: 'req-r005',
             document_id: 'doc-02-maf',
             document_type: 'OEM_AUTH',
             document_name: 'OEM_Partner_MAF.pdf',
-            extracted_value: 'CDEF Solutions Tech Pvt Ltd',
+            extracted_value: 'BCDE Solutions Technologies',
             source_page: 1,
-            snippet_text: 'Partner Name: CDEF Solutions Tech Pvt Ltd',
+            snippet_text: 'Partner Name: BCDE Solutions Technologies',
             confidence_score: 0.94,
           },
         },
@@ -354,13 +354,13 @@ export const complianceService = {
           risk_weight: 5,
           score_contribution: 5,
           threshold_display: 'Valid Udyam/MSME registration where applicable',
-          extracted_display: 'UDYAM-MH-02-0045612 (Small Enterprise)',
+          extracted_display: 'UDYAM-BB-02-0000002 (Small Enterprise)',
           human_explanation: 'Small Enterprise preference applied.',
         },
       ];
     }
 
-    // Bidder 01 (BCDE Technologies) - 100% Compliant
+    // Bidder 01 (ABCD Technologies) - 100% Compliant
     return [
       {
         id: 'cr-01-1',

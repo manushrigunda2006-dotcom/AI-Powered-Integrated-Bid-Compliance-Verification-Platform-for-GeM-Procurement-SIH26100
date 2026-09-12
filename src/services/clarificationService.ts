@@ -18,14 +18,14 @@ export const clarificationService = {
     const dbBidderId = resolveBidderId(bidderId);
 
     if (!isSupabaseConfigured()) {
-      if (bidderId.includes('02') || bidderId.includes('cdef')) {
+      if (bidderId.includes('02') || bidderId.includes('bcde') || bidderId.includes('cdef')) {
         return [
           {
             id: 'clar-02',
             bidder_id: dbBidderId,
             clause_id: '33333333-3333-3333-3333-333333333005',
             reason:
-              'Legal entity name variation detected between GST Certificate (CDEF Solutions Private Limited) and OEM Authorization Form (CDEF Solutions Technologies Pvt Ltd). Officer clarification required.',
+              'Legal entity name variation detected between GST Certificate (BCDE Solutions) and OEM Authorization Form (BCDE Solutions Technologies). Officer clarification required.',
             status: 'OPEN',
             requested_by: 'ABCD',
             requested_at: new Date().toISOString(),
