@@ -3,7 +3,8 @@
 import React from 'react';
 import { RiskLevel } from '@/lib/types';
 import { getRiskLevelBadge } from '@/lib/utils';
-import { AlertOctagon, CheckCircle, AlertTriangle } from 'lucide-react';
+import { AlertOctagon, AlertTriangle } from 'lucide-react';
+import { useLanguage } from '@/lib/i18n/LanguageContext';
 
 interface RiskGaugeProps {
   score: number;
@@ -18,7 +19,8 @@ export function RiskGauge({
   mandatoryFailuresCount = 0,
   minorDiscrepanciesCount = 0,
 }: RiskGaugeProps) {
-  const riskBadge = getRiskLevelBadge(riskLevel);
+  const { t } = useLanguage();
+  const riskBadge = getRiskLevelBadge(riskLevel, t);
 
   // SVG circular gauge geometry
   const radius = 48;
@@ -45,7 +47,7 @@ export function RiskGauge({
     <div className="bg-white rounded-xl border border-slate-200 p-5 shadow-xs">
       <div className="flex items-center justify-between mb-3">
         <h3 className="text-xs font-bold uppercase tracking-wider text-slate-500">
-          Composite Compliance Score
+          {t('gauge.overall_score', 'Composite Compliance Score')}
         </h3>
         <span
           className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold border ${riskBadge.className}`}
@@ -95,18 +97,18 @@ export function RiskGauge({
         {/* Breakdown details */}
         <div className="flex-1 space-y-2 text-xs">
           <div className="flex items-center justify-between pb-1 border-b border-slate-100">
-            <span className="text-slate-600 font-medium">Evaluation Gate:</span>
+            <span className="text-slate-600 font-medium">{t('common.status', 'Evaluation Gate')}:</span>
             <span className="font-bold text-slate-800">
               {riskLevel === 'HIGH'
-                ? 'Fatal Non-Compliance'
+                ? t('tender.disqualified', 'Fatal Non-Compliance')
                 : riskLevel === 'MEDIUM'
-                ? 'Review Required'
-                : 'Full Pass (Eligible)'}
+                ? t('tender.review_required', 'Review Required')
+                : t('tender.eligible', 'Full Pass (Eligible)')}
             </span>
           </div>
 
           <div className="flex items-center justify-between pb-1 border-b border-slate-100">
-            <span className="text-slate-600 font-medium">Mandatory Breaches:</span>
+            <span className="text-slate-600 font-medium">{t('gauge.mandatory_failures', 'Mandatory Breaches')}:</span>
             <span
               className={`font-bold ${
                 mandatoryFailuresCount > 0 ? 'text-rose-600' : 'text-emerald-600'
@@ -117,7 +119,7 @@ export function RiskGauge({
           </div>
 
           <div className="flex items-center justify-between">
-            <span className="text-slate-600 font-medium">Clarification Flags:</span>
+            <span className="text-slate-600 font-medium">{t('gauge.minor_discrepancies', 'Clarification Flags')}:</span>
             <span
               className={`font-bold ${
                 minorDiscrepanciesCount > 0 ? 'text-amber-600' : 'text-slate-500'
@@ -134,7 +136,7 @@ export function RiskGauge({
         <div className="mt-4 p-2.5 rounded-lg bg-rose-50 border border-rose-200 flex items-start space-x-2 text-rose-800 text-xs">
           <AlertOctagon className="w-4 h-4 text-rose-600 shrink-0 mt-0.5" />
           <p className="leading-tight font-medium">
-            <strong className="font-bold">Automated Override:</strong> Mandatory RFP clause failed. Score capped at {score}/100 and flagged for immediate disqualification.
+            <strong className="font-bold">{t('status.disqualified', 'Override')}:</strong> {t('bidders.blacklist_breach', 'Mandatory clause breach detected')}.
           </p>
         </div>
       )}
@@ -144,7 +146,7 @@ export function RiskGauge({
         <div className="mt-4 p-2.5 rounded-lg bg-amber-50 border border-amber-200 flex items-start space-x-2 text-amber-800 text-xs">
           <AlertTriangle className="w-4 h-4 text-amber-600 shrink-0 mt-0.5" />
           <p className="leading-tight font-medium">
-            <strong className="font-bold">Adjudication Notice:</strong> Non-fatal entity or numeric variances detected. Officer clarification requested.
+            <strong className="font-bold">{t('status.clarification', 'Clarification')}:</strong> {t('bidders.name_variances', 'Name variances or borderline criteria detected')}.
           </p>
         </div>
       )}

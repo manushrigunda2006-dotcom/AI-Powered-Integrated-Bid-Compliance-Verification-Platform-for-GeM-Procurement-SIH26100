@@ -175,7 +175,7 @@ export default function BidderLoginPage() {
                   disabled={isLoading || loginSuccess}
                   className="w-full mt-1 py-2 px-3 bg-blue-900 hover:bg-blue-800 disabled:bg-slate-400 text-white font-bold text-xs rounded-xl shadow-xs transition-all flex items-center justify-center space-x-1.5 cursor-pointer"
                 >
-                  <span>Sign in as {selectedBidderObj.company_name} →</span>
+                  <span>{t('bidder.sign_in_as', { name: selectedBidderObj.company_name })}</span>
                 </button>
               </div>
 
@@ -204,7 +204,7 @@ export default function BidderLoginPage() {
                 </div>
                 <div className="text-[10.5px] text-slate-600 mt-1 flex justify-between">
                   <span>GSTIN: 07AAAAA0000A1Z5</span>
-                  <span className="font-semibold text-emerald-700">Quick Sign In →</span>
+                  <span className="font-semibold text-emerald-700">{t('bidder.quick_sign_in')}</span>
                 </div>
               </button>
 
@@ -226,7 +226,7 @@ export default function BidderLoginPage() {
                 </div>
                 <div className="text-[10.5px] text-slate-600 mt-1 flex justify-between">
                   <span>Name Mismatch on MAF</span>
-                  <span className="font-semibold text-amber-700">Quick Sign In →</span>
+                  <span className="font-semibold text-amber-700">{t('bidder.quick_sign_in')}</span>
                 </div>
               </button>
 
@@ -248,7 +248,7 @@ export default function BidderLoginPage() {
                 </div>
                 <div className="text-[10.5px] text-slate-600 mt-1 flex justify-between">
                   <span>CPPP Blacklisted / Cancelled GST</span>
-                  <span className="font-semibold text-red-700">Quick Sign In →</span>
+                  <span className="font-semibold text-red-700">{t('bidder.quick_sign_in')}</span>
                 </div>
               </button>
 
@@ -306,13 +306,13 @@ export default function BidderLoginPage() {
                 {loginSuccess ? (
                   <>
                     <CheckCircle2 className="w-4 h-4 text-emerald-300" />
-                    <span>Signing in...</span>
+                    <span>{t('app.routing')}</span>
                   </>
                 ) : isLoading ? (
-                  <span>Authenticating Bidder...</span>
+                  <span>{t('common.loading')}</span>
                 ) : (
                   <>
-                    <span>Sign In to Bidder Portal</span>
+                    <span>{t('bidder.login_title')}</span>
                     <ArrowRight className="w-3.5 h-3.5" />
                   </>
                 )}
@@ -322,12 +322,11 @@ export default function BidderLoginPage() {
 
           {/* Switch Role Link */}
           <div className="pt-3 border-t border-slate-100 text-center text-xs">
-            <span className="text-slate-500">Are you a Government Procurement Officer? </span>
             <Link
               href="/officer/login"
               className="text-amber-800 hover:underline font-bold"
             >
-              Switch to Officer Login
+              {t('bidder.switch_to_officer')}
             </Link>
           </div>
         </div>

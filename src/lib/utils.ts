@@ -37,7 +37,7 @@ export function formatDateTime(dateString: string | null | undefined): string {
   }
 }
 
-export function getRiskLevelBadge(risk: RiskLevel): {
+export function getRiskLevelBadge(risk: RiskLevel, t?: (key: string, fallback?: string) => string): {
   label: string;
   className: string;
   icon: string;
@@ -46,28 +46,28 @@ export function getRiskLevelBadge(risk: RiskLevel): {
   switch (risk) {
     case "LOW":
       return {
-        label: "LOW RISK",
+        label: t ? t('status.low_risk', 'LOW RISK') : "LOW RISK",
         className: "bg-emerald-50 text-emerald-700 border-emerald-200",
         borderClass: "border-emerald-500",
         icon: "🟢",
       };
     case "MEDIUM":
       return {
-        label: "MEDIUM RISK",
+        label: t ? t('status.medium_risk', 'MEDIUM RISK') : "MEDIUM RISK",
         className: "bg-amber-50 text-amber-700 border-amber-200",
         borderClass: "border-amber-500",
         icon: "🟡",
       };
     case "HIGH":
       return {
-        label: "HIGH RISK",
+        label: t ? t('status.high_risk', 'HIGH RISK') : "HIGH RISK",
         className: "bg-rose-50 text-rose-700 border-rose-200",
         borderClass: "border-rose-500",
         icon: "🔴",
       };
     default:
       return {
-        label: "UNKNOWN",
+        label: t ? t('common.not_available', 'UNKNOWN') : "UNKNOWN",
         className: "bg-slate-100 text-slate-700 border-slate-200",
         borderClass: "border-slate-400",
         icon: "⚪",
@@ -151,37 +151,59 @@ export const FALLBACK_COMPLIANCE_STATUS: ComplianceStatusBadgeConfig = {
 };
 
 export function getComplianceStatusBadge(
-  status?: ComplianceStatus | string | null
+  status?: ComplianceStatus | string | null,
+  t?: (key: string, fallback?: string) => string
 ): ComplianceStatusBadgeConfig {
-  if (!status) return FALLBACK_COMPLIANCE_STATUS;
+  if (!status) {
+    return {
+      label: t ? t('status.review_required', 'Review Required') : 'Review Required',
+      className: 'bg-amber-50 text-amber-800 border-amber-300',
+      icon: 'AlertTriangle',
+    };
+  }
   const normalized = normalizeComplianceStatus(status);
-  return COMPLIANCE_STATUS_CONFIG[normalized] || FALLBACK_COMPLIANCE_STATUS;
+  const base = COMPLIANCE_STATUS_CONFIG[normalized] || FALLBACK_COMPLIANCE_STATUS;
+  if (!t) return base;
+
+  let labelKey = 'status.review_required';
+  switch (normalized) {
+    case 'COMPLIANT': labelKey = 'status.compliant'; break;
+    case 'NON_COMPLIANT': labelKey = 'status.non_compliant'; break;
+    case 'INCONSISTENT': labelKey = 'status.entity_mismatch'; break;
+    case 'MISSING_DOC': labelKey = 'status.missing_doc'; break;
+    case 'FLAGGED': labelKey = 'status.officer_review'; break;
+  }
+
+  return {
+    ...base,
+    label: t(labelKey, base.label),
+  };
 }
 
-export function getDecisionBadge(decision: OfficerDecision): {
+export function getDecisionBadge(decision: OfficerDecision, t?: (key: string, fallback?: string) => string): {
   label: string;
   className: string;
 } {
   switch (decision) {
     case "QUALIFIED":
       return {
-        label: "Qualified (Approved)",
+        label: t ? t('status.qualified', 'Qualified (Approved)') : "Qualified (Approved)",
         className: "bg-emerald-600 text-white font-medium",
       };
     case "DISQUALIFIED":
       return {
-        label: "Disqualified",
+        label: t ? t('status.disqualified', 'Disqualified') : "Disqualified",
         className: "bg-rose-600 text-white font-medium",
       };
     case "CLARIFICATION_REQUESTED":
       return {
-        label: "Clarification Requested",
+        label: t ? t('status.clarification', 'Clarification Requested') : "Clarification Requested",
         className: "bg-amber-500 text-white font-medium",
       };
     case "PENDING":
     default:
       return {
-        label: "Adjudication Pending",
+        label: t ? t('status.pending', 'Adjudication Pending') : "Adjudication Pending",
         className: "bg-slate-200 text-slate-700 font-medium",
       };
   }

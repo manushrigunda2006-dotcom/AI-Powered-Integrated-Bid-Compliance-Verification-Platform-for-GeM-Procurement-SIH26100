@@ -3,7 +3,8 @@
 import React from 'react';
 import { AuditLog } from '@/lib/types';
 import { formatDateTime } from '@/lib/utils';
-import { History, ShieldCheck, UserCheck, Cpu, X, Download, Loader2 } from 'lucide-react';
+import { History, UserCheck, Cpu, X, Download, Loader2 } from 'lucide-react';
+import { useLanguage } from '@/lib/i18n/LanguageContext';
 
 interface AuditTimelineProps {
   logs: AuditLog[];
@@ -14,6 +15,8 @@ interface AuditTimelineProps {
 }
 
 export function AuditTimeline({ logs, companyName, onClose, onExport, isExporting }: AuditTimelineProps) {
+  const { t } = useLanguage();
+
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 backdrop-blur-xs p-4 animate-fadeIn">
       <div className="bg-white rounded-2xl shadow-2xl border border-slate-200 w-full max-w-2xl max-h-[85vh] flex flex-col overflow-hidden">
@@ -26,10 +29,10 @@ export function AuditTimeline({ logs, companyName, onClose, onExport, isExportin
             <div>
               <div className="flex items-center space-x-2">
                 <span className="text-xs font-mono font-bold text-blue-300">
-                  IMMUTABLE AUDIT TRAIL
+                  {t('modal.audit_title', 'Section 65B Certified Audit Trail')}
                 </span>
                 <span className="bg-emerald-900 text-emerald-300 text-[10px] font-semibold px-2 py-0.5 rounded-full">
-                  Tamper-Evident
+                  {t('audit.immutable', 'Tamper-Evident')}
                 </span>
               </div>
               <h3 className="text-sm font-bold text-white truncate max-w-md">
@@ -39,7 +42,7 @@ export function AuditTimeline({ logs, companyName, onClose, onExport, isExportin
           </div>
           <button
             onClick={onClose}
-            className="text-slate-400 hover:text-white rounded-lg p-1.5 hover:bg-slate-800 transition-colors"
+            className="text-slate-400 hover:text-white rounded-lg p-1.5 hover:bg-slate-800 transition-colors cursor-pointer"
           >
             <X className="w-5 h-5" />
           </button>
@@ -125,32 +128,32 @@ export function AuditTimeline({ logs, companyName, onClose, onExport, isExportin
 
         {/* Footer */}
         <div className="bg-slate-50 border-t border-slate-200 px-6 py-3 flex justify-between items-center text-[11px] text-slate-500">
-          <span>Compliant with CVC & CAG statutory audit guidelines</span>
+          <span className="truncate max-w-xs sm:max-w-md">{t('role.footer_compliance', 'GFR 2017 & Section 65B Electronic Evidence compliant')}</span>
           <div className="flex items-center gap-2">
             {onExport && (
               <button
                 onClick={onExport}
                 disabled={isExporting}
-                className="px-3.5 py-1.5 bg-blue-600 hover:bg-blue-700 disabled:bg-blue-400 text-white rounded-lg transition-colors font-medium text-xs flex items-center gap-1.5 shadow-xs"
+                className="px-3.5 py-1.5 bg-blue-600 hover:bg-blue-700 disabled:bg-blue-400 text-white rounded-lg transition-colors font-medium text-xs flex items-center gap-1.5 shadow-xs cursor-pointer"
               >
                 {isExporting ? (
                   <>
                     <Loader2 className="w-3.5 h-3.5 animate-spin" />
-                    Generating...
+                    <span>{t('verify.generating_cert', 'Generating...')}</span>
                   </>
                 ) : (
                   <>
                     <Download className="w-3.5 h-3.5" />
-                    Export 65B Certificate
+                    <span>{t('verify.export_cert', 'Export 65B Certificate')}</span>
                   </>
                 )}
               </button>
             )}
             <button
               onClick={onClose}
-              className="px-4 py-1.5 bg-slate-900 hover:bg-slate-800 text-white rounded-lg transition-colors font-medium text-xs"
+              className="px-4 py-1.5 bg-slate-900 hover:bg-slate-800 text-white rounded-lg transition-colors font-medium text-xs cursor-pointer"
             >
-              Close Audit Log
+              {t('common.close', 'Close')}
             </button>
           </div>
         </div>

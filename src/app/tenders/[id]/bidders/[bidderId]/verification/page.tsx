@@ -312,7 +312,7 @@ export default function BidderVerificationPage() {
       <div className="flex flex-col items-center justify-center min-h-[60vh] space-y-3">
         <div className="w-9 h-9 border-3 border-blue-900 border-t-transparent rounded-full animate-spin" />
         <span className="text-xs font-bold text-slate-500">
-          Verifying Officer Evaluation Authorization...
+          {t('common.loading')}
         </span>
       </div>
     );
@@ -323,10 +323,10 @@ export default function BidderVerificationPage() {
       <div className="flex flex-col items-center justify-center min-h-[60vh] space-y-3">
         <div className="w-10 h-10 border-4 border-blue-900 border-t-transparent rounded-full animate-spin" />
         <span className="text-sm font-bold text-slate-700">
-          Running Deterministic Compliance Engine & External Registry Adapters...
+          {t('common.loading')}
         </span>
         <span className="text-xs text-slate-400">
-          Simulating GSTN, MSME Udyam, and CPPP Blacklist verification
+          {t('role.officer_features_1')}
         </span>
       </div>
     );
@@ -342,14 +342,14 @@ export default function BidderVerificationPage() {
             className="text-blue-900 hover:underline flex items-center space-x-1 font-bold"
           >
             <ArrowLeft className="w-3.5 h-3.5" />
-            <span>Back to Bidders List</span>
+            <span>{t('verify.back_bidders')}</span>
           </Link>
           <span>/</span>
           <Link
             href={`/tenders/${tenderId}/bidders`}
             className="text-slate-500 hover:text-blue-900 transition-colors font-medium"
           >
-            Tender GEM/2026/B/892104
+            {tenderId.length > 20 ? 'GEM/2026/B/892104' : tenderId}
           </Link>
           <span>/</span>
           <span className="text-slate-800 font-bold truncate max-w-xs">
@@ -437,7 +437,7 @@ export default function BidderVerificationPage() {
             title="Toggle Gemini AI Copilot Advisory Insights"
           >
             <Sparkles className={`w-3.5 h-3.5 ${isAiLoading ? 'animate-spin text-indigo-300' : 'text-amber-300'}`} />
-            <span>Gemini Copilot</span>
+            <span>{t('verify.gemini_copilot', 'Gemini Copilot')}</span>
           </button>
 
           {/* Export 65B Certificate Button */}
@@ -451,12 +451,12 @@ export default function BidderVerificationPage() {
             {isExporting ? (
               <>
                 <Loader2 className="w-3.5 h-3.5 animate-spin text-blue-900" />
-                <span>Generating Certificate...</span>
+                <span>{t('verify.generating_cert', 'Generating Certificate...')}</span>
               </>
             ) : (
               <>
                 <Download className="w-3.5 h-3.5" />
-                <span>Export 65B Certificate</span>
+                <span>{t('verify.export_cert', 'Export 65B Certificate')}</span>
               </>
             )}
           </button>
@@ -494,7 +494,7 @@ export default function BidderVerificationPage() {
               </div>
               <div className="p-2 bg-slate-50 rounded-lg">
                 <span className="text-[10px] uppercase font-bold text-slate-400 block">
-                  PAN Number
+                  PAN
                 </span>
                 <span className="font-mono font-bold text-slate-800">
                   {bidder.pan_number}
@@ -502,10 +502,10 @@ export default function BidderVerificationPage() {
               </div>
               <div className="p-2 bg-slate-50 rounded-lg col-span-2">
                 <span className="text-[10px] uppercase font-bold text-slate-400 block">
-                  Udyam MSME Registration
+                  {t('registry.msme', 'MSME / Udyam')}
                 </span>
                 <span className="font-mono font-bold text-blue-900">
-                  {bidder.udyam_registration || 'Not Declared (Non-MSME)'}
+                  {bidder.udyam_registration || t('common.not_available', 'N/A')}
                 </span>
               </div>
             </div>
@@ -526,7 +526,7 @@ export default function BidderVerificationPage() {
               <div className="flex items-center space-x-2">
                 <FileCheck className="w-4 h-4 text-slate-600" />
                 <h3 className="text-xs font-bold uppercase tracking-wider text-slate-700">
-                  Bidder Document Packet ({bidder.documents?.length || 0})
+                  {t('verify.bidder_packet', 'Bidder Document Packet')} ({bidder.documents?.length || 0})
                 </h3>
               </div>
 
@@ -541,10 +541,10 @@ export default function BidderVerificationPage() {
               <button
                 onClick={() => fileInputRef.current?.click()}
                 disabled={isUploading}
-                className="flex items-center space-x-1 text-[11px] font-bold text-blue-900 bg-blue-50 hover:bg-blue-100 px-2 py-1 rounded-md transition-colors"
+                className="flex items-center space-x-1 text-[11px] font-bold text-blue-900 bg-blue-50 hover:bg-blue-100 px-2 py-1 rounded-md transition-colors cursor-pointer"
               >
                 <Upload className="w-3 h-3" />
-                <span>{isUploading ? 'Uploading...' : 'Upload'}</span>
+                <span>{isUploading ? t('verify.uploading', 'Uploading...') : t('verify.upload_doc', 'Upload')}</span>
               </button>
             </div>
 
@@ -573,7 +573,7 @@ export default function BidderVerificationPage() {
                       </span>
                       <button
                         onClick={() => handleDeleteDocument(doc.id)}
-                        className="text-slate-400 hover:text-rose-600 p-0.5"
+                        className="text-slate-400 hover:text-rose-600 p-0.5 cursor-pointer"
                         title="Delete Document"
                       >
                         <Trash2 className="w-3 h-3" />
@@ -583,7 +583,7 @@ export default function BidderVerificationPage() {
                 ))
               ) : (
                 <div className="text-center py-4 text-xs text-slate-400">
-                  No documents in packet. Click upload to add PDF.
+                  {t('verify.no_docs', 'No documents in packet. Click upload to add PDF.')}
                 </div>
               )}
             </div>

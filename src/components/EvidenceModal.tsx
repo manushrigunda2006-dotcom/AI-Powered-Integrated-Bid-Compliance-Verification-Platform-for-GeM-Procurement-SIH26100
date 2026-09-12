@@ -2,7 +2,8 @@
 
 import React from 'react';
 import { Evidence } from '@/lib/types';
-import { X, FileText, CheckCircle2, ShieldCheck, Search, Eye } from 'lucide-react';
+import { X, FileText, CheckCircle2, ShieldCheck, Search } from 'lucide-react';
+import { useLanguage } from '@/lib/i18n/LanguageContext';
 
 interface EvidenceModalProps {
   evidence: Evidence | null;
@@ -17,6 +18,8 @@ export function EvidenceModal({
   clauseTitle,
   onClose,
 }: EvidenceModalProps) {
+  const { t } = useLanguage();
+
   if (!evidence) return null;
 
   const confidencePercent = Math.round(evidence.confidence_score * 100);
@@ -33,10 +36,10 @@ export function EvidenceModal({
             <div>
               <div className="flex items-center space-x-2">
                 <span className="text-xs font-mono font-bold text-blue-300">
-                  [{clauseCode}] EVIDENCE AUDIT
+                  [{clauseCode}] {t('verify.evidence', 'Evidence')}
                 </span>
                 <span className="bg-blue-900 text-blue-200 text-[10px] font-semibold px-2 py-0.5 rounded-full border border-blue-700">
-                  Page {evidence.source_page}
+                  {t('modal.page_number', 'Page')} {evidence.source_page}
                 </span>
               </div>
               <h3 className="text-sm font-bold text-white truncate max-w-md">
@@ -46,7 +49,7 @@ export function EvidenceModal({
           </div>
           <button
             onClick={onClose}
-            className="text-slate-400 hover:text-white rounded-lg p-1.5 hover:bg-slate-800 transition-colors"
+            className="text-slate-400 hover:text-white rounded-lg p-1.5 hover:bg-slate-800 transition-colors cursor-pointer"
           >
             <X className="w-5 h-5" />
           </button>
@@ -57,25 +60,25 @@ export function EvidenceModal({
           {/* Metadata bar */}
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 p-3 bg-slate-50 rounded-xl border border-slate-200 text-xs">
             <div>
-              <span className="text-[10px] text-slate-500 block uppercase font-bold">Document Name</span>
+              <span className="text-[10px] text-slate-500 block uppercase font-bold">{t('modal.document_source', 'Document Source')}</span>
               <span className="font-semibold text-slate-800 truncate block">
                 {evidence.document_name}
               </span>
             </div>
             <div>
-              <span className="text-[10px] text-slate-500 block uppercase font-bold">Document Type</span>
+              <span className="text-[10px] text-slate-500 block uppercase font-bold">{t('tender.rule_type', 'Rule Type')}</span>
               <span className="font-semibold text-slate-800 truncate block">
                 {evidence.document_type}
               </span>
             </div>
             <div>
-              <span className="text-[10px] text-slate-500 block uppercase font-bold">Page Citation</span>
+              <span className="text-[10px] text-slate-500 block uppercase font-bold">{t('modal.page_number', 'Page Number')}</span>
               <span className="font-semibold text-slate-800 block">
-                Page {evidence.source_page}
+                {t('modal.page_number', 'Page')} {evidence.source_page}
               </span>
             </div>
             <div>
-              <span className="text-[10px] text-slate-500 block uppercase font-bold">OCR Confidence</span>
+              <span className="text-[10px] text-slate-500 block uppercase font-bold">{t('modal.confidence', 'Extraction Confidence')}</span>
               <span className="font-bold text-emerald-700 flex items-center space-x-1">
                 <CheckCircle2 className="w-3.5 h-3.5" />
                 <span>{confidencePercent}%</span>
@@ -86,7 +89,7 @@ export function EvidenceModal({
           {/* Extracted Value Banner */}
           <div className="p-4 rounded-xl bg-blue-50/80 border border-blue-200">
             <span className="text-[10px] uppercase font-bold tracking-wider text-blue-800 block mb-1">
-              Deterministically Extracted & Normalized Value
+              {t('modal.extracted_value', 'Extracted Value')}
             </span>
             <div className="text-lg font-black text-blue-950 font-mono">
               {evidence.extracted_value}
@@ -98,10 +101,10 @@ export function EvidenceModal({
             <div className="flex items-center justify-between text-xs text-slate-500 font-medium">
               <span className="flex items-center space-x-1.5">
                 <Search className="w-3.5 h-3.5 text-slate-400" />
-                <span>OCR Extracted Text Snippet with Bounding Box</span>
+                <span>{t('verify.evidence_doc', 'Evidence Document')}</span>
               </span>
               <span className="text-[10px] font-mono text-slate-400">
-                LayoutLM BBox [T:{evidence.bounding_box?.top || 210}, L:{evidence.bounding_box?.left || 120}]
+                BBox [T:{evidence.bounding_box?.top || 210}, L:{evidence.bounding_box?.left || 120}]
               </span>
             </div>
 
@@ -137,7 +140,7 @@ export function EvidenceModal({
           <div className="p-3 bg-slate-50 rounded-lg border border-slate-200 flex items-center justify-between text-[11px] text-slate-600">
             <div className="flex items-center space-x-2">
               <ShieldCheck className="w-4 h-4 text-emerald-600" />
-              <span>Cryptographic PDF Hash SHA-256 Validated • No Tampering Detected</span>
+              <span>{t('audit.immutable', 'Immutable Cryptographic Ledger')}</span>
             </div>
             <span className="font-mono text-[10px] text-slate-400">
               ID: {evidence.id}
@@ -149,9 +152,9 @@ export function EvidenceModal({
         <div className="bg-slate-50 border-t border-slate-200 px-6 py-3 flex justify-end">
           <button
             onClick={onClose}
-            className="px-4 py-2 bg-slate-900 hover:bg-slate-800 text-white text-xs font-semibold rounded-lg transition-colors"
+            className="px-4 py-2 bg-slate-900 hover:bg-slate-800 text-white text-xs font-semibold rounded-lg transition-colors cursor-pointer"
           >
-            Close Evidence Audit
+            {t('common.close', 'Close')}
           </button>
         </div>
       </div>

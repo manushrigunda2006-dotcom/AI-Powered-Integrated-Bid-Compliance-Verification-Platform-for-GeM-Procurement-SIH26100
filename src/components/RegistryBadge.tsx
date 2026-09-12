@@ -2,7 +2,8 @@
 
 import React, { useState } from 'react';
 import { ExternalRegistrySummary } from '@/lib/types';
-import { ShieldCheck, ShieldAlert, CheckCircle2, AlertTriangle, Building2, Factory, Ban, ChevronDown, ChevronUp } from 'lucide-react';
+import { ShieldCheck, ShieldAlert, CheckCircle2, AlertTriangle, Building2, Factory, Ban } from 'lucide-react';
+import { useLanguage } from '@/lib/i18n/LanguageContext';
 
 interface RegistryBadgeProps {
   registrySummary?: ExternalRegistrySummary;
@@ -10,6 +11,7 @@ interface RegistryBadgeProps {
 }
 
 export function RegistryBadges({ registrySummary, latencyMs }: RegistryBadgeProps) {
+  const { t } = useLanguage();
   const [expanded, setExpanded] = useState<string | null>(null);
 
   if (!registrySummary) {
@@ -29,7 +31,7 @@ export function RegistryBadges({ registrySummary, latencyMs }: RegistryBadgeProp
         <div className="flex items-center space-x-2">
           <ShieldCheck className="w-4 h-4 text-blue-900" />
           <h3 className="text-xs font-bold uppercase tracking-wider text-slate-700">
-            National Registry Adapters
+            {t('registry.external_checks', 'National Registry Adapters')}
           </h3>
         </div>
         <span className="text-[10px] text-slate-500 font-mono flex items-center space-x-1">
@@ -51,7 +53,7 @@ export function RegistryBadges({ registrySummary, latencyMs }: RegistryBadgeProp
           <div className="flex items-center justify-between mb-1">
             <span className="text-[11px] font-bold text-slate-700 flex items-center space-x-1">
               <Building2 className="w-3 h-3 text-slate-600" />
-              <span>GSTN Portal</span>
+              <span>{t('registry.gstn', 'GSTN Registry')}</span>
             </span>
             {gstn.status === 'ACTIVE' ? (
               <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
@@ -60,7 +62,7 @@ export function RegistryBadges({ registrySummary, latencyMs }: RegistryBadgeProp
             )}
           </div>
           <div className="text-xs font-black text-slate-900 truncate">
-            {gstn.status}
+            {gstn.status === 'ACTIVE' ? t('status.active', 'ACTIVE') : gstn.status}
           </div>
           <div className="text-[10px] text-slate-500 truncate">
             Tax Score: {gstn.tax_compliance_score}%
@@ -79,7 +81,7 @@ export function RegistryBadges({ registrySummary, latencyMs }: RegistryBadgeProp
           <div className="flex items-center justify-between mb-1">
             <span className="text-[11px] font-bold text-slate-700 flex items-center space-x-1">
               <Factory className="w-3 h-3 text-slate-600" />
-              <span>MSME Udyam</span>
+              <span>{t('registry.msme', 'MSME / Udyam')}</span>
             </span>
             {udyam.is_verified ? (
               <CheckCircle2 className="w-3.5 h-3.5 text-blue-600" />
@@ -91,7 +93,7 @@ export function RegistryBadges({ registrySummary, latencyMs }: RegistryBadgeProp
             {udyam.msme_category} MSE
           </div>
           <div className="text-[10px] text-slate-500 truncate">
-            PPP Eligible
+            {t('tender.eligible', 'Eligible')}
           </div>
         </div>
 
@@ -107,7 +109,7 @@ export function RegistryBadges({ registrySummary, latencyMs }: RegistryBadgeProp
           <div className="flex items-center justify-between mb-1">
             <span className="text-[11px] font-bold text-slate-700 flex items-center space-x-1">
               <Ban className="w-3 h-3 text-slate-600" />
-              <span>CPPP Blacklist</span>
+              <span>{t('registry.cppp', 'CPPP Debarment')}</span>
             </span>
             {!debarment.is_blacklisted ? (
               <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
@@ -120,10 +122,10 @@ export function RegistryBadges({ registrySummary, latencyMs }: RegistryBadgeProp
               !debarment.is_blacklisted ? 'text-slate-900' : 'text-rose-700'
             }`}
           >
-            {debarment.status === 'CLEAR' ? 'CLEARED' : 'DEBARRED!'}
+            {!debarment.is_blacklisted ? t('status.cleared', 'CLEARED') : t('status.debarred', 'DEBARRED!')}
           </div>
           <div className="text-[10px] text-slate-500 truncate">
-            {debarment.status === 'CLEAR' ? 'Zero Violations' : 'GFR Rule 151'}
+            {!debarment.is_blacklisted ? t('gauge.zero_failures', 'Zero Violations') : 'GFR Rule 151'}
           </div>
         </div>
       </div>
@@ -132,7 +134,7 @@ export function RegistryBadges({ registrySummary, latencyMs }: RegistryBadgeProp
       {expanded === 'gstn' && (
         <div className="p-3 bg-slate-50 rounded-lg border border-slate-200 text-xs space-y-1 animate-fadeIn">
           <div className="font-bold text-slate-800 flex justify-between">
-            <span>GSTN Verification Details</span>
+            <span>{t('registry.gstn', 'GSTN Registry')} {t('common.details', 'Details')}</span>
             <span className="text-[10px] text-slate-500">Form REG-06 Verified</span>
           </div>
           <p><strong className="text-slate-600">Legal Name:</strong> {gstn.legal_name}</p>
@@ -145,7 +147,7 @@ export function RegistryBadges({ registrySummary, latencyMs }: RegistryBadgeProp
       {expanded === 'udyam' && (
         <div className="p-3 bg-slate-50 rounded-lg border border-slate-200 text-xs space-y-1 animate-fadeIn">
           <div className="font-bold text-slate-800 flex justify-between">
-            <span>Udyam MSME Registry Details</span>
+            <span>{t('registry.msme', 'MSME / Udyam')} {t('common.details', 'Details')}</span>
             <span className="text-[10px] text-slate-500">MSME Registry</span>
           </div>
           <p><strong className="text-slate-600">Enterprise:</strong> {udyam.enterprise_name}</p>
@@ -160,7 +162,7 @@ export function RegistryBadges({ registrySummary, latencyMs }: RegistryBadgeProp
           debarment.is_blacklisted ? 'bg-rose-50 border-rose-200 text-rose-900' : 'bg-slate-50 border-slate-200'
         }`}>
           <div className="font-bold flex justify-between">
-            <span>Central Debarment Registry Lookup</span>
+            <span>{t('registry.cppp', 'CPPP Debarment')} {t('common.details', 'Details')}</span>
             <span className="text-[10px]">{debarment.status}</span>
           </div>
           {debarment.is_blacklisted ? (

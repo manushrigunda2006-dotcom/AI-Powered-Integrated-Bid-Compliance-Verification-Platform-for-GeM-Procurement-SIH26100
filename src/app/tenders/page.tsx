@@ -6,17 +6,10 @@ import { Tender } from '@/lib/types';
 import { tenderService } from '@/services/tenderService';
 import { formatDate, formatIndianCurrency } from '@/lib/utils';
 import {
-  FileText,
   Building2,
-  Calendar,
-  DollarSign,
   Search,
   PlusCircle,
-  ExternalLink,
   ChevronRight,
-  ShieldCheck,
-  Users,
-  Sparkles,
   Filter
 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
@@ -25,7 +18,7 @@ import { useLanguage } from '@/lib/i18n/LanguageContext';
 
 export default function ExistingTendersPage() {
   const router = useRouter();
-  const { isBidder, isLoading: authLoading } = useAuth();
+  const { isBidder } = useAuth();
   const { t } = useLanguage();
   const [tenders, setTenders] = useState<Tender[]>([]);
 
@@ -68,11 +61,11 @@ export default function ExistingTendersPage() {
     <div className="space-y-6">
       {/* Breadcrumb */}
       <nav className="flex items-center space-x-2 text-xs text-slate-500 font-medium">
-        <Link href="/" className="text-blue-900 hover:underline font-bold">
-          Procurement Dashboard
+        <Link href="/officer/dashboard" className="text-blue-900 hover:underline font-bold">
+          {t('nav.officer_dashboard')}
         </Link>
         <span>/</span>
-        <span className="text-slate-800 font-bold">Existing Tenders</span>
+        <span className="text-slate-800 font-bold">{t('nav.existing_tenders')}</span>
       </nav>
 
       {/* Page Header */}
@@ -80,17 +73,17 @@ export default function ExistingTendersPage() {
         <div className="space-y-1.5">
           <div className="flex items-center space-x-2">
             <span className="bg-blue-100 text-blue-900 font-mono text-xs font-bold px-2.5 py-0.5 rounded-md">
-              GeM RFP Repository
+              {t('tender.rfp_repository')}
             </span>
             <span className="bg-emerald-100 text-emerald-800 text-xs font-semibold px-2 py-0.5 rounded-md">
-              {tenders.length} Active Procurements
+              {t('tender.active_procurements', { count: tenders.length })}
             </span>
           </div>
           <h1 className="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight">
-            Existing Tender RFPs
+            {t('nav.existing_tenders')}
           </h1>
           <p className="text-xs sm:text-sm text-slate-500 max-w-2xl">
-            Manage active procurement tenders, inspect RFP eligibility criteria, and run automated compliance evaluations on bidder packets.
+            {t('tender.manage_desc')}
           </p>
         </div>
 
@@ -99,7 +92,7 @@ export default function ExistingTendersPage() {
           className="inline-flex items-center space-x-2 px-5 py-3 bg-blue-900 hover:bg-blue-800 text-white font-bold text-xs rounded-xl shadow-xs transition-all shrink-0 cursor-pointer"
         >
           <PlusCircle className="w-4 h-4" />
-          <span>Create New Tender RFP</span>
+          <span>{t('tender.create_new')}</span>
         </Link>
       </div>
 
@@ -111,7 +104,7 @@ export default function ExistingTendersPage() {
             type="text"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            placeholder="Search tender title, GEM RFP number or ministry..."
+            placeholder={t('common.search')}
             className="w-full pl-9 pr-4 py-2 rounded-xl border border-slate-200 text-xs focus:outline-hidden focus:ring-2 focus:ring-blue-600"
           />
         </div>
@@ -119,7 +112,7 @@ export default function ExistingTendersPage() {
         <div className="flex items-center space-x-2 overflow-x-auto pb-1 sm:pb-0">
           <span className="text-slate-500 font-bold shrink-0 flex items-center space-x-1">
             <Filter className="w-3 h-3" />
-            <span>Ministry:</span>
+            <span>{t('common.filter')}:</span>
           </span>
           {departments.map((dept) => (
             <button
@@ -131,7 +124,7 @@ export default function ExistingTendersPage() {
                   : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
               }`}
             >
-              {dept}
+              {dept === 'ALL' ? t('common.all') : dept}
             </button>
           ))}
         </div>
@@ -151,7 +144,7 @@ export default function ExistingTendersPage() {
                     {tender.tender_number}
                   </span>
                   <span className="bg-emerald-50 text-emerald-800 text-xs font-bold px-2 py-0.5 rounded-md border border-emerald-200">
-                    Technical Evaluation Phase
+                    {t('tender.technical_active')}
                   </span>
                 </div>
                 <h2 className="text-lg font-bold text-slate-900 group-hover:text-blue-900 transition-colors">
@@ -169,13 +162,13 @@ export default function ExistingTendersPage() {
                   href={`/tenders/${tender.id}`}
                   className="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs font-bold rounded-xl transition-colors cursor-pointer"
                 >
-                  Tender Details
+                  {t('tender.view_details')}
                 </Link>
                 <Link
                   href={`/tenders/${tender.id}/bidders`}
                   className="px-4 py-2 bg-blue-900 hover:bg-blue-800 text-white text-xs font-bold rounded-xl shadow-xs transition-colors flex items-center space-x-1.5 cursor-pointer"
                 >
-                  <span>Evaluate Bidders</span>
+                  <span>{t('tender.evaluate_bidders')}</span>
                   <ChevronRight className="w-3.5 h-3.5" />
                 </Link>
               </div>
@@ -185,7 +178,7 @@ export default function ExistingTendersPage() {
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-3 border-t border-slate-100 text-xs">
               <div className="p-2.5 bg-slate-50 rounded-xl">
                 <span className="text-[10px] uppercase font-bold text-slate-400 block">
-                  Estimated Budget
+                  {t('tender.estimated_budget')}
                 </span>
                 <span className="text-sm font-black text-slate-900">
                   {tender.budget_formatted || formatIndianCurrency(tender.estimated_budget)}
@@ -193,7 +186,7 @@ export default function ExistingTendersPage() {
               </div>
               <div className="p-2.5 bg-slate-50 rounded-xl">
                 <span className="text-[10px] uppercase font-bold text-slate-400 block">
-                  Closing Deadline
+                  {t('tender.closing_deadline')}
                 </span>
                 <span className="text-xs font-bold text-slate-800">
                   {formatDate(tender.deadline)}
@@ -201,18 +194,18 @@ export default function ExistingTendersPage() {
               </div>
               <div className="p-2.5 bg-slate-50 rounded-xl">
                 <span className="text-[10px] uppercase font-bold text-slate-400 block">
-                  Compliance Clauses
+                  {t('tender.compliance_clauses')}
                 </span>
                 <span className="text-xs font-bold text-slate-800">
-                  {tender.requirements?.length || 6} Clauses Configured
+                  {tender.requirements?.length || 6} {t('tender.compliance_clauses')}
                 </span>
               </div>
               <div className="p-2.5 bg-slate-50 rounded-xl">
                 <span className="text-[10px] uppercase font-bold text-slate-400 block">
-                  {t('tender.enrolled_bidders', 'Enrolled Bidders')}
+                  {t('tender.enrolled_bidders')}
                 </span>
                 <span className="text-xs font-bold text-blue-900">
-                  20 Bidder Packets Ready
+                  {t('tender.bidders_enrolled', { count: 20 })}
                 </span>
               </div>
             </div>

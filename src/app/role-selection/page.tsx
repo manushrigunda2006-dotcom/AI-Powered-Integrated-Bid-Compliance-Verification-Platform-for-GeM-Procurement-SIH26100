@@ -29,7 +29,7 @@ export default function RoleSelectionPage() {
         <div>
           <span className="inline-flex items-center space-x-1.5 bg-blue-100 text-blue-900 text-[11px] font-bold px-3 py-1 rounded-full border border-blue-200 uppercase tracking-wider">
             <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-            <span>National Procurement Portal • SIH Edition</span>
+            <span>{t('app.national_portal', 'National Procurement Portal • SIH Edition')}</span>
           </span>
           <h1 className="mt-3 text-2xl sm:text-4xl font-black text-slate-900 tracking-tight">
             {t('role.welcome', 'Welcome to the Procurement Compliance Platform')}
@@ -56,7 +56,7 @@ export default function RoleSelectionPage() {
                   <Building2 className="w-6 h-6 text-blue-900" />
                 </div>
                 <span className="text-[10px] uppercase font-bold tracking-wider px-2.5 py-1 rounded-full bg-slate-100 text-slate-600">
-                  Role: Bidder
+                  {t('role.bidder_badge', 'Vendor & Supplier')}
                 </span>
               </div>
 
@@ -72,15 +72,15 @@ export default function RoleSelectionPage() {
               <div className="pt-2 border-t border-slate-100 space-y-2 text-xs text-slate-600">
                 <div className="flex items-center space-x-2">
                   <CheckCircle2 className="w-3.5 h-3.5 text-blue-600 shrink-0" />
-                  <span>Track submission packets &amp; compliance scores</span>
+                  <span>{t('role.bidder_features_1', 'Track submission packets & compliance scores')}</span>
                 </div>
                 <div className="flex items-center space-x-2">
                   <CheckCircle2 className="w-3.5 h-3.5 text-blue-600 shrink-0" />
-                  <span>Inspect rule-by-rule verification status</span>
+                  <span>{t('role.bidder_features_2', 'Inspect rule-by-rule verification status')}</span>
                 </div>
                 <div className="flex items-center space-x-2">
                   <CheckCircle2 className="w-3.5 h-3.5 text-blue-600 shrink-0" />
-                  <span>View isolated bidder activity &amp; verification logs</span>
+                  <span>{t('role.bidder_features_3', 'View isolated bidder activity & verification logs')}</span>
                 </div>
               </div>
             </div>
@@ -120,15 +120,15 @@ export default function RoleSelectionPage() {
               <div className="pt-2 border-t border-slate-100 space-y-2 text-xs text-slate-600">
                 <div className="flex items-center space-x-2">
                   <CheckCircle2 className="w-3.5 h-3.5 text-amber-600 shrink-0" />
-                  <span>Deterministic rule engine &amp; registry checks</span>
+                  <span>{t('role.officer_features_1', 'Deterministic rule engine & registry checks')}</span>
                 </div>
                 <div className="flex items-center space-x-2">
                   <CheckCircle2 className="w-3.5 h-3.5 text-amber-600 shrink-0" />
-                  <span>Class-3 PKI DSC token signed adjudication</span>
+                  <span>{t('role.officer_features_2', 'Class-3 PKI DSC token signed adjudication')}</span>
                 </div>
                 <div className="flex items-center space-x-2">
                   <CheckCircle2 className="w-3.5 h-3.5 text-amber-600 shrink-0" />
-                  <span>GFR Rule 151 &amp; Section 65B immutable audit trails</span>
+                  <span>{t('role.officer_features_3', 'GFR Rule 151 & Section 65B immutable audit trails')}</span>
                 </div>
               </div>
             </div>
@@ -150,7 +150,7 @@ export default function RoleSelectionPage() {
           <div className="inline-flex items-center space-x-2 text-[11px] text-slate-500 bg-slate-100 px-3.5 py-1.5 rounded-full">
             <Lock className="w-3.5 h-3.5 text-slate-400" />
             <span>
-              Role-based session isolation enforced • GFR 2017 &amp; Section 65B Electronic Evidence compliant
+              {t('role.footer_compliance', 'Role-based session isolation enforced • GFR 2017 & Section 65B Electronic Evidence compliant')}
             </span>
           </div>
         </div>

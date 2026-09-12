@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { ComplianceResult, Evidence, RequirementCategory } from '@/lib/types';
+import { ComplianceResult, Evidence } from '@/lib/types';
 import { getComplianceStatusBadge, normalizeComplianceStatus } from '@/lib/utils';
 import {
   CheckCircle2,
@@ -11,12 +11,11 @@ import {
   HelpCircle,
   Eye,
   FileSearch,
-  Filter,
   ShieldCheck,
-  AlertOctagon,
   Sparkles,
 } from 'lucide-react';
 import { ClauseExplanationItem } from '@/lib/gemini/types';
+import { useLanguage } from '@/lib/i18n/LanguageContext';
 
 interface ComplianceMatrixProps {
   results: ComplianceResult[];
@@ -31,14 +30,15 @@ export function ComplianceMatrix({
   crossEntityWarning,
   clauseExplanations,
 }: ComplianceMatrixProps) {
+  const { t } = useLanguage();
   const [activeCategory, setActiveCategory] = useState<string>('ALL');
 
   if (!results || results.length === 0) {
     return (
       <div className="bg-white rounded-xl border border-slate-200 p-8 shadow-xs text-center space-y-2">
         <FileSearch className="w-8 h-8 text-slate-400 mx-auto" />
-        <h3 className="text-sm font-bold text-slate-700">No Compliance Results Available</h3>
-        <p className="text-xs text-slate-500">Run the evaluation engine to generate compliance verification clauses.</p>
+        <h3 className="text-sm font-bold text-slate-700">{t('common.not_available', 'No Compliance Results Available')}</h3>
+        <p className="text-xs text-slate-500">{t('verify.compliance_clauses', 'Deterministic Compliance Clauses')}</p>
       </div>
     );
   }
@@ -46,7 +46,7 @@ export function ComplianceMatrix({
   const safeResults = results || [];
 
   const categories: { label: string; value: string; count: number }[] = [
-    { label: 'All Clauses', value: 'ALL', count: safeResults.length },
+    { label: t('common.all', 'All'), value: 'ALL', count: safeResults.length },
     {
       label: 'Financial',
       value: 'FINANCIAL',
@@ -87,11 +87,11 @@ export function ComplianceMatrix({
           <div className="flex items-center space-x-2">
             <FileSearch className="w-5 h-5 text-blue-900" />
             <h2 className="text-base font-bold text-slate-900">
-              Clause-by-Clause Compliance Matrix
+              {t('verify.compliance_matrix', 'Deterministic Compliance Matrix')}
             </h2>
           </div>
           <p className="text-xs text-slate-500 mt-0.5">
-            Strict deterministic evaluation against tender thresholds with OCR page citations
+            {t('verify.compliance_clauses', 'Deterministic Compliance Clauses')}
           </p>
         </div>
 
@@ -119,7 +119,7 @@ export function ComplianceMatrix({
           <AlertTriangle className="w-5 h-5 text-amber-600 shrink-0 mt-0.5" />
           <div className="text-xs space-y-1">
             <span className="font-bold uppercase tracking-wider text-amber-800 flex items-center space-x-1.5">
-              <span>⚠️ Cross-Document Entity Name Variance Detected</span>
+              <span>⚠️ {t('officer.cross_entity_check', 'Cross-Document Entity Check')}</span>
             </span>
             <p className="leading-relaxed font-medium">
               {crossEntityWarning}
@@ -132,7 +132,7 @@ export function ComplianceMatrix({
       <div className="space-y-3">
         {filteredResults.map((result) => {
           const normalizedStatus = normalizeComplianceStatus(result?.status);
-          const statusBadge = getComplianceStatusBadge(result?.status);
+          const statusBadge = getComplianceStatusBadge(result?.status, t);
 
           return (
             <div
@@ -162,7 +162,7 @@ export function ComplianceMatrix({
                       </h4>
                       {result.is_mandatory && (
                         <span className="bg-rose-100 text-rose-800 text-[10px] font-bold px-1.5 py-0.2 rounded-xs border border-rose-200 uppercase">
-                          Mandatory
+                          {t('tender.mandatory', 'Mandatory')}
                         </span>
                       )}
                       <span className="bg-slate-100 text-slate-600 text-[10px] font-semibold px-2 py-0.5 rounded-full">
@@ -182,7 +182,7 @@ export function ComplianceMatrix({
                     {normalizedStatus === 'INCONSISTENT' && <AlertTriangle className="w-3.5 h-3.5" />}
                     {normalizedStatus === 'MISSING_DOC' && <FileWarning className="w-3.5 h-3.5" />}
                     {normalizedStatus === 'FLAGGED' && <HelpCircle className="w-3.5 h-3.5" />}
-                    <span>{statusBadge?.label || 'Review Required'}</span>
+                    <span>{statusBadge?.label || t('status.review_required', 'Review Required')}</span>
                   </span>
                 </div>
               </div>
@@ -191,7 +191,7 @@ export function ComplianceMatrix({
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 my-2.5 p-2.5 bg-slate-50/90 rounded-lg border border-slate-200/80 text-xs">
                 <div>
                   <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 block">
-                    Tender RFP Threshold
+                    {t('modal.required_threshold', 'Statutory Threshold')}
                   </span>
                   <span className="font-semibold text-slate-700">
                     {result.threshold_display}
@@ -199,7 +199,7 @@ export function ComplianceMatrix({
                 </div>
                 <div>
                   <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 block">
-                    Extracted & Verified Value
+                    {t('modal.extracted_value', 'Extracted Value')}
                   </span>
                   <span
                     className={`font-black ${
@@ -230,7 +230,7 @@ export function ComplianceMatrix({
                   <div className="flex items-center justify-between">
                     <span className="text-indigo-900 font-bold flex items-center space-x-1.5 text-[11px]">
                       <Sparkles className="w-3 h-3 text-indigo-600" />
-                      <span>Statutory Citation: {clauseExplanations[result.clause_code].gfr_or_gem_rule_ref}</span>
+                      <span>{t('ai.recommendations', 'Statutory Citation')}: {clauseExplanations[result.clause_code].gfr_or_gem_rule_ref}</span>
                     </span>
                     <span className="text-[9px] bg-indigo-100 text-indigo-800 font-semibold px-1.5 py-0.2 rounded-xs">
                       ✨ AI Grounding
@@ -247,7 +247,7 @@ export function ComplianceMatrix({
                 <div className="pt-2 border-t border-slate-100 flex items-center justify-between">
                   <span className="text-[11px] text-slate-400 flex items-center space-x-1">
                     <ShieldCheck className="w-3.5 h-3.5 text-slate-400" />
-                    <span>Evidence verified from {result.evidence.document_name}</span>
+                    <span>{t('verify.evidence', 'Evidence')}: {result.evidence.document_name}</span>
                   </span>
                   <button
                     onClick={() =>
@@ -257,10 +257,10 @@ export function ComplianceMatrix({
                         result.clause_title
                       )
                     }
-                    className="inline-flex items-center space-x-1.5 px-3 py-1.5 rounded-lg bg-blue-50 hover:bg-blue-100 text-blue-800 text-xs font-semibold border border-blue-200 transition-colors shadow-2xs"
+                    className="inline-flex items-center space-x-1.5 px-3 py-1.5 rounded-lg bg-blue-50 hover:bg-blue-100 text-blue-800 text-xs font-semibold border border-blue-200 transition-colors shadow-2xs cursor-pointer"
                   >
                     <Eye className="w-3.5 h-3.5 text-blue-700" />
-                    <span>View Evidence (Page {result.evidence.source_page})</span>
+                    <span>{t('verify.view_evidence', 'View Evidence')} (Page {result.evidence.source_page})</span>
                   </button>
                 </div>
               )}

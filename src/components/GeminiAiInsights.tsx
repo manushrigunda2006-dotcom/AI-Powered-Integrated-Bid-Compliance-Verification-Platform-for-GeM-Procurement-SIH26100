@@ -13,11 +13,10 @@ import {
   CheckCircle2,
   Scale,
   Info,
-  Layers,
-  ExternalLink,
   ChevronDown,
   ChevronUp,
 } from 'lucide-react';
+import { useLanguage } from '@/lib/i18n/LanguageContext';
 
 interface GeminiAiInsightsProps {
   evaluation: GeminiFullEvaluationResult | null;
@@ -34,6 +33,7 @@ export function GeminiAiInsights({
   isConfigured = false,
   fallbackMessage,
 }: GeminiAiInsightsProps) {
+  const { t } = useLanguage();
   const [activeTab, setActiveTab] = useState<'EXECUTIVE' | 'CROSS_ENTITY' | 'RECOMMENDATIONS'>('EXECUTIVE');
   const [isExpanded, setIsExpanded] = useState<boolean>(true);
 
@@ -52,7 +52,7 @@ export function GeminiAiInsights({
           <div>
             <div className="flex items-center space-x-2">
               <h3 className="text-sm font-black text-slate-900">
-                Gemini AI Procurement Copilot
+                {t('ai.copilot_title', 'Gemini AI Procurement Copilot')}
               </h3>
               <span className="bg-indigo-100 text-indigo-900 border border-indigo-200 text-[10px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wider flex items-center space-x-1">
                 <span>✨ AI-Assisted</span>
@@ -75,7 +75,7 @@ export function GeminiAiInsights({
             className="px-3 py-1.5 bg-white hover:bg-indigo-50 border border-indigo-200 text-indigo-900 text-xs font-bold rounded-lg shadow-2xs transition-colors flex items-center space-x-1.5 cursor-pointer disabled:opacity-60"
           >
             <RotateCcw className={'w-3.5 h-3.5 ' + (isLoading ? 'animate-spin text-indigo-600' : '')} />
-            <span>{isLoading ? 'Analyzing...' : 'Re-Analyze'}</span>
+            <span>{isLoading ? t('common.loading', 'Analyzing...') : t('verify.rerun', 'Re-Analyze')}</span>
           </button>
 
           <button
@@ -108,14 +108,14 @@ export function GeminiAiInsights({
               onClick={() => setActiveTab('EXECUTIVE')}
               className={'px-3 py-1.5 rounded-lg transition-all cursor-pointer ' + (activeTab === 'EXECUTIVE' ? 'bg-white text-indigo-900 shadow-xs' : 'text-slate-600 hover:text-slate-900')}
             >
-              Executive Briefing
+              {t('ai.executive_summary', 'Executive Briefing')}
             </button>
             <button
               type="button"
               onClick={() => setActiveTab('CROSS_ENTITY')}
               className={'px-3 py-1.5 rounded-lg transition-all cursor-pointer flex items-center space-x-1 ' + (activeTab === 'CROSS_ENTITY' ? 'bg-white text-indigo-900 shadow-xs' : 'text-slate-600 hover:text-slate-900')}
             >
-              <span>Cross-Entity Analysis</span>
+              <span>{t('officer.cross_entity_check', 'Cross-Entity Analysis')}</span>
               {!evaluation.cross_entity_analysis.is_coherent && (
                 <span className="w-2 h-2 rounded-full bg-amber-500" />
               )}
@@ -125,7 +125,7 @@ export function GeminiAiInsights({
               onClick={() => setActiveTab('RECOMMENDATIONS')}
               className={'px-3 py-1.5 rounded-lg transition-all cursor-pointer ' + (activeTab === 'RECOMMENDATIONS' ? 'bg-white text-indigo-900 shadow-xs' : 'text-slate-600 hover:text-slate-900')}
             >
-              Officer Action Checklist
+              {t('ai.recommendations', 'Officer Action Checklist')}
             </button>
           </div>
 
@@ -135,7 +135,7 @@ export function GeminiAiInsights({
               <div className="p-3.5 bg-white rounded-xl border border-indigo-100 shadow-2xs space-y-2">
                 <div className="flex items-center space-x-2 text-indigo-950 font-bold">
                   <FileText className="w-4 h-4 text-indigo-600" />
-                  <span>AI Risk Synthesis</span>
+                  <span>{t('ai.risk_analysis', 'AI Risk Synthesis')}</span>
                 </div>
                 <p className="text-slate-700 leading-relaxed font-medium">
                   {evaluation.risk_explanation.executive_summary}
@@ -146,7 +146,7 @@ export function GeminiAiInsights({
               <div className="p-3.5 bg-white rounded-xl border border-slate-200 shadow-2xs space-y-2">
                 <div className="flex items-center space-x-2 text-slate-900 font-bold">
                   <AlertTriangle className="w-4 h-4 text-amber-600" />
-                  <span>Key Concerns & Statutory Flags</span>
+                  <span>{t('gauge.minor_discrepancies', 'Key Concerns & Statutory Flags')}</span>
                 </div>
                 <ul className="space-y-1.5">
                   {evaluation.risk_explanation.detected_concerns.map((concern, i) => (
@@ -187,8 +187,8 @@ export function GeminiAiInsights({
                   )}
                   <span>
                     {!evaluation.cross_entity_analysis.is_coherent
-                      ? 'Cross-Entity Discrepancy Identified'
-                      : 'Corporate Entity Identity Verified'}
+                      ? t('status.entity_mismatch', 'Cross-Entity Discrepancy Identified')
+                      : t('status.compliant', 'Corporate Entity Identity Verified')}
                   </span>
                 </div>
                 <p className="text-slate-800 leading-relaxed font-medium">
@@ -207,7 +207,7 @@ export function GeminiAiInsights({
                 </div>
                 <div className="p-3 bg-white rounded-xl border border-slate-200 shadow-2xs space-y-1">
                   <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">
-                    Recommended Vigilance Action
+                    {t('ai.recommendations', 'Recommended Vigilance Action')}
                   </span>
                   <p className="text-slate-700 leading-relaxed font-medium">
                     {evaluation.cross_entity_analysis.recommended_action}
@@ -222,7 +222,7 @@ export function GeminiAiInsights({
             <div className="p-3.5 bg-white rounded-xl border border-slate-200 shadow-2xs space-y-2.5 text-xs animate-fadeIn">
               <div className="flex items-center space-x-2 text-slate-900 font-bold">
                 <ShieldCheck className="w-4 h-4 text-indigo-600" />
-                <span>Officer Adjudication Checklist</span>
+                <span>{t('ai.recommendations', 'Officer Adjudication Checklist')}</span>
               </div>
               <div className="space-y-2">
                 {evaluation.risk_explanation.officer_recommendations.map((rec, i) => (
@@ -241,7 +241,7 @@ export function GeminiAiInsights({
 
           {/* Legal Guardrail Footer */}
           <p className="text-[10px] text-slate-400 italic pt-1 border-t border-indigo-100/60">
-            {evaluation.audit_disclaimer}
+            {t('ai.disclaimer', evaluation.audit_disclaimer)}
           </p>
         </div>
       )}

@@ -169,7 +169,7 @@ export default function OfficerLoginPage() {
             {authMode === 'CREDENTIALS' && (
               <>
                 <div className="space-y-1">
-                  <label className="font-bold text-slate-700">Official Email / GeM ID</label>
+                  <label className="font-bold text-slate-700">{t('officer.email_label')}</label>
                   <input
                     type="text"
                     value={officerId}
@@ -179,7 +179,7 @@ export default function OfficerLoginPage() {
                   />
                 </div>
                 <div className="space-y-1">
-                  <label className="font-bold text-slate-700">Password / MPIN</label>
+                  <label className="font-bold text-slate-700">{t('officer.pwd_label')}</label>
                   <input
                     type="password"
                     value={password}
@@ -204,7 +204,7 @@ export default function OfficerLoginPage() {
               <div className="p-3 bg-slate-50 border border-slate-200 rounded-xl text-center space-y-2">
                 <Fingerprint className="w-8 h-8 text-emerald-700 mx-auto" />
                 <p className="text-[11px] text-slate-600">
-                  Hardware Token Detected: <strong>Class-3 PKI DSC Token (Active)</strong>
+                  Hardware Token Detected: <strong>{t('officer.dsc_badge')}</strong>
                 </p>
               </div>
             )}
@@ -217,13 +217,13 @@ export default function OfficerLoginPage() {
               {loginSuccess ? (
                 <>
                   <CheckCircle2 className="w-4 h-4 text-emerald-400" />
-                  <span>Logging In...</span>
+                  <span>{t('app.routing')}</span>
                 </>
               ) : isLoading ? (
-                <span>Validating Officer Credentials...</span>
+                <span>{t('common.loading')}</span>
               ) : (
                 <>
-                  <span>Sign In as Government Officer</span>
+                  <span>{t('officer.btn_signin')}</span>
                   <ArrowRight className="w-3.5 h-3.5" />
                 </>
               )}
@@ -232,12 +232,11 @@ export default function OfficerLoginPage() {
 
           {/* Switch Role Link */}
           <div className="pt-3 border-t border-slate-100 text-center text-xs">
-            <span className="text-slate-500">Are you a participating vendor? </span>
             <Link
               href="/bidder/login"
               className="text-blue-900 hover:underline font-bold"
             >
-              Switch to Bidder Login
+              {t('officer.switch_to_bidder')}
             </Link>
           </div>
         </div>

@@ -534,7 +534,7 @@ export default function OfficerDashboardPage() {
                   </div>
                   <div className="text-[10px] text-[#64748B] flex justify-between pt-0.5">
                     <span>
-                      Score: <strong className="text-[#0F2F63]">{b.overall_score}/100</strong>
+                      {t('bidders.table_score', 'Score')}: <strong className="text-[#0F2F63]">{b.overall_score}/100</strong>
                     </span>
                     <span
                       className={`${
@@ -545,7 +545,7 @@ export default function OfficerDashboardPage() {
                           : 'text-[#DC2626]'
                       } font-bold`}
                     >
-                      Inspect →
+                      {t('bidders.inspect', 'Inspect →')}
                     </span>
                   </div>
                 </Link>

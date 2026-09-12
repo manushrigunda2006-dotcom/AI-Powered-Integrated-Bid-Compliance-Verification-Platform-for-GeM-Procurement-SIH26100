@@ -87,7 +87,7 @@ export default function BidderDashboardPage() {
             </span>
             <span className="bg-emerald-100 text-emerald-800 text-[10.5px] font-bold px-2 py-0.5 rounded-md flex items-center space-x-1">
               <span className="w-1.5 h-1.5 rounded-full bg-emerald-600 animate-pulse" />
-              <span>Session Authenticated</span>
+              <span>{t('app.session_authenticated')}</span>
             </span>
           </div>
           <h1 className="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight mt-1.5">
@@ -125,7 +125,7 @@ export default function BidderDashboardPage() {
                 {tender.tender_number}
               </span>
               <span className="bg-slate-100 text-slate-700 text-xs font-bold px-2 py-0.5 rounded-md">
-                Enrolled RFP
+                {t('bidder.active_rfp')}
               </span>
             </div>
             <h2 className="text-lg font-bold text-slate-900">
@@ -140,7 +140,7 @@ export default function BidderDashboardPage() {
           <div className="flex items-center space-x-3 shrink-0">
             <div className="text-right">
               <span className="text-[10px] uppercase font-bold text-slate-400 block">
-                Estimated Tender Value
+                {t('tender.estimated_budget')}
               </span>
               <span className="text-base font-black text-slate-900">
                 {tender.budget_formatted || formatIndianCurrency(tender.estimated_budget)}
