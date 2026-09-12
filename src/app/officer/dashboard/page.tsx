@@ -77,11 +77,18 @@ export default function OfficerDashboardPage() {
   const medCount = MOCK_BIDDERS.filter((b) => b.risk_level === 'MEDIUM').length;
   const highCount = MOCK_BIDDERS.filter((b) => b.risk_level === 'HIGH').length;
 
-  const filteredBidders = MOCK_BIDDERS.filter((b) => {
+  const sortedBidders = [...MOCK_BIDDERS].sort((a, b) => {
+    const scoreB = Number(b.complianceScore ?? b.compliance_score ?? b.overall_score ?? 0);
+    const scoreA = Number(a.complianceScore ?? a.compliance_score ?? a.overall_score ?? 0);
+    return scoreB - scoreA;
+  });
+
+  const filteredBidders = sortedBidders.filter((b) => {
     const matchesRisk = riskFilter === 'ALL' ? true : b.risk_level === riskFilter;
     const matchesSearch =
       b.company_name.toLowerCase().includes(bidderSearch.toLowerCase()) ||
       b.id.toLowerCase().includes(bidderSearch.toLowerCase()) ||
+      (b.bidder_code && b.bidder_code.toLowerCase().includes(bidderSearch.toLowerCase())) ||
       b.gst_number.toLowerCase().includes(bidderSearch.toLowerCase());
     return matchesRisk && matchesSearch;
   });

@@ -17,6 +17,7 @@ import {
 import { setBidderSession } from '@/lib/authGuard';
 import { MOCK_BIDDERS } from '@/lib/mock-data/tender-seed';
 import { useLanguage } from '@/lib/i18n/LanguageContext';
+import { auditService } from '@/services/auditService';
 
 export default function BidderLoginPage() {
   const router = useRouter();
@@ -50,6 +51,17 @@ export default function BidderLoginPage() {
         authenticatedAt: new Date().toISOString(),
       });
 
+      try {
+        auditService.recordAuthEvent({
+          eventType: 'LOGIN',
+          userName: mock.company_name,
+          role: 'Bidder',
+          sessionInfo: `Bidder ${mock.company_name} (${mock.id}) authenticated • GeM Bidder Portal`,
+        });
+      } catch (err) {
+        console.warn('Notice recording bidder login event:', err);
+      }
+
       setTimeout(() => {
         router.push('/bidder/dashboard');
       }, 700);
@@ -80,6 +92,17 @@ export default function BidderLoginPage() {
         cinNumber: matchedMock.cin_number || '',
         authenticatedAt: new Date().toISOString(),
       });
+
+      try {
+        auditService.recordAuthEvent({
+          eventType: 'LOGIN',
+          userName: matchedMock.company_name,
+          role: 'Bidder',
+          sessionInfo: `Bidder ${matchedMock.company_name} (${matchedMock.id}) authenticated via GSTIN • GeM Bidder Portal`,
+        });
+      } catch (err) {
+        console.warn('Notice recording bidder login event:', err);
+      }
 
       setTimeout(() => {
         router.push('/bidder/dashboard');

@@ -18,6 +18,7 @@ import {
 } from 'lucide-react';
 import { setOfficerSession } from '@/lib/authGuard';
 import { useLanguage } from '@/lib/i18n/LanguageContext';
+import { auditService } from '@/services/auditService';
 
 export default function OfficerLoginPage() {
   const router = useRouter();
@@ -44,6 +45,18 @@ export default function OfficerLoginPage() {
         dscValid: true,
         authenticatedAt: new Date().toISOString(),
       });
+
+      // Record LOGIN audit event upon successful authentication
+      try {
+        auditService.recordAuthEvent({
+          eventType: 'LOGIN',
+          userName: 'ABCD',
+          role: 'Officer',
+          sessionInfo: `Officer ABCD authenticated via ${authMode} • GeM Officer Portal`,
+        });
+      } catch (err) {
+        console.warn('Notice recording login audit event:', err);
+      }
 
       setTimeout(() => {
         router.push('/officer/dashboard');

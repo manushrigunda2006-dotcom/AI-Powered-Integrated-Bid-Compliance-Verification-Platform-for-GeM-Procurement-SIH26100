@@ -96,6 +96,7 @@ export interface Requirement {
 
 export interface Bidder {
   id: string;
+  bidder_code?: string;
   tender_id: string;
   company_name: string;
   gst_number: string;
@@ -107,6 +108,7 @@ export interface Bidder {
   submission_date: string;
   overall_score: number;          // 0 to 100
   compliance_score?: number;     // Alias for overall_score
+  complianceScore?: number;      // Numeric compliance score
   risk_level: RiskLevel;
   officer_decision: OfficerDecision;
   decision_notes?: string;

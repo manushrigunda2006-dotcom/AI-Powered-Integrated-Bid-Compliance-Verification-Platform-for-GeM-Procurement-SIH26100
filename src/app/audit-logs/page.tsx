@@ -22,6 +22,9 @@ import {
   AlertCircle,
   Loader2,
   AlertTriangle,
+  LogIn,
+  LogOut,
+  UserCheck,
 } from 'lucide-react';
 import { useOfficerAuth } from '@/lib/authGuard';
 import { useLanguage } from '@/lib/i18n/LanguageContext';
@@ -53,20 +56,44 @@ export default function AuditLogsPage() {
     loadLogs();
   }, []);
 
+  const formatTimestamp = (timestamp: string) => {
+    try {
+      const d = new Date(timestamp);
+      return (
+        d.toLocaleString('en-IN', {
+          day: '2-digit',
+          month: 'short',
+          year: 'numeric',
+          hour: '2-digit',
+          minute: '2-digit',
+          hour12: true,
+          timeZone: 'Asia/Kolkata',
+        }) + ' IST'
+      );
+    } catch {
+      return timestamp;
+    }
+  };
+
   const filteredLogs = useMemo(() => {
     return logs.filter((log) => {
-      // Actor filter
+      // Actor filter: ALL, OFFICER, SYSTEM
       if (selectedActor !== 'ALL' && log.actor !== selectedActor) {
         return false;
       }
-      // Search filter
+      // Search filter: action, actor, user_name, officer_name, user_role, bidder_id, tender_id, metadata
       if (searchQuery.trim()) {
         const query = searchQuery.toLowerCase();
         const actionMatch = log.action.toLowerCase().includes(query);
-        const bidderMatch = log.bidder_id?.toLowerCase().includes(query);
-        const tenderMatch = log.tender_id?.toLowerCase().includes(query);
+        const actorMatch = log.actor.toLowerCase().includes(query);
+        const userMatch =
+          Boolean(log.metadata?.user_name && String(log.metadata.user_name).toLowerCase().includes(query)) ||
+          Boolean(log.metadata?.officer_name && String(log.metadata.officer_name).toLowerCase().includes(query)) ||
+          Boolean(log.metadata?.user_role && String(log.metadata.user_role).toLowerCase().includes(query));
+        const bidderMatch = Boolean(log.bidder_id && log.bidder_id.toLowerCase().includes(query));
+        const tenderMatch = Boolean(log.tender_id && log.tender_id.toLowerCase().includes(query));
         const metaMatch = JSON.stringify(log.metadata || {}).toLowerCase().includes(query);
-        return actionMatch || bidderMatch || tenderMatch || metaMatch;
+        return actionMatch || actorMatch || userMatch || bidderMatch || tenderMatch || metaMatch;
       }
       return true;
     });
@@ -145,7 +172,7 @@ export default function AuditLogsPage() {
               </span>
             </div>
             <p className="text-xs text-slate-600">
-              GFR Rule 151 & Section 65B Electronic Evidence certified trail of all automated runs and officer decisions
+              {t('audit.subtitle')}
             </p>
           </div>
         </div>
@@ -160,12 +187,12 @@ export default function AuditLogsPage() {
             {isExporting ? (
               <>
                 <Loader2 className="w-4 h-4 animate-spin text-blue-900" />
-                <span>Generating Certificate...</span>
+                <span>{t('audit.generating_cert')}</span>
               </>
             ) : (
               <>
                 <Download className="w-4 h-4" />
-                <span>Export 65B Certificate</span>
+                <span>{t('audit.export_cert')}</span>
               </>
             )}
           </button>
@@ -174,7 +201,7 @@ export default function AuditLogsPage() {
             href="/tenders"
             className="px-4 py-2 bg-blue-900 hover:bg-blue-800 text-white rounded-xl text-xs font-bold shadow-xs transition-all flex items-center space-x-2 cursor-pointer"
           >
-            <span>Evaluate Tenders</span>
+            <span>{t('audit.evaluate_tenders')}</span>
             <ExternalLink className="w-4 h-4" />
           </Link>
         </div>
@@ -184,55 +211,55 @@ export default function AuditLogsPage() {
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-xs space-y-1">
           <span className="text-[11px] font-bold text-slate-500 uppercase tracking-wider">
-            Total Logged Events
+            {t('audit.total_events')}
           </span>
           <div className="flex items-baseline space-x-2">
             <span className="text-2xl font-black text-slate-900">{stats.total}</span>
-            <span className="text-xs text-slate-500 font-medium">recorded</span>
+            <span className="text-xs text-slate-500 font-medium">{t('audit.recorded')}</span>
           </div>
           <p className="text-[11px] text-slate-500 pt-1">
-            Persisted in PostgreSQL ledger
+            {t('audit.ledger_note')}
           </p>
         </div>
 
         <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-xs space-y-1">
           <span className="text-[11px] font-bold text-emerald-700 uppercase tracking-wider flex items-center space-x-1">
             <Cpu className="w-3.5 h-3.5 text-emerald-600" />
-            <span>Automated Engine Runs</span>
+            <span>{t('audit.engine_runs')}</span>
           </span>
           <div className="flex items-baseline space-x-2">
             <span className="text-2xl font-black text-slate-900">{stats.systemCount}</span>
             <span className="text-xs text-emerald-700 font-medium">100% deterministic</span>
           </div>
           <p className="text-[11px] text-slate-500 pt-1">
-            Zero hallucination compliance calculations
+            {t('audit.deterministic_note')}
           </p>
         </div>
 
         <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-xs space-y-1">
           <span className="text-[11px] font-bold text-blue-700 uppercase tracking-wider flex items-center space-x-1">
             <User className="w-3.5 h-3.5 text-blue-600" />
-            <span>Officer Adjudications</span>
+            <span>{t('audit.officer_adjudications')}</span>
           </span>
           <div className="flex items-baseline space-x-2">
             <span className="text-2xl font-black text-slate-900">{stats.officerCount}</span>
-            <span className="text-xs text-blue-700 font-medium">human-in-the-loop</span>
+            <span className="text-xs text-blue-700 font-medium">{t('audit.user_action')}</span>
           </div>
           <p className="text-[11px] text-slate-500 pt-1">
-            DSC Class-3 digital signatures applied
+            {t('audit.human_loop_note')}
           </p>
         </div>
 
         <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-xs space-y-1">
           <span className="text-[11px] font-bold text-purple-700 uppercase tracking-wider flex items-center space-x-1">
             <ShieldCheck className="w-3.5 h-3.5 text-purple-600" />
-            <span>Integrity Status</span>
+            <span>{t('audit.integrity_status')}</span>
           </span>
           <div className="flex items-baseline space-x-2">
-            <span className="text-lg font-black text-emerald-700">VERIFIED</span>
+            <span className="text-lg font-black text-emerald-700">{t('audit.verified')}</span>
           </div>
           <p className="text-[11px] text-slate-500 pt-1 font-mono">
-            SHA-256 Chain Intact
+            {t('audit.chain_intact')}
           </p>
         </div>
       </div>
@@ -296,7 +323,7 @@ export default function AuditLogsPage() {
           <div className="flex items-center space-x-2">
             <FileCheck className="w-4 h-4 text-blue-900" />
             <h2 className="text-sm font-bold text-slate-900">
-              Audit Event Log Records ({filteredLogs.length})
+              {t('audit.event_records')} ({filteredLogs.length})
             </h2>
           </div>
           <span className="text-xs text-slate-500 font-mono">
@@ -312,43 +339,76 @@ export default function AuditLogsPage() {
         ) : filteredLogs.length === 0 ? (
           <div className="p-12 text-center text-slate-500 space-y-2">
             <AlertCircle className="w-8 h-8 text-slate-400 mx-auto" />
-            <p className="text-sm font-bold text-slate-800">No matching audit events found</p>
+            <p className="text-sm font-bold text-slate-800">{t('audit.no_records')}</p>
             <p className="text-xs text-slate-500">
-              Try adjusting your search terms or actor filter.
+              {t('audit.no_records_hint')}
             </p>
           </div>
         ) : (
           <div className="divide-y divide-slate-100">
             {filteredLogs.map((log) => {
               const isOfficer = log.actor === 'OFFICER';
+              const isAuthLogin = log.action === 'LOGIN';
+              const isAuthLogout = log.action === 'LOGOUT';
               const isExpanded = expandedLogId === log.id;
               const hashSnippet = getHash(log.id, log.timestamp);
+              const formattedTime = formatTimestamp(log.timestamp);
+              const userName =
+                (log.metadata?.user_name as string) ||
+                (log.metadata?.officer_name as string) ||
+                (isOfficer ? 'ABCD' : 'SYSTEM');
+              const roleDisplay =
+                (log.metadata?.user_role as string) ||
+                (isOfficer ? t('audit.officer') : 'System');
 
               return (
                 <div key={log.id} className="p-4 hover:bg-slate-50/70 transition-colors">
                   <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                     <div className="flex items-start space-x-3 min-w-0">
-                      {/* Actor Icon Badge */}
+                      {/* Actor / Event Icon Badge */}
                       <div
-                        className={`w-9 h-9 rounded-xl flex items-center justify-center shrink-0 mt-0.5 ${
-                          isOfficer
+                        className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0 mt-0.5 ${
+                          isAuthLogin
+                            ? 'bg-emerald-100 text-emerald-800 border border-emerald-300'
+                            : isAuthLogout
+                            ? 'bg-rose-100 text-rose-800 border border-rose-300'
+                            : isOfficer
                             ? 'bg-blue-100 text-blue-900 border border-blue-200'
                             : 'bg-slate-100 text-slate-700 border border-slate-200'
                         }`}
                       >
-                        {isOfficer ? (
-                          <User className="w-4 h-4" />
+                        {isAuthLogin ? (
+                          <LogIn className="w-4 h-4 text-emerald-700" />
+                        ) : isAuthLogout ? (
+                          <LogOut className="w-4 h-4 text-rose-700" />
+                        ) : isOfficer ? (
+                          <User className="w-4 h-4 text-blue-800" />
                         ) : (
-                          <Cpu className="w-4 h-4" />
+                          <Cpu className="w-4 h-4 text-slate-600" />
                         )}
                       </div>
 
                       {/* Event Details */}
-                      <div className="space-y-1 min-w-0">
+                      <div className="space-y-1.5 min-w-0">
                         <div className="flex flex-wrap items-center gap-2">
-                          <span className="font-mono text-xs font-bold text-slate-900">
-                            {log.action}
+                          {/* Action Name */}
+                          <span
+                            className={`font-mono text-xs font-bold px-2 py-0.5 rounded-md ${
+                              isAuthLogin
+                                ? 'bg-emerald-50 text-emerald-900 border border-emerald-300'
+                                : isAuthLogout
+                                ? 'bg-rose-50 text-rose-900 border border-rose-300'
+                                : 'text-slate-900 bg-slate-100 border border-slate-200'
+                            }`}
+                          >
+                            {isAuthLogin
+                              ? t('audit.action_login')
+                              : isAuthLogout
+                              ? t('audit.action_logout')
+                              : log.action}
                           </span>
+
+                          {/* Actor Badge */}
                           <span
                             className={`text-[10px] font-bold px-2 py-0.5 rounded-md ${
                               isOfficer
@@ -356,8 +416,30 @@ export default function AuditLogsPage() {
                                 : 'bg-slate-100 text-slate-700 border border-slate-200'
                             }`}
                           >
-                            {log.actor}
+                            {isOfficer ? t('audit.officer') : 'SYSTEM'}
                           </span>
+
+                          {/* USER ACTION vs SYSTEM / AUTOMATED ENGINE Pill */}
+                          <span
+                            className={`text-[10px] font-bold px-2 py-0.5 rounded-md flex items-center space-x-1 ${
+                              isOfficer
+                                ? 'bg-indigo-50 text-indigo-800 border border-indigo-200'
+                                : 'bg-slate-100 text-slate-600 border border-slate-200'
+                            }`}
+                          >
+                            {isOfficer ? (
+                              <>
+                                <User className="w-3 h-3 text-indigo-700" />
+                                <span>{t('audit.user_action')}</span>
+                              </>
+                            ) : (
+                              <>
+                                <Cpu className="w-3 h-3 text-slate-600" />
+                                <span>{t('audit.system_engine')}</span>
+                              </>
+                            )}
+                          </span>
+
                           {log.bidder_id && (
                             <span className="bg-amber-50 text-amber-800 text-[10px] font-bold px-2 py-0.5 rounded-md border border-amber-200 font-mono">
                               {log.bidder_id}
@@ -365,13 +447,26 @@ export default function AuditLogsPage() {
                           )}
                         </div>
 
-                        <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-slate-500">
+                        {/* User / Role / Time row */}
+                        <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-slate-600">
+                          {isOfficer && (
+                            <>
+                              <span className="text-slate-700">
+                                {t('audit.user')}: <strong className="text-slate-900 font-bold">{userName}</strong>
+                              </span>
+                              <span className="text-slate-700">
+                                {t('audit.role')}: <strong className="text-slate-900 font-bold">{roleDisplay}</strong>
+                              </span>
+                            </>
+                          )}
                           <span className="flex items-center space-x-1">
                             <Clock className="w-3 h-3 text-slate-400" />
-                            <span>{new Date(log.timestamp).toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' })} IST</span>
+                            <span>
+                              {t('audit.time')}: <strong className="text-slate-800 font-semibold">{formattedTime}</strong>
+                            </span>
                           </span>
                           <span className="font-mono text-[11px] text-slate-400">
-                            Tender: {log.tender_id || 'tender-gem-2026-cloud'}
+                            {t('audit.tender')}: {log.tender_id || 'tender-gem-2026-cloud'}
                           </span>
                           <span className="font-mono text-[11px] text-emerald-700 flex items-center space-x-1">
                             <CheckCircle2 className="w-3 h-3 text-emerald-600" />
@@ -387,7 +482,7 @@ export default function AuditLogsPage() {
                       onClick={() => setExpandedLogId(isExpanded ? null : log.id)}
                       className="inline-flex items-center space-x-1.5 px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg text-xs font-semibold transition-colors cursor-pointer self-start sm:self-center shrink-0"
                     >
-                      <span>{isExpanded ? 'Hide Details' : 'Inspect Details'}</span>
+                      <span>{isExpanded ? t('audit.hide_details') : t('audit.inspect_details')}</span>
                       {isExpanded ? (
                         <ChevronDown className="w-3.5 h-3.5" />
                       ) : (
@@ -400,8 +495,8 @@ export default function AuditLogsPage() {
                   {isExpanded && (
                     <div className="mt-3 pt-3 border-t border-slate-100 space-y-2 text-xs">
                       <div className="flex items-center justify-between text-slate-600">
-                        <span className="font-bold text-slate-800">Event Payload & Metadata:</span>
-                        <span className="font-mono text-[11px] text-slate-400">Record ID: {log.id}</span>
+                        <span className="font-bold text-slate-800">{t('audit.event_payload')}:</span>
+                        <span className="font-mono text-[11px] text-slate-400">{t('audit.record_id')}: {log.id}</span>
                       </div>
                       <div className="p-3 bg-slate-900 rounded-xl font-mono text-[11px] text-emerald-400 overflow-x-auto shadow-inner">
                         <pre>{JSON.stringify(log.metadata || {}, null, 2)}</pre>

@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
 import {
@@ -110,19 +110,32 @@ export default function TenderBiddersPage() {
     }
   };
 
-  const filteredBidders = bidders.filter((b) => {
-    const matchesRisk =
-      selectedRiskFilter === 'ALL' ? true : b.risk_level === selectedRiskFilter;
-    const q = searchQuery.toLowerCase().trim();
-    const matchesSearch =
-      !q ||
-      b.company_name.toLowerCase().includes(q) ||
-      b.id.toLowerCase().includes(q) ||
-      (b.gst_number && b.gst_number.toLowerCase().includes(q)) ||
-      (b.pan_number && b.pan_number.toLowerCase().includes(q)) ||
-      (b.udyam_registration && b.udyam_registration.toLowerCase().includes(q));
-    return matchesRisk && matchesSearch;
-  });
+  // 1. Sort all 20 bidders by compliance score descending (numeric comparison)
+  const sortedBidders = useMemo(() => {
+    return [...bidders].sort((a, b) => {
+      const scoreB = Number(b.complianceScore ?? b.compliance_score ?? b.overall_score ?? 0);
+      const scoreA = Number(a.complianceScore ?? a.compliance_score ?? a.overall_score ?? 0);
+      return scoreB - scoreA;
+    });
+  }, [bidders]);
+
+  // 2. Filter from sortedBidders preserving complianceScore DESC order
+  const filteredBidders = useMemo(() => {
+    return sortedBidders.filter((b) => {
+      const matchesRisk =
+        selectedRiskFilter === 'ALL' ? true : b.risk_level === selectedRiskFilter;
+      const q = searchQuery.toLowerCase().trim();
+      const matchesSearch =
+        !q ||
+        b.company_name.toLowerCase().includes(q) ||
+        b.id.toLowerCase().includes(q) ||
+        (b.bidder_code && b.bidder_code.toLowerCase().includes(q)) ||
+        (b.gst_number && b.gst_number.toLowerCase().includes(q)) ||
+        (b.pan_number && b.pan_number.toLowerCase().includes(q)) ||
+        (b.udyam_registration && b.udyam_registration.toLowerCase().includes(q));
+      return matchesRisk && matchesSearch;
+    });
+  }, [sortedBidders, selectedRiskFilter, searchQuery]);
 
   const qualifiedCount = bidders.filter(
     (b) => b.officer_decision === 'QUALIFIED' || (b.risk_level === 'LOW' && b.officer_decision === 'PENDING')
@@ -374,6 +387,11 @@ export default function TenderBiddersPage() {
                             className="font-bold text-slate-900 text-sm hover:text-blue-900 flex items-center space-x-1.5"
                           >
                             <span>{bidder.company_name}</span>
+                            {bidder.bidder_code && (
+                              <span className="font-mono text-[10px] bg-slate-100 text-slate-600 px-1.5 py-0.5 rounded-sm font-semibold border border-slate-200">
+                                {bidder.bidder_code}
+                              </span>
+                            )}
                             <ExternalLink className="w-3.5 h-3.5 opacity-0 group-hover:opacity-100 transition-opacity text-blue-700" />
                           </Link>
                           <div className="text-[11px] text-slate-500">
@@ -411,14 +429,14 @@ export default function TenderBiddersPage() {
                         <div className="inline-flex flex-col items-center">
                           <span
                             className={`text-base font-black px-3 py-1 rounded-xl border ${
-                              bidder.overall_score >= 85
+                              (bidder.complianceScore ?? bidder.overall_score) >= 85
                                 ? 'bg-emerald-50 text-emerald-700 border-emerald-200'
-                                : bidder.overall_score >= 60
+                                : (bidder.complianceScore ?? bidder.overall_score) >= 60
                                 ? 'bg-amber-50 text-amber-700 border-amber-200'
                                 : 'bg-rose-50 text-rose-700 border-rose-200'
                             }`}
                           >
-                            {bidder.overall_score} / 100
+                            {bidder.complianceScore ?? bidder.overall_score} / 100
                           </span>
                         </div>
                       </td>

@@ -3,6 +3,7 @@
 import { useEffect, useState, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import { supabase, isSupabaseConfigured } from './supabase';
+import { auditService } from '@/services/auditService';
 
 export type UserRole = 'bidder' | 'officer';
 
@@ -176,6 +177,29 @@ export function setBidderSession(bidder: Partial<BidderSession>): BidderSession 
  * Comprehensive logout: clears all session tokens, role credentials, and drafts
  */
 export function logout(router?: any, redirectPath = '/role-selection'): void {
+  // 1. Read currently authenticated user's information BEFORE clearing session
+  const currentSession = getAuthSession();
+  if (currentSession) {
+    const role: 'Officer' | 'Bidder' = currentSession.role === 'officer' ? 'Officer' : 'Bidder';
+    const userName =
+      currentSession.role === 'officer'
+        ? (currentSession.name || 'ABCD')
+        : (currentSession.companyName || currentSession.contactPerson || 'ABCD');
+
+    // 2. Create the LOGOUT audit event with actual timestamp
+    try {
+      auditService.recordAuthEvent({
+        eventType: 'LOGOUT',
+        userName,
+        role,
+        sessionInfo: `${role} (${userName}) signed out at ${new Date().toISOString()}`,
+      });
+    } catch (err) {
+      console.warn('Notice recording logout audit event:', err);
+    }
+  }
+
+  // 3. Clear session and tokens
   if (typeof window !== 'undefined') {
     localStorage.removeItem('gem_auth_session');
     localStorage.removeItem('gem_officer_session');
@@ -185,6 +209,8 @@ export function logout(router?: any, redirectPath = '/role-selection'): void {
   if (isSupabaseConfigured()) {
     supabase.auth.signOut().catch(() => {});
   }
+
+  // 4. Redirect
   if (router) {
     router.push(redirectPath);
   } else if (typeof window !== 'undefined') {

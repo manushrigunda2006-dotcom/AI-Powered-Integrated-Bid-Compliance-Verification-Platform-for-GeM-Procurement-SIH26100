@@ -7,8 +7,16 @@ import { resolveTenderId, resolveBidderId } from '../lib/idMapper';
 
 export const bidderService = {
   async getBiddersForTender(tenderId: string): Promise<Bidder[]> {
+    const sortByComplianceScoreDesc = (list: Bidder[]): Bidder[] => {
+      return [...list].sort((a, b) => {
+        const scoreB = Number(b.complianceScore ?? b.compliance_score ?? b.overall_score ?? 0);
+        const scoreA = Number(a.complianceScore ?? a.compliance_score ?? a.overall_score ?? 0);
+        return scoreB - scoreA;
+      });
+    };
+
     if (!isSupabaseConfigured()) {
-      return MOCK_BIDDERS;
+      return sortByComplianceScoreDesc(MOCK_BIDDERS);
     }
 
     try {
@@ -16,7 +24,7 @@ export const bidderService = {
         .select('*');
 
       if (!data || data.length === 0) {
-        return MOCK_BIDDERS;
+        return sortByComplianceScoreDesc(MOCK_BIDDERS);
       }
 
       // Merge any database updates into MOCK_BIDDERS ensuring exactly 20 bidders are always returned
@@ -26,14 +34,18 @@ export const bidderService = {
         if (row.id) dbMap.set(String(row.id).toLowerCase(), row);
       }
 
-      return MOCK_BIDDERS.map((mock) => {
+      const merged = MOCK_BIDDERS.map((mock) => {
         const row =
           dbMap.get(mock.id.toLowerCase()) ||
           dbMap.get(mock.id.toUpperCase()) ||
           dbMap.get(`BIDDER-${mock.id.replace('bidder-', '')}`);
         if (row) {
+          const score = row.compliance_score ?? mock.overall_score;
           return {
             ...mock,
+            overall_score: score,
+            compliance_score: score,
+            complianceScore: score,
             officer_decision: (row.officer_decision as OfficerDecision) || mock.officer_decision,
             risk_level: (row.risk_level as RiskLevel) || mock.risk_level,
             decision_notes: row.decision_notes || mock.decision_notes,
@@ -42,8 +54,10 @@ export const bidderService = {
         }
         return mock;
       });
+
+      return sortByComplianceScoreDesc(merged);
     } catch {
-      return MOCK_BIDDERS;
+      return sortByComplianceScoreDesc(MOCK_BIDDERS);
     }
   },
 
