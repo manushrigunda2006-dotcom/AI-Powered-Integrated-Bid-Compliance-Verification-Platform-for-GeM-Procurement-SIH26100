@@ -19,7 +19,9 @@ export const en: Record<string, string> = {
   'nav.bidder_dashboard': 'Bidder Dashboard',
   'nav.available_tenders': 'Available Tenders',
   'nav.my_submissions': 'My Submissions',
+  'nav.upload_docs': 'Upload Documents',
   'nav.my_logs': 'My Activity Logs',
+  'nav.history': 'History',
   'nav.profile': 'Profile',
   'nav.company_profile': 'Company Profile',
   'nav.logout': 'Log Out',
@@ -28,6 +30,15 @@ export const en: Record<string, string> = {
   'nav.about': 'About',
   'nav.back': 'Back',
   'nav.switch_role': 'Switch Role',
+
+  // Bidder Document Upload & Submissions
+  'bidder.bid_submission_title': 'Bid Submission',
+  'bidder.upload_docs_title': 'Upload Required Bid Documents',
+  'bidder.bid_submitted_success': 'Bid Submitted Successfully',
+  'bidder.submission_progress_label': 'Document Submission Progress',
+  'bidder.required_documents_list': 'Required Document Submissions',
+  'bidder.submit_bid': 'Submit Bid',
+  'bidder.view_tender': 'View Tender',
 
   // Common Actions, Buttons & Generic Labels
   'common.save': 'Save',

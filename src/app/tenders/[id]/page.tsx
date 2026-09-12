@@ -35,6 +35,12 @@ export default function TenderDetailsPage() {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
+    if (isBidder) {
+      router.replace(`/bidder/tenders/${rawId}/submit`);
+    }
+  }, [isBidder, rawId, router]);
+
+  useEffect(() => {
     async function loadTender() {
       setIsLoading(true);
       try {

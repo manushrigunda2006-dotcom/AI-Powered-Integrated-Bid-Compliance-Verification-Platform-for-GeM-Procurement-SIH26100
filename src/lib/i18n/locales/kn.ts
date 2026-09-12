@@ -19,7 +19,9 @@ export const kn: Record<string, string> = {
   'nav.bidder_dashboard': 'ಬಿಡ್ಡುದಾರರ ಡ್ಯಾಶ್‌ಬೋರ್ಡ್',
   'nav.available_tenders': 'ಲಭ್ಯವಿರುವ ಟೆಂಡರ್‌ಗಳು',
   'nav.my_submissions': 'ನನ್ನ ಸಲ್ಲಿಕೆಗಳು',
+  'nav.upload_docs': 'ದಾಖಲೆಗಳನ್ನು ಅಪ್‌ಲೋಡ್ ಮಾಡಿ',
   'nav.my_logs': 'ನನ್ನ ಚಟುವಟಿಕೆ ದಾಖಲೆಗಳು',
+  'nav.history': 'ಇತಿಹಾಸ',
   'nav.profile': 'ಪ್ರೊಫೈಲ್',
   'nav.company_profile': 'ಕಂಪನಿ ಪ್ರೊಫೈಲ್',
   'nav.logout': 'ಲಾಗ್ ಔಟ್',
@@ -28,6 +30,15 @@ export const kn: Record<string, string> = {
   'nav.about': 'ಕುರಿತು',
   'nav.back': 'ಹಿಂದಕ್ಕೆ',
   'nav.switch_role': 'ಪಾತ್ರವನ್ನು ಬದಲಾಯಿಸಿ',
+
+  // Bidder Document Upload & Submissions
+  'bidder.bid_submission_title': 'ಬಿಡ್ ಸಲ್ಲಿಕೆ',
+  'bidder.upload_docs_title': 'ಅಗತ್ಯ ಬಿಡ್ ದಾಖಲೆಗಳನ್ನು ಅಪ್‌ಲೋಡ್ ಮಾಡಿ',
+  'bidder.bid_submitted_success': 'ಬಿಡ್ ಯಶಸ್ವಿಯಾಗಿ ಸಲ್ಲಿಸಲಾಗಿದೆ',
+  'bidder.submission_progress_label': 'ದಾಖಲೆ ಸಲ್ಲಿಕೆ ಪ್ರಗತಿ',
+  'bidder.required_documents_list': 'ಅಗತ್ಯವಿರುವ ದಾಖಲೆಗಳ ಸಲ್ಲಿಕೆಗಳು',
+  'bidder.submit_bid': 'ಬಿಡ್ ಸಲ್ಲಿಸಿ',
+  'bidder.view_tender': 'ಟೆಂಡರ್ ವೀಕ್ಷಿಸಿ',
 
   // Common Actions, Buttons & Generic Labels
   'common.save': 'ಉಳಿಸಿ',

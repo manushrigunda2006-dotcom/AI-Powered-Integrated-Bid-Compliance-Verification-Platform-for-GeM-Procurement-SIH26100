@@ -19,7 +19,9 @@ export const hi: Record<string, string> = {
   'nav.bidder_dashboard': 'बोलीदाता डैशबोर्ड',
   'nav.available_tenders': 'उपलब्ध निविदाएं',
   'nav.my_submissions': 'मेरी प्रस्तुतियां',
+  'nav.upload_docs': 'दस्तावेज़ अपलोड करें',
   'nav.my_logs': 'मेरी गतिविधि लॉग',
+  'nav.history': 'इतिहास',
   'nav.profile': 'प्रोफ़ाइल',
   'nav.company_profile': 'कंपनी प्रोफ़ाइल',
   'nav.logout': 'लॉग आउट',
@@ -28,6 +30,15 @@ export const hi: Record<string, string> = {
   'nav.about': 'के बारे में',
   'nav.back': 'वापस',
   'nav.switch_role': 'भूमिका बदलें',
+
+  // Bidder Document Upload & Submissions
+  'bidder.bid_submission_title': 'बोली प्रस्तुति',
+  'bidder.upload_docs_title': 'आवश्यक बोली दस्तावेज़ अपलोड करें',
+  'bidder.bid_submitted_success': 'बोली सफलतापूर्वक प्रस्तुत की गई',
+  'bidder.submission_progress_label': 'दस्तावेज़ प्रस्तुति प्रगति',
+  'bidder.required_documents_list': 'आवश्यक दस्तावेज़ प्रस्तुतियां',
+  'bidder.submit_bid': 'बोली जमा करें',
+  'bidder.view_tender': 'निविदा देखें',
 
   // Common Actions, Buttons & Generic Labels
   'common.save': 'सहेजें',

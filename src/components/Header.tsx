@@ -19,7 +19,8 @@ import {
   ShieldCheck,
   FileCheck2,
   LayoutDashboard,
-  Info
+  Info,
+  Upload
 } from 'lucide-react';
 import { useAuth, logout } from '@/lib/authGuard';
 import { GfrComplianceDialog } from './GfrComplianceDialog';
@@ -167,7 +168,7 @@ export function Header() {
 
             {/* 2. BIDDER NAVIGATION */}
             {isBidder && (
-              <nav className="hidden md:flex items-center space-x-3 text-[11px] font-medium">
+              <nav className="hidden md:flex items-center space-x-2.5 text-[11px] font-medium">
                 <Link
                   href="/bidder/dashboard"
                   className="text-[#334155] hover:text-[#102F5F] transition-colors flex items-center space-x-1 px-2 py-1 rounded-md hover:bg-slate-100"
@@ -193,11 +194,27 @@ export function Header() {
                 </Link>
 
                 <Link
+                  href="/bidder/submit"
+                  className="text-[#334155] hover:text-[#102F5F] transition-colors flex items-center space-x-1 px-2 py-1 rounded-md hover:bg-slate-100"
+                >
+                  <Upload className="w-3.5 h-3.5 text-blue-700" />
+                  <span className="text-[11px] font-semibold">{t('nav.upload_docs', 'Upload Documents')}</span>
+                </Link>
+
+                <Link
                   href="/bidder/logs"
                   className="text-[#334155] hover:text-[#102F5F] transition-colors flex items-center space-x-1 px-2 py-1 rounded-md hover:bg-slate-100"
                 >
                   <Clock className="w-3.5 h-3.5 text-blue-700" />
-                  <span className="text-[11px] font-semibold">{t('nav.my_logs', 'My Activity Logs')}</span>
+                  <span className="text-[11px] font-semibold">{t('nav.history', 'History')}</span>
+                </Link>
+
+                <Link
+                  href="/bidder/profile"
+                  className="text-[#334155] hover:text-[#102F5F] transition-colors flex items-center space-x-1 px-2 py-1 rounded-md hover:bg-slate-100"
+                >
+                  <Building2 className="w-3.5 h-3.5 text-[#64748B]" />
+                  <span className="text-[11px] font-semibold">{t('nav.profile', 'Profile')}</span>
                 </Link>
 
                 <Link
@@ -392,15 +409,6 @@ export function Header() {
                         </Link>
 
                         <Link
-                          href="/bidder/profile"
-                          onClick={() => setIsProfileOpen(false)}
-                          className="w-full flex items-center space-x-2 px-3 py-1.5 text-[11px] font-medium text-[#334155] hover:text-[#102F5F] hover:bg-slate-50 rounded-lg transition-colors cursor-pointer"
-                        >
-                          <Building2 className="w-3.5 h-3.5 text-[#64748B]" />
-                          <span>{t('nav.company_profile', 'Company Profile')}</span>
-                        </Link>
-
-                        <Link
                           href="/bidder/tenders"
                           onClick={() => setIsProfileOpen(false)}
                           className="w-full flex items-center space-x-2 px-3 py-1.5 text-[11px] font-medium text-[#334155] hover:text-[#102F5F] hover:bg-slate-50 rounded-lg transition-colors cursor-pointer"
@@ -410,12 +418,39 @@ export function Header() {
                         </Link>
 
                         <Link
+                          href="/bidder/submit"
+                          onClick={() => setIsProfileOpen(false)}
+                          className="w-full flex items-center space-x-2 px-3 py-1.5 text-[11px] font-medium text-[#334155] hover:text-[#102F5F] hover:bg-slate-50 rounded-lg transition-colors cursor-pointer"
+                        >
+                          <Upload className="w-3.5 h-3.5 text-blue-700" />
+                          <span>{t('nav.upload_docs', 'Upload Documents')}</span>
+                        </Link>
+
+                        <Link
+                          href="/bidder/dashboard#submissions"
+                          onClick={() => setIsProfileOpen(false)}
+                          className="w-full flex items-center space-x-2 px-3 py-1.5 text-[11px] font-medium text-[#334155] hover:text-[#102F5F] hover:bg-slate-50 rounded-lg transition-colors cursor-pointer"
+                        >
+                          <FileCheck2 className="w-3.5 h-3.5 text-emerald-600" />
+                          <span>{t('nav.my_submissions', 'My Submissions')}</span>
+                        </Link>
+
+                        <Link
                           href="/bidder/logs"
                           onClick={() => setIsProfileOpen(false)}
                           className="w-full flex items-center space-x-2 px-3 py-1.5 text-[11px] font-medium text-[#334155] hover:text-[#102F5F] hover:bg-slate-50 rounded-lg transition-colors cursor-pointer"
                         >
-                          <Clock className="w-3.5 h-3.5 text-[#64748B]" />
-                          <span>{t('nav.my_logs', 'My Activity Logs')}</span>
+                          <Clock className="w-3.5 h-3.5 text-blue-700" />
+                          <span>{t('nav.history', 'History')}</span>
+                        </Link>
+
+                        <Link
+                          href="/bidder/profile"
+                          onClick={() => setIsProfileOpen(false)}
+                          className="w-full flex items-center space-x-2 px-3 py-1.5 text-[11px] font-medium text-[#334155] hover:text-[#102F5F] hover:bg-slate-50 rounded-lg transition-colors cursor-pointer"
+                        >
+                          <Building2 className="w-3.5 h-3.5 text-[#64748B]" />
+                          <span>{t('nav.company_profile', 'Profile')}</span>
                         </Link>
 
                         <Link

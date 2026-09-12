@@ -12,33 +12,60 @@ import {
   ShieldCheck,
   Briefcase,
   Clock,
-  ArrowRight
+  ArrowRight,
+  Upload,
+  CheckCircle2,
+  FileCheck
 } from 'lucide-react';
 import { useBidderAuth } from '@/lib/authGuard';
 import { tenderService } from '@/services/tenderService';
-import { Tender } from '@/lib/types';
+import { tenderRequiredDocumentService } from '@/services/tenderRequiredDocumentService';
+import { bidSubmissionService, BidSubmission } from '@/services/bidSubmissionService';
+import { Tender, TenderRequiredDocument } from '@/lib/types';
 import { formatDate, formatIndianCurrency } from '@/lib/utils';
+import { useLanguage } from '@/lib/i18n/LanguageContext';
 
 export default function BidderTendersPage() {
   const { session, isAuthenticated, isAuthorized, isLoading: authLoading } = useBidderAuth(true);
+  const { t } = useLanguage();
   const [tenders, setTenders] = useState<Tender[]>([]);
+  const [tenderDocsMap, setTenderDocsMap] = useState<Record<string, TenderRequiredDocument[]>>({});
+  const [submissionsMap, setSubmissionsMap] = useState<Record<string, BidSubmission | null>>({});
   const [searchQuery, setSearchQuery] = useState('');
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    async function loadTenders() {
+    async function loadTendersAndMeta() {
+      if (!session?.bidderId) return;
       setIsLoading(true);
       try {
         const list = await tenderService.getTenders();
         setTenders(list);
+
+        const docsMap: Record<string, TenderRequiredDocument[]> = {};
+        const subsMap: Record<string, BidSubmission | null> = {};
+
+        await Promise.all(
+          list.map(async (tender) => {
+            const docs = await tenderRequiredDocumentService.getRequiredDocuments(tender.id);
+            docsMap[tender.id] = docs;
+            subsMap[tender.id] = bidSubmissionService.getSubmission(session.bidderId, tender.id);
+          })
+        );
+
+        setTenderDocsMap(docsMap);
+        setSubmissionsMap(subsMap);
       } catch (err) {
         console.error('Error fetching tenders:', err);
       } finally {
         setIsLoading(false);
       }
     }
-    loadTenders();
-  }, []);
+
+    if (session?.bidderId) {
+      loadTendersAndMeta();
+    }
+  }, [session?.bidderId]);
 
   const filteredTenders = tenders.filter((t) => {
     return (
@@ -85,22 +112,31 @@ export default function BidderTendersPage() {
             Available Tenders for Bidding
           </h1>
           <p className="text-xs sm:text-sm text-slate-500 max-w-2xl">
-            Browse published government RFP tenders, review deterministic eligibility criteria, and track your active bids.
+            Browse published government RFP tenders, review required compliance documents, and upload your submission dossier.
           </p>
         </div>
 
-        <Link
-          href="/bidder/dashboard"
-          className="inline-flex items-center space-x-1.5 px-4 py-2.5 bg-blue-900 hover:bg-blue-800 text-white font-bold text-xs rounded-xl shadow-xs transition-all shrink-0 cursor-pointer"
-        >
-          <span>View My Active Submissions</span>
-          <ArrowRight className="w-3.5 h-3.5" />
-        </Link>
+        <div className="flex flex-wrap items-center gap-2 shrink-0">
+          <Link
+            href="/bidder/submit"
+            className="inline-flex items-center space-x-1.5 px-4 py-2.5 bg-blue-900 hover:bg-blue-800 text-white font-bold text-xs rounded-xl shadow-xs transition-all shrink-0 cursor-pointer"
+          >
+            <Upload className="w-3.5 h-3.5" />
+            <span>Upload Documents</span>
+          </Link>
+          <Link
+            href="/bidder/dashboard#submissions"
+            className="inline-flex items-center space-x-1.5 px-4 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold text-xs rounded-xl transition-all shrink-0 cursor-pointer"
+          >
+            <span>My Active Submissions</span>
+            <ArrowRight className="w-3.5 h-3.5" />
+          </Link>
+        </div>
       </div>
 
       {/* Search Bar */}
-      <div className="bg-white rounded-2xl border border-slate-200 p-4 shadow-xs text-xs">
-        <div className="relative max-w-md">
+      <div className="bg-white rounded-2xl border border-slate-200 p-4 shadow-xs text-xs flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+        <div className="relative flex-1 max-w-md">
           <Search className="w-4 h-4 text-slate-400 absolute left-3 top-2.5" />
           <input
             type="text"
@@ -110,81 +146,118 @@ export default function BidderTendersPage() {
             className="w-full pl-9 pr-4 py-2 rounded-xl border border-slate-200 text-xs focus:ring-2 focus:ring-blue-600 focus:outline-hidden"
           />
         </div>
+        <div className="text-xs text-slate-500 font-medium">
+          Showing <strong className="text-slate-800">{filteredTenders.length}</strong> available tenders
+        </div>
       </div>
 
       {/* Tenders Grid */}
       <div className="grid grid-cols-1 gap-4">
-        {filteredTenders.map((tender) => (
-          <div
-            key={tender.id}
-            className="bg-white rounded-2xl border border-slate-200 hover:border-blue-300 p-6 shadow-xs hover:shadow-md transition-all space-y-4"
-          >
-            <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-3">
-              <div className="space-y-1 max-w-3xl">
-                <div className="flex flex-wrap items-center gap-2">
-                  <span className="bg-blue-900 text-white font-mono text-xs font-bold px-2.5 py-0.5 rounded-md">
-                    {tender.tender_number}
-                  </span>
-                  <span className="bg-emerald-50 text-emerald-800 text-xs font-bold px-2 py-0.5 rounded-md border border-emerald-200">
-                    Open for Bidding
-                  </span>
-                </div>
-                <h2 className="text-lg font-bold text-slate-900">
-                  {tender.title}
-                </h2>
-                <div className="flex items-center space-x-1 text-xs text-slate-500">
-                  <Building2 className="w-3.5 h-3.5 text-slate-400" />
-                  <span>{tender.department}</span>
-                </div>
-              </div>
-
-              {/* Action Buttons for Bidder */}
-              <div className="flex items-center space-x-2 shrink-0 pt-2 lg:pt-0">
-                <Link
-                  href={`/tenders/${tender.id}`}
-                  className="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs font-bold rounded-xl transition-colors cursor-pointer"
-                >
-                  View RFP Specifications
-                </Link>
-                <Link
-                  href="/bidder/dashboard"
-                  className="px-4 py-2 bg-blue-900 hover:bg-blue-800 text-white text-xs font-bold rounded-xl shadow-xs transition-colors flex items-center space-x-1.5 cursor-pointer"
-                >
-                  <span>My Bid Status</span>
-                  <ChevronRight className="w-3.5 h-3.5" />
-                </Link>
-              </div>
-            </div>
-
-            {/* Quick Specs Grid */}
-            <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 pt-3 border-t border-slate-100 text-xs">
-              <div className="p-2.5 bg-slate-50 rounded-xl">
-                <span className="text-[10px] uppercase font-bold text-slate-400 block">
-                  Estimated Budget
-                </span>
-                <span className="text-sm font-black text-slate-900">
-                  {tender.budget_formatted || formatIndianCurrency(tender.estimated_budget)}
-                </span>
-              </div>
-              <div className="p-2.5 bg-slate-50 rounded-xl">
-                <span className="text-[10px] uppercase font-bold text-slate-400 block">
-                  Submission Deadline
-                </span>
-                <span className="text-xs font-bold text-slate-800">
-                  {formatDate(tender.deadline)}
-                </span>
-              </div>
-              <div className="p-2.5 bg-slate-50 rounded-xl">
-                <span className="text-[10px] uppercase font-bold text-slate-400 block">
-                  Mandatory Clauses
-                </span>
-                <span className="text-xs font-bold text-slate-800">
-                  {tender.requirements?.length || 6} Deterministic Criteria
-                </span>
-              </div>
-            </div>
+        {isLoading ? (
+          <div className="p-12 text-center text-xs text-slate-400 bg-white rounded-3xl border border-slate-200">
+            Loading available tenders and requirements...
           </div>
-        ))}
+        ) : filteredTenders.length === 0 ? (
+          <div className="p-12 text-center text-xs text-slate-400 bg-white rounded-3xl border border-slate-200">
+            No tenders found matching your search.
+          </div>
+        ) : (
+          filteredTenders.map((tender) => {
+            const reqDocs = tenderDocsMap[tender.id] || [];
+            const totalDocsCount = reqDocs.length || 8;
+            const mandatoryDocsCount = reqDocs.filter((d) => d.is_mandatory).length || 6;
+            const sub = submissionsMap[tender.id];
+            const isSubmitted = sub !== null && sub !== undefined;
+
+            return (
+              <div
+                key={tender.id}
+                className="bg-white rounded-2xl border border-slate-200 hover:border-blue-300 p-6 shadow-xs hover:shadow-md transition-all space-y-4"
+              >
+                <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-3">
+                  <div className="space-y-1 max-w-3xl">
+                    <div className="flex flex-wrap items-center gap-2">
+                      <span className="bg-blue-900 text-white font-mono text-xs font-bold px-2.5 py-0.5 rounded-md">
+                        {tender.tender_number}
+                      </span>
+                      {isSubmitted ? (
+                        <span className="bg-emerald-50 text-emerald-800 text-xs font-bold px-2.5 py-0.5 rounded-md border border-emerald-200 flex items-center space-x-1">
+                          <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
+                          <span>Submitted - {sub.complianceStatus}</span>
+                        </span>
+                      ) : (
+                        <span className="bg-blue-50 text-blue-800 text-xs font-bold px-2.5 py-0.5 rounded-md border border-blue-200">
+                          Open for Bidding
+                        </span>
+                      )}
+                    </div>
+                    <h2 className="text-lg font-bold text-slate-900">
+                      {tender.title}
+                    </h2>
+                    <div className="flex items-center space-x-1 text-xs text-slate-500">
+                      <Building2 className="w-3.5 h-3.5 text-slate-400" />
+                      <span>{tender.department}</span>
+                    </div>
+                  </div>
+
+                  {/* Action Buttons for Bidder */}
+                  <div className="flex items-center space-x-2 shrink-0 pt-2 lg:pt-0">
+                    <Link
+                      href={`/bidder/tenders/${tender.id}/submit`}
+                      className="px-4 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs font-bold rounded-xl transition-colors cursor-pointer"
+                    >
+                      View Tender
+                    </Link>
+                    <Link
+                      href={`/bidder/tenders/${tender.id}/submit`}
+                      className="px-4 py-2.5 bg-blue-900 hover:bg-blue-800 text-white text-xs font-bold rounded-xl shadow-xs transition-colors flex items-center space-x-1.5 cursor-pointer"
+                    >
+                      <Upload className="w-3.5 h-3.5" />
+                      <span>{isSubmitted ? 'View / Update Dossier' : 'Upload Documents'}</span>
+                    </Link>
+                  </div>
+                </div>
+
+                {/* Quick Specs Grid */}
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-3 border-t border-slate-100 text-xs">
+                  <div className="p-2.5 bg-slate-50 rounded-xl">
+                    <span className="text-[10px] uppercase font-bold text-slate-400 block">
+                      Estimated Budget
+                    </span>
+                    <span className="text-sm font-black text-slate-900">
+                      {tender.budget_formatted || formatIndianCurrency(tender.estimated_budget)}
+                    </span>
+                  </div>
+                  <div className="p-2.5 bg-slate-50 rounded-xl">
+                    <span className="text-[10px] uppercase font-bold text-slate-400 block">
+                      Submission Deadline
+                    </span>
+                    <span className="text-xs font-bold text-slate-800">
+                      {formatDate(tender.deadline)}
+                    </span>
+                  </div>
+                  <div className="p-2.5 bg-slate-50 rounded-xl">
+                    <span className="text-[10px] uppercase font-bold text-slate-400 block">
+                      Required Documents
+                    </span>
+                    <span className="text-xs font-bold text-blue-950 flex items-center space-x-1">
+                      <FileText className="w-3 h-3 text-blue-700" />
+                      <span>{totalDocsCount} Required ({mandatoryDocsCount} Mandatory)</span>
+                    </span>
+                  </div>
+                  <div className="p-2.5 bg-slate-50 rounded-xl">
+                    <span className="text-[10px] uppercase font-bold text-slate-400 block">
+                      Procurement Status
+                    </span>
+                    <span className="text-xs font-bold text-emerald-800">
+                      Active / Open RFP
+                    </span>
+                  </div>
+                </div>
+              </div>
+            );
+          })
+        )}
       </div>
     </div>
   );
