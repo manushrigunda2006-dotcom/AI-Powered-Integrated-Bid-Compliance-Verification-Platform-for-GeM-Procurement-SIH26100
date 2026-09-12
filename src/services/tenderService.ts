@@ -143,10 +143,17 @@ export const tenderService = {
     }
 
     // Record Audit Log: TENDER_CREATED
-    await auditService.recordAuditLog({
-      actor: 'OFFICER',
-      tenderId: fullTender.id,
+    await auditService.recordUserAction({
       action: 'TENDER_CREATED',
+      userName: 'ABCD',
+      role: 'Officer',
+      device: 'Windows Desktop • Chrome',
+      sessionId: 'SESSION-ABCD-001',
+      tenderId: fullTender.id,
+      actionDescription: `New GeM tender ${fullTender.tender_number} created and published.`,
+      field: 'Tender Status',
+      beforeValue: 'Draft',
+      afterValue: 'Published',
       metadata: {
         tender_number: fullTender.tender_number,
         title: fullTender.title,
@@ -172,10 +179,17 @@ export const tenderService = {
       }
     }
 
-    await auditService.recordAuditLog({
-      actor: 'OFFICER',
-      tenderId: draft.id || 'draft',
+    await auditService.recordUserAction({
       action: 'TENDER_DRAFT_SAVED',
+      userName: 'ABCD',
+      role: 'Officer',
+      device: 'Windows Desktop • Chrome',
+      sessionId: 'SESSION-ABCD-001',
+      tenderId: draft.id || 'draft',
+      actionDescription: 'Tender draft was saved.',
+      field: 'Tender Status',
+      beforeValue: 'Unsaved',
+      afterValue: 'Draft Saved',
       metadata: {
         title: draft.title,
         tender_number: draft.tender_number,

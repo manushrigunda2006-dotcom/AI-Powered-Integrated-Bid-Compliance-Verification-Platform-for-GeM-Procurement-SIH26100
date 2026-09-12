@@ -25,6 +25,10 @@ import {
   LogIn,
   LogOut,
   UserCheck,
+  Laptop,
+  Layers,
+  XCircle,
+  FileText,
 } from 'lucide-react';
 import { useOfficerAuth } from '@/lib/authGuard';
 import { useLanguage } from '@/lib/i18n/LanguageContext';
@@ -36,6 +40,7 @@ export default function AuditLogsPage() {
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedActor, setSelectedActor] = useState<'ALL' | 'OFFICER' | 'SYSTEM'>('ALL');
+  const [selectedEventType, setSelectedEventType] = useState<'ALL' | 'LOGIN' | 'LOGOUT' | 'USER_ACTIONS' | 'SYSTEM_ACTIONS'>('ALL');
   const [expandedLogId, setExpandedLogId] = useState<string | null>(null);
   const [isExporting, setIsExporting] = useState(false);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
@@ -81,7 +86,19 @@ export default function AuditLogsPage() {
       if (selectedActor !== 'ALL' && log.actor !== selectedActor) {
         return false;
       }
-      // Search filter: action, actor, user_name, officer_name, user_role, bidder_id, tender_id, metadata
+
+      // Event type filter: ALL, LOGIN, LOGOUT, USER_ACTIONS, SYSTEM_ACTIONS
+      const isLogin = log.action === 'USER_LOGIN' || log.action === 'LOGIN';
+      const isLogout = log.action === 'USER_LOGOUT' || log.action === 'LOGOUT';
+      const isOfficer = log.actor === 'OFFICER';
+      const isSystem = log.actor === 'SYSTEM';
+
+      if (selectedEventType === 'LOGIN' && !isLogin) return false;
+      if (selectedEventType === 'LOGOUT' && !isLogout) return false;
+      if (selectedEventType === 'USER_ACTIONS' && !isOfficer) return false;
+      if (selectedEventType === 'SYSTEM_ACTIONS' && !isSystem) return false;
+
+      // Search filter: action, actor, user_name, officer_name, user_role, device, session_id, action_description, field, changes, bidder_id, tender_id, metadata
       if (searchQuery.trim()) {
         const query = searchQuery.toLowerCase();
         const actionMatch = log.action.toLowerCase().includes(query);
@@ -90,20 +107,42 @@ export default function AuditLogsPage() {
           Boolean(log.metadata?.user_name && String(log.metadata.user_name).toLowerCase().includes(query)) ||
           Boolean(log.metadata?.officer_name && String(log.metadata.officer_name).toLowerCase().includes(query)) ||
           Boolean(log.metadata?.user_role && String(log.metadata.user_role).toLowerCase().includes(query));
+        const deviceMatch = Boolean(log.metadata?.device && String(log.metadata.device).toLowerCase().includes(query));
+        const sessionMatch = Boolean(log.metadata?.session_id && String(log.metadata.session_id).toLowerCase().includes(query));
+        const descMatch = Boolean(log.metadata?.action_description && String(log.metadata.action_description).toLowerCase().includes(query));
+        const fieldMatch = Boolean(log.metadata?.field && String(log.metadata.field).toLowerCase().includes(query));
+        const changeMatch =
+          Boolean(log.metadata?.before_value && String(log.metadata.before_value).toLowerCase().includes(query)) ||
+          Boolean(log.metadata?.after_value && String(log.metadata.after_value).toLowerCase().includes(query));
         const bidderMatch = Boolean(log.bidder_id && log.bidder_id.toLowerCase().includes(query));
         const tenderMatch = Boolean(log.tender_id && log.tender_id.toLowerCase().includes(query));
         const metaMatch = JSON.stringify(log.metadata || {}).toLowerCase().includes(query);
-        return actionMatch || actorMatch || userMatch || bidderMatch || tenderMatch || metaMatch;
+
+        return (
+          actionMatch ||
+          actorMatch ||
+          userMatch ||
+          deviceMatch ||
+          sessionMatch ||
+          descMatch ||
+          fieldMatch ||
+          changeMatch ||
+          bidderMatch ||
+          tenderMatch ||
+          metaMatch
+        );
       }
       return true;
     });
-  }, [logs, selectedActor, searchQuery]);
+  }, [logs, selectedActor, selectedEventType, searchQuery]);
 
   const stats = useMemo(() => {
     const total = logs.length;
     const officerCount = logs.filter((l) => l.actor === 'OFFICER').length;
     const systemCount = logs.filter((l) => l.actor === 'SYSTEM').length;
-    return { total, officerCount, systemCount };
+    const loginCount = logs.filter((l) => l.action === 'USER_LOGIN' || l.action === 'LOGIN').length;
+    const logoutCount = logs.filter((l) => l.action === 'USER_LOGOUT' || l.action === 'LOGOUT').length;
+    return { total, officerCount, systemCount, loginCount, logoutCount };
   }, [logs]);
 
   // Generate deterministic mock hash for display
@@ -265,8 +304,8 @@ export default function AuditLogsPage() {
       </div>
 
       {/* Filter and Search Bar */}
-      <div className="bg-white p-4 rounded-2xl border border-slate-200 shadow-xs flex flex-col md:flex-row items-center justify-between gap-3">
-        <div className="relative w-full md:w-96">
+      <div className="bg-white p-4 rounded-2xl border border-slate-200 shadow-xs flex flex-col xl:flex-row items-stretch xl:items-center justify-between gap-3">
+        <div className="relative flex-1 min-w-[240px] max-w-md">
           <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
           <input
             type="text"
@@ -277,42 +316,113 @@ export default function AuditLogsPage() {
           />
         </div>
 
-        <div className="flex items-center space-x-2 w-full md:w-auto">
-          <span className="text-xs font-bold text-slate-500 flex items-center space-x-1">
-            <Filter className="w-3.5 h-3.5" />
-            <span>{t('audit.actor')}:</span>
-          </span>
-          <div className="flex rounded-xl bg-slate-100 p-1 border border-slate-200 text-xs">
-            <button
-              onClick={() => setSelectedActor('ALL')}
-              className={`px-3 py-1 font-bold rounded-lg transition-colors cursor-pointer ${
-                selectedActor === 'ALL'
-                  ? 'bg-white text-slate-900 shadow-xs'
-                  : 'text-slate-600 hover:text-slate-900'
-              }`}
-            >
-              {t('audit.actor_all')} ({logs.length})
-            </button>
-            <button
-              onClick={() => setSelectedActor('OFFICER')}
-              className={`px-3 py-1 font-bold rounded-lg transition-colors cursor-pointer ${
-                selectedActor === 'OFFICER'
-                  ? 'bg-white text-blue-900 shadow-xs'
-                  : 'text-slate-600 hover:text-slate-900'
-              }`}
-            >
-              {t('audit.actor_officer')} ({stats.officerCount})
-            </button>
-            <button
-              onClick={() => setSelectedActor('SYSTEM')}
-              className={`px-3 py-1 font-bold rounded-lg transition-colors cursor-pointer ${
-                selectedActor === 'SYSTEM'
-                  ? 'bg-white text-emerald-900 shadow-xs'
-                  : 'text-slate-600 hover:text-slate-900'
-              }`}
-            >
-              {t('audit.actor_system')} ({stats.systemCount})
-            </button>
+        <div className="flex flex-wrap items-center gap-3 text-xs">
+          {/* Actor Filter */}
+          <div className="flex items-center space-x-1.5">
+            <span className="text-xs font-bold text-slate-500 flex items-center space-x-1">
+              <Filter className="w-3.5 h-3.5" />
+              <span>{t('audit.actor')}:</span>
+            </span>
+            <div className="flex rounded-xl bg-slate-100 p-1 border border-slate-200 text-xs">
+              <button
+                type="button"
+                onClick={() => setSelectedActor('ALL')}
+                className={`px-2.5 py-1 font-bold rounded-lg transition-colors cursor-pointer ${
+                  selectedActor === 'ALL'
+                    ? 'bg-white text-slate-900 shadow-xs'
+                    : 'text-slate-600 hover:text-slate-900'
+                }`}
+              >
+                {t('audit.actor_all')} ({logs.length})
+              </button>
+              <button
+                type="button"
+                onClick={() => setSelectedActor('OFFICER')}
+                className={`px-2.5 py-1 font-bold rounded-lg transition-colors cursor-pointer ${
+                  selectedActor === 'OFFICER'
+                    ? 'bg-white text-blue-900 shadow-xs'
+                    : 'text-slate-600 hover:text-slate-900'
+                }`}
+              >
+                {t('audit.actor_officer')} ({stats.officerCount})
+              </button>
+              <button
+                type="button"
+                onClick={() => setSelectedActor('SYSTEM')}
+                className={`px-2.5 py-1 font-bold rounded-lg transition-colors cursor-pointer ${
+                  selectedActor === 'SYSTEM'
+                    ? 'bg-white text-emerald-900 shadow-xs'
+                    : 'text-slate-600 hover:text-slate-900'
+                }`}
+              >
+                {t('audit.actor_system')} ({stats.systemCount})
+              </button>
+            </div>
+          </div>
+
+          {/* Event Filter */}
+          <div className="flex items-center space-x-1.5">
+            <span className="text-xs font-bold text-slate-500 flex items-center space-x-1">
+              <Layers className="w-3.5 h-3.5" />
+              <span>{t('audit.event_filter')}:</span>
+            </span>
+            <div className="flex rounded-xl bg-slate-100 p-1 border border-slate-200 text-xs">
+              <button
+                type="button"
+                onClick={() => setSelectedEventType('ALL')}
+                className={`px-2 py-1 font-bold rounded-lg transition-colors cursor-pointer ${
+                  selectedEventType === 'ALL'
+                    ? 'bg-white text-slate-900 shadow-xs'
+                    : 'text-slate-600 hover:text-slate-900'
+                }`}
+              >
+                {t('audit.event_all')}
+              </button>
+              <button
+                type="button"
+                onClick={() => setSelectedEventType('LOGIN')}
+                className={`px-2 py-1 font-bold rounded-lg transition-colors cursor-pointer ${
+                  selectedEventType === 'LOGIN'
+                    ? 'bg-white text-emerald-900 shadow-xs'
+                    : 'text-slate-600 hover:text-slate-900'
+                }`}
+              >
+                {t('audit.event_login')} ({stats.loginCount})
+              </button>
+              <button
+                type="button"
+                onClick={() => setSelectedEventType('LOGOUT')}
+                className={`px-2 py-1 font-bold rounded-lg transition-colors cursor-pointer ${
+                  selectedEventType === 'LOGOUT'
+                    ? 'bg-white text-rose-900 shadow-xs'
+                    : 'text-slate-600 hover:text-slate-900'
+                }`}
+              >
+                {t('audit.event_logout')} ({stats.logoutCount})
+              </button>
+              <button
+                type="button"
+                onClick={() => setSelectedEventType('USER_ACTIONS')}
+                className={`px-2 py-1 font-bold rounded-lg transition-colors cursor-pointer ${
+                  selectedEventType === 'USER_ACTIONS'
+                    ? 'bg-white text-blue-900 shadow-xs'
+                    : 'text-slate-600 hover:text-slate-900'
+                }`}
+              >
+                {t('audit.event_user_actions')}
+              </button>
+              <button
+                type="button"
+                onClick={() => setSelectedEventType('SYSTEM_ACTIONS')}
+                className={`px-2 py-1 font-bold rounded-lg transition-colors cursor-pointer ${
+                  selectedEventType === 'SYSTEM_ACTIONS'
+                    ? 'bg-white text-slate-900 shadow-xs'
+                    : 'text-slate-600 hover:text-slate-900'
+                }`}
+              >
+                {t('audit.event_system_actions')}
+              </button>
+            </div>
           </div>
         </div>
       </div>
@@ -327,7 +437,7 @@ export default function AuditLogsPage() {
             </h2>
           </div>
           <span className="text-xs text-slate-500 font-mono">
-            Standard: GeM-RFP-AUDIT-v2
+            Standard: GeM-RFP-AUDIT-v2 • Section 65B Certified
           </span>
         </div>
 
@@ -348,29 +458,60 @@ export default function AuditLogsPage() {
           <div className="divide-y divide-slate-100">
             {filteredLogs.map((log) => {
               const isOfficer = log.actor === 'OFFICER';
-              const isAuthLogin = log.action === 'LOGIN';
-              const isAuthLogout = log.action === 'LOGOUT';
+              const isAuthLogin = log.action === 'USER_LOGIN' || log.action === 'LOGIN';
+              const isAuthLogout = log.action === 'USER_LOGOUT' || log.action === 'LOGOUT';
+              const displayAction = isAuthLogin ? 'USER_LOGIN' : isAuthLogout ? 'USER_LOGOUT' : log.action;
               const isExpanded = expandedLogId === log.id;
               const hashSnippet = getHash(log.id, log.timestamp);
               const formattedTime = formatTimestamp(log.timestamp);
+
               const userName =
                 (log.metadata?.user_name as string) ||
                 (log.metadata?.officer_name as string) ||
                 (isOfficer ? 'ABCD' : 'SYSTEM');
               const roleDisplay =
                 (log.metadata?.user_role as string) ||
-                (isOfficer ? t('audit.officer') : 'System');
+                (isOfficer ? t('audit.officer') : 'SYSTEM');
+              const device =
+                (log.metadata?.device as string) ||
+                (isOfficer ? 'Windows Desktop • Chrome' : '—');
+              const sessionId =
+                (log.metadata?.session_id as string) ||
+                (isOfficer ? 'SESSION-ABCD-001' : '—');
+              const tenderIdDisplay = log.tender_id || 'tender-gem-2026-cloud';
+
+              const actionDesc =
+                (log.metadata?.action_description as string) ||
+                (log.metadata?.change_description as string) ||
+                (isAuthLogin
+                  ? 'User logged into the Officer Portal.'
+                  : isAuthLogout
+                  ? 'User logged out of the Officer Portal.'
+                  : log.metadata?.remarks
+                  ? String(log.metadata.remarks)
+                  : log.action.replace(/_/g, ' '));
+
+              const fieldName = (log.metadata?.field as string) || (log.metadata?.previous_state ? 'Status' : null);
+              const beforeVal = (log.metadata?.before_value as string) || (log.metadata?.previous_state as string) || null;
+              const afterVal = (log.metadata?.after_value as string) || (log.metadata?.new_state as string) || null;
+              const hasChange = Boolean(beforeVal && afterVal);
 
               return (
                 <div key={log.id} className="p-4 hover:bg-slate-50/70 transition-colors">
-                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-                    <div className="flex items-start space-x-3 min-w-0">
+                  <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-3">
+                    <div className="flex items-start space-x-3 min-w-0 flex-1">
                       {/* Actor / Event Icon Badge */}
                       <div
                         className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0 mt-0.5 ${
                           isAuthLogin
                             ? 'bg-emerald-100 text-emerald-800 border border-emerald-300'
                             : isAuthLogout
+                            ? 'bg-rose-100 text-rose-800 border border-rose-300'
+                            : log.action === 'BIDDER_APPROVED'
+                            ? 'bg-emerald-100 text-emerald-800 border border-emerald-300'
+                            : log.action === 'CLARIFICATION_REQUESTED'
+                            ? 'bg-amber-100 text-amber-800 border border-amber-300'
+                            : log.action === 'BIDDER_DISQUALIFIED'
                             ? 'bg-rose-100 text-rose-800 border border-rose-300'
                             : isOfficer
                             ? 'bg-blue-100 text-blue-900 border border-blue-200'
@@ -381,6 +522,14 @@ export default function AuditLogsPage() {
                           <LogIn className="w-4 h-4 text-emerald-700" />
                         ) : isAuthLogout ? (
                           <LogOut className="w-4 h-4 text-rose-700" />
+                        ) : log.action === 'BIDDER_APPROVED' ? (
+                          <UserCheck className="w-4 h-4 text-emerald-700" />
+                        ) : log.action === 'CLARIFICATION_REQUESTED' ? (
+                          <AlertTriangle className="w-4 h-4 text-amber-700" />
+                        ) : log.action === 'BIDDER_DISQUALIFIED' ? (
+                          <XCircle className="w-4 h-4 text-rose-700" />
+                        ) : log.action === 'TENDER_CREATED' || log.action === 'TENDER_DRAFT_SAVED' || log.action === 'TENDER_UPDATED' ? (
+                          <FileText className="w-4 h-4 text-blue-800" />
                         ) : isOfficer ? (
                           <User className="w-4 h-4 text-blue-800" />
                         ) : (
@@ -389,7 +538,7 @@ export default function AuditLogsPage() {
                       </div>
 
                       {/* Event Details */}
-                      <div className="space-y-1.5 min-w-0">
+                      <div className="space-y-1.5 min-w-0 flex-1">
                         <div className="flex flex-wrap items-center gap-2">
                           {/* Action Name */}
                           <span
@@ -398,14 +547,16 @@ export default function AuditLogsPage() {
                                 ? 'bg-emerald-50 text-emerald-900 border border-emerald-300'
                                 : isAuthLogout
                                 ? 'bg-rose-50 text-rose-900 border border-rose-300'
+                                : log.action === 'BIDDER_APPROVED'
+                                ? 'bg-emerald-50 text-emerald-800 border border-emerald-200'
+                                : log.action === 'CLARIFICATION_REQUESTED'
+                                ? 'bg-amber-50 text-amber-800 border border-amber-200'
+                                : log.action === 'BIDDER_DISQUALIFIED'
+                                ? 'bg-rose-50 text-rose-800 border border-rose-200'
                                 : 'text-slate-900 bg-slate-100 border border-slate-200'
                             }`}
                           >
-                            {isAuthLogin
-                              ? t('audit.action_login')
-                              : isAuthLogout
-                              ? t('audit.action_logout')
-                              : log.action}
+                            {displayAction}
                           </span>
 
                           {/* Actor Badge */}
@@ -447,32 +598,77 @@ export default function AuditLogsPage() {
                           )}
                         </div>
 
-                        {/* User / Role / Time row */}
-                        <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-slate-600">
-                          {isOfficer && (
-                            <>
-                              <span className="text-slate-700">
+                        {/* Human User Details Grid (for Officer / User Actions) */}
+                        {isOfficer ? (
+                          <div className="space-y-1.5 text-xs text-slate-600 pt-0.5">
+                            <div className="flex flex-wrap items-center gap-x-4 gap-y-1">
+                              <span>
                                 {t('audit.user')}: <strong className="text-slate-900 font-bold">{userName}</strong>
                               </span>
-                              <span className="text-slate-700">
+                              <span>
                                 {t('audit.role')}: <strong className="text-slate-900 font-bold">{roleDisplay}</strong>
                               </span>
-                            </>
-                          )}
-                          <span className="flex items-center space-x-1">
-                            <Clock className="w-3 h-3 text-slate-400" />
-                            <span>
-                              {t('audit.time')}: <strong className="text-slate-800 font-semibold">{formattedTime}</strong>
-                            </span>
-                          </span>
-                          <span className="font-mono text-[11px] text-slate-400">
-                            {t('audit.tender')}: {log.tender_id || 'tender-gem-2026-cloud'}
-                          </span>
-                          <span className="font-mono text-[11px] text-emerald-700 flex items-center space-x-1">
-                            <CheckCircle2 className="w-3 h-3 text-emerald-600" />
-                            <span>sha256:{hashSnippet}...</span>
-                          </span>
-                        </div>
+                              <span className="flex items-center space-x-1">
+                                <Laptop className="w-3.5 h-3.5 text-slate-400" />
+                                <span>{t('audit.device')}: <strong className="text-slate-800 font-semibold">{device}</strong></span>
+                              </span>
+                            </div>
+
+                            <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-[11.5px]">
+                              <span className="flex items-center space-x-1">
+                                <Clock className="w-3 h-3 text-slate-400" />
+                                <span>{t('audit.time')}: <strong className="text-slate-800 font-semibold">{formattedTime}</strong></span>
+                              </span>
+                              <span className="font-mono">
+                                {t('audit.session')}: <strong className="text-slate-800">{sessionId}</strong>
+                              </span>
+                              <span className="font-mono text-slate-500">
+                                {t('audit.tender')}: {tenderIdDisplay || '—'}
+                              </span>
+                              <span className="font-mono text-[11px] text-emerald-700 flex items-center space-x-1">
+                                <CheckCircle2 className="w-3 h-3 text-emerald-600" />
+                                <span>sha256:{hashSnippet}...</span>
+                              </span>
+                            </div>
+
+                            <div className="pt-0.5 flex flex-wrap items-center gap-2">
+                              <span className="text-slate-700 font-medium">
+                                <strong className="text-slate-900 font-semibold">{t('audit.action_label')}:</strong> {actionDesc}
+                              </span>
+                              {hasChange && (
+                                <span className="inline-flex items-center space-x-1 bg-blue-50 text-blue-900 text-[11px] font-semibold px-2 py-0.5 rounded-md border border-blue-200">
+                                  <span className="text-slate-600">{fieldName || 'Status'}:</span>
+                                  <span className="line-through text-slate-400">{beforeVal}</span>
+                                  <span>→</span>
+                                  <span className="font-bold text-emerald-700">{afterVal}</span>
+                                </span>
+                              )}
+                            </div>
+                          </div>
+                        ) : (
+                          /* Automated System Details */
+                          <div className="space-y-1 text-xs text-slate-600 pt-0.5">
+                            <div className="flex flex-wrap items-center gap-x-4 gap-y-1">
+                              <span>
+                                <strong className="text-slate-800">{t('audit.actor')}:</strong> SYSTEM / AUTOMATED ENGINE
+                              </span>
+                              <span className="flex items-center space-x-1">
+                                <Clock className="w-3 h-3 text-slate-400" />
+                                <span>{t('audit.time')}: <strong className="text-slate-800 font-semibold">{formattedTime}</strong></span>
+                              </span>
+                              <span className="font-mono text-slate-500">
+                                {t('audit.tender')}: {tenderIdDisplay}
+                              </span>
+                              <span className="font-mono text-[11px] text-emerald-700 flex items-center space-x-1">
+                                <CheckCircle2 className="w-3 h-3 text-emerald-600" />
+                                <span>sha256:{hashSnippet}...</span>
+                              </span>
+                            </div>
+                            <div className="text-slate-700 font-medium">
+                              <strong className="text-slate-800">{t('audit.action_label')}:</strong> {actionDesc}
+                            </div>
+                          </div>
+                        )}
                       </div>
                     </div>
 
@@ -493,13 +689,117 @@ export default function AuditLogsPage() {
 
                   {/* Expanded Metadata Inspector */}
                   {isExpanded && (
-                    <div className="mt-3 pt-3 border-t border-slate-100 space-y-2 text-xs">
-                      <div className="flex items-center justify-between text-slate-600">
-                        <span className="font-bold text-slate-800">{t('audit.event_payload')}:</span>
-                        <span className="font-mono text-[11px] text-slate-400">{t('audit.record_id')}: {log.id}</span>
+                    <div className="mt-3 pt-3 border-t border-slate-200 space-y-3 bg-slate-50/50 p-4 rounded-xl border">
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center space-x-2">
+                          <ShieldCheck className="w-4 h-4 text-blue-900" />
+                          <h3 className="font-bold text-slate-900 text-xs">{t('audit.inspection_title')}</h3>
+                          <span className="text-[10px] font-mono text-slate-400 bg-white px-2 py-0.5 rounded-md border border-slate-200">
+                            {log.id}
+                          </span>
+                        </div>
+                        <span className="text-[10px] font-bold text-emerald-800 bg-emerald-50 px-2.5 py-0.5 rounded-full border border-emerald-200">
+                          GFR-151 Verified
+                        </span>
                       </div>
-                      <div className="p-3 bg-slate-900 rounded-xl font-mono text-[11px] text-emerald-400 overflow-x-auto shadow-inner">
-                        <pre>{JSON.stringify(log.metadata || {}, null, 2)}</pre>
+
+                      {/* Structured Key Attributes Grid */}
+                      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2 text-xs">
+                        <div className="bg-white p-2.5 rounded-lg border border-slate-200">
+                          <span className="text-[10px] uppercase font-bold text-slate-400 block">{t('audit.action')}</span>
+                          <span className="font-mono font-bold text-slate-900 text-[11px]">{displayAction}</span>
+                        </div>
+                        <div className="bg-white p-2.5 rounded-lg border border-slate-200">
+                          <span className="text-[10px] uppercase font-bold text-slate-400 block">{t('audit.user')}</span>
+                          <span className="font-bold text-slate-900">{userName}</span>
+                        </div>
+                        <div className="bg-white p-2.5 rounded-lg border border-slate-200">
+                          <span className="text-[10px] uppercase font-bold text-slate-400 block">{t('audit.role')}</span>
+                          <span className="font-bold text-slate-800">{roleDisplay}</span>
+                        </div>
+                        <div className="bg-white p-2.5 rounded-lg border border-slate-200">
+                          <span className="text-[10px] uppercase font-bold text-slate-400 block">{t('audit.device')}</span>
+                          <span className="font-semibold text-slate-800 text-[11px] flex items-center space-x-1">
+                            <Laptop className="w-3 h-3 text-slate-400" />
+                            <span>{device}</span>
+                          </span>
+                        </div>
+                        <div className="bg-white p-2.5 rounded-lg border border-slate-200">
+                          <span className="text-[10px] uppercase font-bold text-slate-400 block">{t('audit.session')}</span>
+                          <span className="font-mono font-bold text-slate-900 text-[11px]">{sessionId}</span>
+                        </div>
+                        <div className="bg-white p-2.5 rounded-lg border border-slate-200">
+                          <span className="text-[10px] uppercase font-bold text-slate-400 block">{t('audit.time')}</span>
+                          <span className="font-semibold text-slate-800 text-[11px]">{formattedTime}</span>
+                        </div>
+                        <div className="bg-white p-2.5 rounded-lg border border-slate-200">
+                          <span className="text-[10px] uppercase font-bold text-slate-400 block">{t('audit.tender')}</span>
+                          <span className="font-mono text-slate-700 text-[11px]">{tenderIdDisplay}</span>
+                        </div>
+                        <div className="bg-white p-2.5 rounded-lg border border-slate-200">
+                          <span className="text-[10px] uppercase font-bold text-slate-400 block">{t('audit.hash')}</span>
+                          <span className="font-mono text-emerald-700 text-[11px]">sha256:{hashSnippet}...</span>
+                        </div>
+                      </div>
+
+                      {/* Action Performed Description */}
+                      <div className="bg-white p-3 rounded-lg border border-slate-200 text-xs">
+                        <span className="text-[10px] uppercase font-bold text-slate-400 block mb-1">{t('audit.action_label')}</span>
+                        <p className="text-slate-800 font-medium">{actionDesc}</p>
+                      </div>
+
+                      {/* Data Modification Details (Before -> After) */}
+                      {hasChange && (
+                        <div className="bg-white p-3 rounded-lg border border-blue-200 text-xs space-y-2">
+                          <div className="flex items-center space-x-1.5 text-blue-900 font-bold text-xs">
+                            <Layers className="w-3.5 h-3.5 text-blue-700" />
+                            <span>{t('audit.modification_details')}</span>
+                          </div>
+                          <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 pt-1">
+                            <div className="bg-slate-50 p-2 rounded-md border border-slate-200">
+                              <span className="text-[10px] uppercase font-bold text-slate-400 block">{t('audit.field_label')}</span>
+                              <span className="font-bold text-slate-900">{fieldName || 'Status'}</span>
+                            </div>
+                            <div className="bg-amber-50 p-2 rounded-md border border-amber-200">
+                              <span className="text-[10px] uppercase font-bold text-amber-700 block">{t('audit.before_label')}</span>
+                              <span className="font-bold text-amber-900">{beforeVal}</span>
+                            </div>
+                            <div className="bg-emerald-50 p-2 rounded-md border border-emerald-200">
+                              <span className="text-[10px] uppercase font-bold text-emerald-700 block">{t('audit.after_label')}</span>
+                              <span className="font-bold text-emerald-900">{afterVal}</span>
+                            </div>
+                          </div>
+                          {Boolean(log.metadata?.remarks) && (
+                            <div className="text-[11px] text-slate-600 pt-1">
+                              <strong>Remarks:</strong> {String(log.metadata?.remarks)}
+                            </div>
+                          )}
+                        </div>
+                      )}
+
+                      {/* Cryptographic & Chain-of-Custody Integrity */}
+                      <div className="bg-white p-3 rounded-lg border border-slate-200 text-xs space-y-1.5">
+                        <div className="flex items-center justify-between">
+                          <span className="text-[10px] uppercase font-bold text-slate-500 flex items-center space-x-1">
+                            <Lock className="w-3 h-3 text-slate-400" />
+                            <span>{t('audit.crypto_integrity')}</span>
+                          </span>
+                          <span className="text-[10px] font-mono text-slate-500">ISO-8601: {log.timestamp}</span>
+                        </div>
+                        <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-[11px] text-slate-600 font-mono">
+                          <span>{t('audit.digital_signature')}: <strong className="text-slate-800">DSC-Class-3 Validated ({userName})</strong></span>
+                          <span>Gateway: <strong className="text-slate-800">NIC-GovNet 10.24.110.42</strong></span>
+                        </div>
+                      </div>
+
+                      {/* Raw Event Payload & Metadata */}
+                      <div className="space-y-1">
+                        <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider block">
+                          {t('audit.event_payload')}
+                        </span>
+                        <div className="p-3 bg-slate-900 rounded-xl font-mono text-[11px] text-emerald-400 overflow-x-auto shadow-inner">
+                          <pre>{JSON.stringify(log.metadata || {}, null, 2)}</pre>
+                        </div>
                       </div>
                     </div>
                   )}

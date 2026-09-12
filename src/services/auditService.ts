@@ -46,7 +46,7 @@ export const auditService = {
             id: d.id,
             tender_id: (d.metadata as any)?.tender_id || '11111111-1111-1111-1111-111111111111',
             bidder_id: d.entity_id,
-            actor: d.action?.startsWith('OFFICER') || d.action === 'LOGIN' || d.action === 'LOGOUT'
+            actor: d.action?.startsWith('OFFICER') || d.action === 'LOGIN' || d.action === 'LOGOUT' || d.action === 'USER_LOGIN' || d.action === 'USER_LOGOUT'
               ? 'OFFICER'
               : ((d.metadata as any)?.actor || 'SYSTEM'),
             action: d.action,
@@ -242,14 +242,29 @@ export const auditService = {
   },
 
   async recordAuthEvent(params: {
-    eventType: 'LOGIN' | 'LOGOUT';
+    eventType: 'USER_LOGIN' | 'USER_LOGOUT' | 'LOGIN' | 'LOGOUT';
     userName?: string;
     role: 'Officer' | 'Bidder';
+    device?: string;
+    sessionId?: string;
     tenderId?: string;
     sessionInfo?: string;
+    actionDescription?: string;
   }): Promise<AuditLog> {
+    const eventName =
+      params.eventType === 'LOGIN' || params.eventType === 'USER_LOGIN'
+        ? 'USER_LOGIN'
+        : 'USER_LOGOUT';
     const userName = params.userName || 'ABCD';
     const actor: 'OFFICER' | 'SYSTEM' = params.role === 'Officer' ? 'OFFICER' : 'SYSTEM';
+    const device = params.device || 'Windows Desktop • Chrome';
+    const sessionId = params.sessionId || 'SESSION-ABCD-001';
+    const actionDesc =
+      params.actionDescription ||
+      (eventName === 'USER_LOGIN'
+        ? `User logged into the ${params.role} Portal.`
+        : `User logged out of the ${params.role} Portal.`);
+
     const now = new Date().toISOString();
 
     const formattedTime =
@@ -264,14 +279,17 @@ export const auditService = {
       }) + ' IST';
 
     const metadata: Record<string, unknown> = {
-      event_type: params.eventType,
+      event_type: eventName,
       user_name: userName,
       user_role: params.role,
       officer_name: params.role === 'Officer' ? userName : undefined,
+      device,
+      session_id: sessionId,
+      action_description: actionDesc,
       session_info:
         params.sessionInfo ||
         `GeM ${params.role} Portal • Session ${
-          params.eventType === 'LOGIN' ? 'Authenticated' : 'Terminated'
+          eventName === 'USER_LOGIN' ? 'Authenticated' : 'Terminated'
         }`,
       auth_method: 'GeM Two-Factor Authentication',
       ip_address: '10.24.110.42 (NIC-GovNet)',
@@ -281,10 +299,66 @@ export const auditService = {
 
     return await this.recordAuditLog({
       actor,
-      tenderId: params.tenderId || '11111111-1111-1111-1111-111111111111',
+      tenderId: params.tenderId || 'tender-gem-2026-cloud',
       bidderId: '',
-      action: params.eventType,
+      action: eventName,
       metadata,
+    });
+  },
+
+  async recordUserAction(params: {
+    action: string;
+    userName?: string;
+    role?: 'Officer' | 'Bidder';
+    device?: string;
+    sessionId?: string;
+    tenderId?: string;
+    bidderId?: string;
+    actionDescription: string;
+    field?: string;
+    beforeValue?: string;
+    afterValue?: string;
+    metadata?: Record<string, unknown>;
+  }): Promise<AuditLog> {
+    const userName = params.userName || 'ABCD';
+    const role = params.role || 'Officer';
+    const actor: 'OFFICER' | 'SYSTEM' = role === 'Officer' ? 'OFFICER' : 'SYSTEM';
+    const device = params.device || 'Windows Desktop • Chrome';
+    const sessionId = params.sessionId || 'SESSION-ABCD-001';
+    const now = new Date().toISOString();
+
+    const formattedTime =
+      new Date(now).toLocaleString('en-IN', {
+        day: '2-digit',
+        month: 'short',
+        year: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit',
+        hour12: true,
+        timeZone: 'Asia/Kolkata',
+      }) + ' IST';
+
+    const meta: Record<string, unknown> = {
+      user_name: userName,
+      user_role: role,
+      officer_name: role === 'Officer' ? userName : undefined,
+      device,
+      session_id: sessionId,
+      action_description: params.actionDescription,
+      timestamp_formatted: formattedTime,
+      readable_time: formattedTime,
+      ...(params.field ? { field: params.field } : {}),
+      ...(params.beforeValue ? { before_value: params.beforeValue } : {}),
+      ...(params.afterValue ? { after_value: params.afterValue } : {}),
+      ...(params.metadata || {}),
+    };
+
+    return await this.recordAuditLog({
+      actor,
+      tenderId: params.tenderId || 'tender-gem-2026-cloud',
+      bidderId: params.bidderId || '',
+      action: params.action,
+      metadata: meta,
     });
   },
 
@@ -296,17 +370,56 @@ export const auditService = {
     metadata?: Record<string, unknown>;
   }): Promise<AuditLog> {
     const timestamp = new Date().toISOString();
+    const isOfficer = entry.actor === 'OFFICER';
+
+    // Enrich officer records with standard user, device, and session metadata if missing
+    let enrichedMetadata: Record<string, unknown> = { ...(entry.metadata || {}) };
+    if (isOfficer) {
+      if (!enrichedMetadata.user_name) enrichedMetadata.user_name = 'ABCD';
+      if (!enrichedMetadata.user_role) enrichedMetadata.user_role = 'Officer';
+      if (!enrichedMetadata.officer_name) enrichedMetadata.officer_name = 'ABCD';
+      if (!enrichedMetadata.device) enrichedMetadata.device = 'Windows Desktop • Chrome';
+      if (!enrichedMetadata.session_id) enrichedMetadata.session_id = 'SESSION-ABCD-001';
+      if (!enrichedMetadata.action_description) {
+        if (entry.action === 'USER_LOGIN' || entry.action === 'LOGIN') {
+          enrichedMetadata.action_description = 'User logged into the Officer Portal.';
+        } else if (entry.action === 'USER_LOGOUT' || entry.action === 'LOGOUT') {
+          enrichedMetadata.action_description = 'User logged out of the Officer Portal.';
+        } else if (entry.action === 'TENDER_CREATED') {
+          enrichedMetadata.action_description = 'New GeM tender created and published.';
+        } else if (entry.action === 'TENDER_DRAFT_SAVED') {
+          enrichedMetadata.action_description = 'Tender draft was saved.';
+        } else if (entry.action === 'TENDER_UPDATED') {
+          enrichedMetadata.action_description = 'Tender details and compliance criteria updated.';
+        } else if (entry.action === 'BIDDER_APPROVED') {
+          enrichedMetadata.action_description = 'Bidder approved and qualified under GFR 151.';
+        } else if (entry.action === 'CLARIFICATION_REQUESTED') {
+          enrichedMetadata.action_description = 'Clarification requested from bidder.';
+        } else if (entry.action === 'BIDDER_DISQUALIFIED') {
+          enrichedMetadata.action_description = 'Bidder disqualified due to mandatory non-compliance.';
+        } else if (entry.action === 'AUDIT_REPORT_EXPORTED') {
+          enrichedMetadata.action_description = 'Section 65B Electronic Evidence Compliance Certificate generated and downloaded.';
+        } else if (entry.action === 'COMPLIANCE_VERIFICATION_RUN') {
+          enrichedMetadata.action_description = 'Automated compliance verification engine executed.';
+        } else if (entry.action === 'BIDDER_REVIEWED') {
+          enrichedMetadata.action_description = 'Bidder verification matrix and clauses reviewed.';
+        } else {
+          enrichedMetadata.action_description = entry.action.replace(/_/g, ' ');
+        }
+      }
+    }
+
     const logItem: AuditLog = {
       id: `audit-${Date.now()}-${Math.floor(Math.random() * 1000)}`,
-      tender_id: entry.tenderId || '11111111-1111-1111-1111-111111111111',
+      tender_id: entry.tenderId || 'tender-gem-2026-cloud',
       bidder_id: entry.bidderId || '',
       actor: entry.actor,
       action: entry.action,
       timestamp,
-      metadata: entry.metadata || {},
+      metadata: enrichedMetadata,
     };
 
-    const key = entry.bidderId || 'system-general';
+    const key = entry.bidderId || 'officer-session';
     const existing = MOCK_AUDIT_LOGS[key] || [];
     existing.unshift(logItem);
     MOCK_AUDIT_LOGS[key] = existing;
@@ -323,7 +436,7 @@ export const auditService = {
           metadata: {
             tender_id: entry.tenderId,
             actor: entry.actor,
-            ...(entry.metadata || {}),
+            ...enrichedMetadata,
           },
         });
       } catch (err) {

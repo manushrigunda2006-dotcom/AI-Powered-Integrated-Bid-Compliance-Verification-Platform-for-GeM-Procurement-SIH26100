@@ -16,6 +16,8 @@ export interface OfficerSession {
   officerId: string;
   dscValid: boolean;
   authenticatedAt: string;
+  sessionId?: string;
+  device?: string;
 }
 
 export interface BidderSession {
@@ -29,6 +31,8 @@ export interface BidderSession {
   udyamRegistration: string;
   cinNumber: string;
   authenticatedAt: string;
+  sessionId?: string;
+  device?: string;
 }
 
 export type AuthSession = OfficerSession | BidderSession;
@@ -136,6 +140,8 @@ export function setOfficerSession(officer: Partial<OfficerSession>): OfficerSess
     officerId: officer.officerId || 'OFFICER-ABCD-001',
     dscValid: officer.dscValid ?? true,
     authenticatedAt: officer.authenticatedAt || new Date().toISOString(),
+    sessionId: officer.sessionId || 'SESSION-ABCD-001',
+    device: officer.device || 'Windows Desktop • Chrome',
   };
 
   if (typeof window !== 'undefined') {
@@ -162,6 +168,8 @@ export function setBidderSession(bidder: Partial<BidderSession>): BidderSession 
     udyamRegistration: bidder.udyamRegistration || 'UDYAM-AA-01-0000001',
     cinNumber: bidder.cinNumber || 'U72200AA2017PTC000001',
     authenticatedAt: bidder.authenticatedAt || new Date().toISOString(),
+    sessionId: bidder.sessionId || 'SESSION-ABCD-001',
+    device: bidder.device || 'Windows Desktop • Chrome',
   };
 
   if (typeof window !== 'undefined') {
@@ -185,13 +193,18 @@ export function logout(router?: any, redirectPath = '/role-selection'): void {
       currentSession.role === 'officer'
         ? (currentSession.name || 'ABCD')
         : (currentSession.companyName || currentSession.contactPerson || 'ABCD');
+    const device = (currentSession as any).device || 'Windows Desktop • Chrome';
+    const sessionId = (currentSession as any).sessionId || 'SESSION-ABCD-001';
 
-    // 2. Create the LOGOUT audit event with actual timestamp
+    // 2. Create the USER_LOGOUT audit event with actual timestamp
     try {
       auditService.recordAuthEvent({
-        eventType: 'LOGOUT',
+        eventType: 'USER_LOGOUT',
         userName,
         role,
+        device,
+        sessionId,
+        actionDescription: `User securely logged out of the ${role} Portal.`,
         sessionInfo: `${role} (${userName}) signed out at ${new Date().toISOString()}`,
       });
     } catch (err) {

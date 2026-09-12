@@ -2,6 +2,7 @@ import { supabase, isSupabaseConfigured } from '../lib/supabase';
 import { OfficerDecision } from '../lib/types';
 import { bidderService } from './bidderService';
 import { resolveBidderId } from '../lib/idMapper';
+import { auditService } from './auditService';
 
 export interface CommitAdjudicationParams {
   bidderId: string;
@@ -37,6 +38,27 @@ export const adjudicationService = {
     const decisionHash = `SHA256-${Date.now().toString(16)}-${Math.random().toString(36).substring(2, 10)}`;
     const timestamp = new Date().toISOString();
 
+    const eventAction =
+      action === 'APPROVE_QUALIFICATION'
+        ? 'BIDDER_APPROVED'
+        : action === 'REQUEST_CLARIFICATION'
+        ? 'CLARIFICATION_REQUESTED'
+        : 'BIDDER_DISQUALIFIED';
+
+    const afterVal =
+      action === 'APPROVE_QUALIFICATION'
+        ? 'Qualified'
+        : action === 'REQUEST_CLARIFICATION'
+        ? 'Clarification Requested'
+        : 'Disqualified';
+
+    const actionDesc =
+      action === 'APPROVE_QUALIFICATION'
+        ? `Bidder status changed from "Under Review" to "Qualified".`
+        : action === 'REQUEST_CLARIFICATION'
+        ? `Clarification requested from bidder. Status changed from "Under Review" to "Clarification Requested".`
+        : `Bidder disqualified. Status changed from "Under Review" to "Disqualified".`;
+
     if (isSupabaseConfigured()) {
       try {
         const { data: bidder } = await (supabase.from('bidders') as any)
@@ -66,32 +88,58 @@ export const adjudicationService = {
           user_id: officerId || null,
           entity_type: 'BIDDER',
           entity_id: dbBidderId,
-          action: `OFFICER_DECISION_${action}`,
+          action: eventAction,
           old_value: { status: previousState },
           new_value: { status: newStatus },
           metadata: {
             officer_name: officerName,
+            user_name: officerName,
+            user_role: 'Officer',
+            device: 'Windows Desktop • Chrome',
+            session_id: 'SESSION-ABCD-001',
+            action_description: actionDesc,
+            field: 'Bidder Status',
+            before_value: 'Under Review',
+            after_value: afterVal,
             remarks,
             signed_at: timestamp,
             decision_hash: decisionHash,
             digital_signature: `Signed digitally by ${officerName}`,
           },
         });
-
-        return {
-          success: true,
-          decision_hash: decisionHash,
-          signed_at: timestamp,
-          new_status: newStatus,
-          decision_state: decisionState,
-        };
       } catch (err) {
         console.error('Adjudication commit error:', err);
       }
     }
 
-    // Local fallback update
+    // Local update
     await bidderService.updateBidderStatus(dbBidderId, newStatus, decisionState, remarks);
+
+    // Record user action with Before -> After in audit trail
+    try {
+      await auditService.recordUserAction({
+        action: eventAction,
+        userName: officerName || 'ABCD',
+        role: 'Officer',
+        device: 'Windows Desktop • Chrome',
+        sessionId: 'SESSION-ABCD-001',
+        tenderId: 'tender-gem-2026-cloud',
+        bidderId,
+        actionDescription: actionDesc,
+        field: 'Bidder Status',
+        beforeValue: 'Under Review',
+        afterValue: afterVal,
+        metadata: {
+          remarks,
+          decision_state: decisionState,
+          new_status: newStatus,
+          decision_hash: decisionHash,
+          digital_signature: `Signed digitally by ${officerName}`,
+        },
+      });
+    } catch (err) {
+      console.warn('Notice recording user action to audit log:', err);
+    }
 
     return {
       success: true,

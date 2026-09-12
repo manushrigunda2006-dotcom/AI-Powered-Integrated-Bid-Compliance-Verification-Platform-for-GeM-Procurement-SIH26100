@@ -44,14 +44,19 @@ export default function OfficerLoginPage() {
         officerId: 'OFFICER-ABCD-001',
         dscValid: true,
         authenticatedAt: new Date().toISOString(),
+        sessionId: 'SESSION-ABCD-001',
+        device: 'Windows Desktop • Chrome',
       });
 
-      // Record LOGIN audit event upon successful authentication
+      // Record USER_LOGIN audit event upon successful authentication
       try {
         auditService.recordAuthEvent({
-          eventType: 'LOGIN',
+          eventType: 'USER_LOGIN',
           userName: 'ABCD',
           role: 'Officer',
+          device: 'Windows Desktop • Chrome',
+          sessionId: 'SESSION-ABCD-001',
+          actionDescription: 'User logged into the Officer Portal.',
           sessionInfo: `Officer ABCD authenticated via ${authMode} • GeM Officer Portal`,
         });
       } catch (err) {

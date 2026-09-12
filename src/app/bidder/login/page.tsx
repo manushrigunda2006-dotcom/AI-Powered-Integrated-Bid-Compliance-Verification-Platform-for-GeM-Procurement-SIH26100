@@ -49,13 +49,18 @@ export default function BidderLoginPage() {
         udyamRegistration: mock.udyam_registration || '',
         cinNumber: mock.cin_number || '',
         authenticatedAt: new Date().toISOString(),
+        sessionId: 'SESSION-ABCD-001',
+        device: 'Windows Desktop • Chrome',
       });
 
       try {
         auditService.recordAuthEvent({
-          eventType: 'LOGIN',
+          eventType: 'USER_LOGIN',
           userName: mock.company_name,
           role: 'Bidder',
+          device: 'Windows Desktop • Chrome',
+          sessionId: 'SESSION-ABCD-001',
+          actionDescription: `Bidder ${mock.company_name} logged into the Bidder Portal.`,
           sessionInfo: `Bidder ${mock.company_name} (${mock.id}) authenticated • GeM Bidder Portal`,
         });
       } catch (err) {
@@ -91,13 +96,18 @@ export default function BidderLoginPage() {
         udyamRegistration: matchedMock.udyam_registration || '',
         cinNumber: matchedMock.cin_number || '',
         authenticatedAt: new Date().toISOString(),
+        sessionId: 'SESSION-ABCD-001',
+        device: 'Windows Desktop • Chrome',
       });
 
       try {
         auditService.recordAuthEvent({
-          eventType: 'LOGIN',
+          eventType: 'USER_LOGIN',
           userName: matchedMock.company_name,
           role: 'Bidder',
+          device: 'Windows Desktop • Chrome',
+          sessionId: 'SESSION-ABCD-001',
+          actionDescription: `Bidder ${matchedMock.company_name} logged into the Bidder Portal.`,
           sessionInfo: `Bidder ${matchedMock.company_name} (${matchedMock.id}) authenticated via GSTIN • GeM Bidder Portal`,
         });
       } catch (err) {

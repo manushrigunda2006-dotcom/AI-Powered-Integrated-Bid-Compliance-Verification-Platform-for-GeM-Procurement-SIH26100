@@ -197,6 +197,15 @@ export interface AuditLog {
     previous_state?: string;
     new_state?: string;
     officer_name?: string;
+    user_name?: string;
+    user_role?: string;
+    device?: string;
+    session_id?: string;
+    action_description?: string;
+    change_description?: string;
+    field?: string;
+    before_value?: string;
+    after_value?: string;
     remarks?: string;
     score?: number;
     risk_level?: RiskLevel;

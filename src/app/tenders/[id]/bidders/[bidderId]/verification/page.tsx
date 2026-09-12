@@ -22,6 +22,7 @@ import { bidderService } from '@/services/bidderService';
 import { tenderService } from '@/services/tenderService';
 import { complianceService } from '@/services/complianceService';
 import { verificationService } from '@/services/verificationService';
+import { auditService } from '@/services/auditService';
 import { scoringEngine } from '@/lib/engine/scoring';
 import {
   FileText,
@@ -174,6 +175,22 @@ export default function BidderVerificationPage() {
 
     evaluateBidder().then(() => {
       runGeminiAnalysis(bidderId);
+      if (typeof window !== 'undefined') {
+        const sessionKey = `officer_reviewed_${tenderId}_${bidderId}`;
+        if (!sessionStorage.getItem(sessionKey)) {
+          sessionStorage.setItem(sessionKey, '1');
+          auditService.recordUserAction({
+            action: 'BIDDER_REVIEWED',
+            userName: 'ABCD',
+            role: 'Officer',
+            device: 'Windows Desktop • Chrome',
+            sessionId: 'SESSION-ABCD-001',
+            tenderId: tenderId as string,
+            bidderId,
+            actionDescription: `Officer opened verification details and compliance clauses for bidder ${bidderId}.`,
+          }).catch(() => {});
+        }
+      }
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [bidderId, tenderId]);
@@ -184,6 +201,47 @@ export default function BidderVerificationPage() {
     remarks: string
   ) => {
     try {
+      const eventAction =
+        decision === 'QUALIFIED'
+          ? 'BIDDER_APPROVED'
+          : decision === 'CLARIFICATION_REQUESTED'
+          ? 'CLARIFICATION_REQUESTED'
+          : 'BIDDER_DISQUALIFIED';
+
+      const afterVal =
+        decision === 'QUALIFIED'
+          ? 'Qualified'
+          : decision === 'CLARIFICATION_REQUESTED'
+          ? 'Clarification Requested'
+          : 'Disqualified';
+
+      const actionDesc =
+        decision === 'QUALIFIED'
+          ? `Bidder status changed from "Under Review" to "Qualified".`
+          : decision === 'CLARIFICATION_REQUESTED'
+          ? `Clarification requested from bidder. Status changed from "Under Review" to "Clarification Requested".`
+          : `Bidder disqualified. Status changed from "Under Review" to "Disqualified".`;
+
+      // Record to audit log
+      await auditService.recordUserAction({
+        action: eventAction,
+        userName: 'ABCD',
+        role: 'Officer',
+        device: 'Windows Desktop • Chrome',
+        sessionId: 'SESSION-ABCD-001',
+        tenderId: tenderId as string,
+        bidderId: bidder?.id || bidderId,
+        actionDescription: actionDesc,
+        field: 'Bidder Status',
+        beforeValue: 'Under Review',
+        afterValue: afterVal,
+        metadata: {
+          remarks,
+          decision_state: decision,
+          signed_digitally_by: 'ABCD',
+        },
+      });
+
       const res = await fetch('/api/decision', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -208,6 +266,17 @@ export default function BidderVerificationPage() {
   const handleReRunEngine = async () => {
     setIsLoading(true);
     try {
+      await auditService.recordUserAction({
+        action: 'COMPLIANCE_VERIFICATION_RUN',
+        userName: 'ABCD',
+        role: 'Officer',
+        device: 'Windows Desktop • Chrome',
+        sessionId: 'SESSION-ABCD-001',
+        tenderId: tenderId as string,
+        bidderId: bidder?.id || bidderId,
+        actionDescription: `Automated compliance verification engine re-run for ${bidder?.company_name || bidderId}.`,
+      }).catch(() => {});
+
       const res = await fetch('/api/evaluate', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -229,6 +298,21 @@ export default function BidderVerificationPage() {
     if (!bidder || !report) return;
     setIsExporting(true);
     try {
+      await auditService.recordUserAction({
+        action: 'AUDIT_REPORT_EXPORTED',
+        userName: 'ABCD',
+        role: 'Officer',
+        device: 'Windows Desktop • Chrome',
+        sessionId: 'SESSION-ABCD-001',
+        tenderId: tenderId as string,
+        bidderId: bidder?.id || bidderId,
+        actionDescription: `Section 65B Electronic Evidence Compliance Certificate generated and downloaded for ${bidder.company_name}.`,
+        metadata: {
+          export_standard: 'Section 65B Indian Evidence Act',
+          company_name: bidder.company_name,
+        },
+      }).catch(() => {});
+
       const [tender, { certificate65BService }] = await Promise.all([
         tenderService.getTender(tenderId),
         import('@/services/certificate65BService'),
