@@ -18,7 +18,8 @@ import {
   Briefcase,
   ShieldCheck,
   FileCheck2,
-  LayoutDashboard
+  LayoutDashboard,
+  Info
 } from 'lucide-react';
 import { useAuth, logout } from '@/lib/authGuard';
 import { GfrComplianceDialog } from './GfrComplianceDialog';
@@ -152,6 +153,14 @@ export function Header() {
                   <Lock className="w-3 h-3 text-[#64748B]" />
                   <span>{t('nav.audit_trail', 'Audit Trail')}</span>
                 </Link>
+
+                <Link
+                  href="/about"
+                  className="text-[#64748B] hover:text-[#102F5F] transition-colors flex items-center space-x-1 px-2 py-1 rounded-md hover:bg-slate-100 text-[11px] font-semibold"
+                >
+                  <Info className="w-3.5 h-3.5 text-[#64748B]" />
+                  <span>{t('nav.about', 'About')}</span>
+                </Link>
               </nav>
             )}
 
@@ -189,12 +198,28 @@ export function Header() {
                   <Clock className="w-3.5 h-3.5 text-blue-700" />
                   <span className="text-[11px] font-semibold">{t('nav.my_logs', 'My Activity Logs')}</span>
                 </Link>
+
+                <Link
+                  href="/about"
+                  className="text-[#64748B] hover:text-[#102F5F] transition-colors flex items-center space-x-1 px-2 py-1 rounded-md hover:bg-slate-100 text-[11px] font-semibold"
+                >
+                  <Info className="w-3.5 h-3.5 text-[#64748B]" />
+                  <span>{t('nav.about', 'About')}</span>
+                </Link>
               </nav>
             )}
 
             {/* 3. UNAUTHENTICATED NAVIGATION */}
             {!isAuthenticated && (
               <nav className="flex items-center space-x-2 text-[11px] font-medium">
+                <Link
+                  href="/about"
+                  className="text-[#334155] hover:text-[#102F5F] transition-colors flex items-center space-x-1 px-2.5 py-1.5 rounded-lg hover:bg-slate-100 text-xs font-semibold"
+                >
+                  <Info className="w-3.5 h-3.5 text-[#64748B]" />
+                  <span>{t('nav.about', 'About')}</span>
+                </Link>
+
                 <Link
                   href="/role-selection"
                   className="px-3 py-1.5 bg-blue-900 hover:bg-blue-800 text-white rounded-lg font-bold text-xs shadow-xs transition-colors"
@@ -330,6 +355,15 @@ export function Header() {
                           <span>{t('nav.audit_trail', 'Immutable Audit Trail')}</span>
                         </Link>
 
+                        <Link
+                          href="/about"
+                          onClick={() => setIsProfileOpen(false)}
+                          className="w-full flex items-center space-x-2 px-3 py-1.5 text-[11px] font-medium text-[#334155] hover:text-[#102F5F] hover:bg-slate-50 rounded-lg transition-colors cursor-pointer"
+                        >
+                          <Info className="w-3.5 h-3.5 text-[#64748B]" />
+                          <span>{t('nav.about', 'About')}</span>
+                        </Link>
+
                         <button
                           type="button"
                           onClick={handleLogout}
@@ -378,6 +412,15 @@ export function Header() {
                         >
                           <Clock className="w-3.5 h-3.5 text-[#64748B]" />
                           <span>{t('nav.my_logs', 'My Activity Logs')}</span>
+                        </Link>
+
+                        <Link
+                          href="/about"
+                          onClick={() => setIsProfileOpen(false)}
+                          className="w-full flex items-center space-x-2 px-3 py-1.5 text-[11px] font-medium text-[#334155] hover:text-[#102F5F] hover:bg-slate-50 rounded-lg transition-colors cursor-pointer"
+                        >
+                          <Info className="w-3.5 h-3.5 text-[#64748B]" />
+                          <span>{t('nav.about', 'About')}</span>
                         </Link>
 
                         <button
