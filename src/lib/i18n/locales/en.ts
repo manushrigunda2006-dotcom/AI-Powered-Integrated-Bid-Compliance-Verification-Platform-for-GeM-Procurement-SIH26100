@@ -15,7 +15,7 @@ export const en: Record<string, string> = {
   'nav.existing_tenders': 'Existing Tenders',
   'nav.create_tender': 'Create Tender',
   'nav.gfr_compliant': 'GFR Rule 151 Compliant',
-  'nav.audit_trail': 'Audit Trail',
+  'nav.audit_trail': 'Audit/History',
   'nav.bidder_dashboard': 'Bidder Dashboard',
   'nav.available_tenders': 'Available Tenders',
   'nav.my_submissions': 'My Submissions',
@@ -335,6 +335,14 @@ export const en: Record<string, string> = {
   'audit.modification_details': 'Data Modification Details (Before → After)',
   'audit.crypto_integrity': 'Cryptographic Integrity & Chain of Custody',
   'audit.digital_signature': 'Digital Signature',
+  'audit.clear_history': 'Clear History',
+  'audit.clear_modal_title': 'Clear Audit History?',
+  'audit.clear_modal_message': 'This will permanently remove the current audit history. This action cannot be undone.',
+  'audit.cancel': 'Cancel',
+  'audit.no_history': 'No audit history available.',
+  'audit.no_history_sub': 'Cleared audit events will be logged here as new officer actions or user sessions occur.',
+  'audit.history_cleared_success': 'Audit history cleared successfully.',
+  'audit.clearing': 'Clearing...',
 
   // Profile Pages
   'profile.title': 'Profile & Security Standing',

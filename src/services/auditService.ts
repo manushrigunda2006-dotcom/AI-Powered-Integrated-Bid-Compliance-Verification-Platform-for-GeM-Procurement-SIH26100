@@ -4,6 +4,16 @@ import { MOCK_AUDIT_LOGS } from '../lib/mock-data/tender-seed';
 import { resolveBidderId, resolveTenderId } from '../lib/idMapper';
 
 const STORAGE_KEY = 'gem_audit_logs';
+const CLEARED_FLAG_KEY = 'gem_audit_cleared';
+
+function isAuditCleared(): boolean {
+  if (typeof window === 'undefined') return false;
+  try {
+    return localStorage.getItem(CLEARED_FLAG_KEY) === 'true';
+  } catch {
+    return false;
+  }
+}
 
 function getStoredLogs(): AuditLog[] {
   if (typeof window === 'undefined') return [];
@@ -31,7 +41,7 @@ function persistLog(log: AuditLog): void {
 export const auditService = {
   async getAllAuditLogs(limit = 100): Promise<AuditLog[]> {
     const localLogs = getStoredLogs();
-    const mockList = Object.values(MOCK_AUDIT_LOGS).flat();
+    const mockList = isAuditCleared() ? [] : Object.values(MOCK_AUDIT_LOGS).flat();
 
     let dbLogs: AuditLog[] = [];
     if (isSupabaseConfigured()) {
@@ -229,6 +239,33 @@ export const auditService = {
       }
     } catch (err) {
       console.warn('Notice seeding initial audit log:', err);
+    }
+  },
+  /**
+   * Clears all existing audit logs from localStorage, in-memory mock state, and database.
+   * Ensures newly created events after clearing are logged and displayed properly.
+   */
+  async clearAuditLogs(): Promise<void> {
+    if (typeof window !== 'undefined') {
+      try {
+        localStorage.setItem(CLEARED_FLAG_KEY, 'true');
+        localStorage.setItem(STORAGE_KEY, JSON.stringify([]));
+      } catch (err) {
+        console.warn('Notice clearing audit logs in localStorage:', err);
+      }
+    }
+
+    // Clear in-memory mock records for all keys
+    for (const key of Object.keys(MOCK_AUDIT_LOGS)) {
+      MOCK_AUDIT_LOGS[key] = [];
+    }
+
+    if (isSupabaseConfigured()) {
+      try {
+        await (supabase.from('audit_logs') as any).delete().neq('id', 'keep-none');
+      } catch (err) {
+        console.warn('Notice clearing supabase audit records:', err);
+      }
     }
   },
 

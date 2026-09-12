@@ -15,7 +15,7 @@ export const kn: Record<string, string> = {
   'nav.existing_tenders': 'ಅಸ್ತಿತ್ವದಲ್ಲಿರುವ ಟೆಂಡರ್‌ಗಳು',
   'nav.create_tender': 'ಟೆಂಡರ್ ರಚಿಸಿ',
   'nav.gfr_compliant': 'GFR ನಿಯಮ 151 ಅನುಸರಣೆ',
-  'nav.audit_trail': 'ಆಡಿಟ್ ಹಾದಿ',
+  'nav.audit_trail': 'ಆಡಿಟ್/ಇತಿಹಾಸ',
   'nav.bidder_dashboard': 'ಬಿಡ್ಡುದಾರರ ಡ್ಯಾಶ್‌ಬೋರ್ಡ್',
   'nav.available_tenders': 'ಲಭ್ಯವಿರುವ ಟೆಂಡರ್‌ಗಳು',
   'nav.my_submissions': 'ನನ್ನ ಸಲ್ಲಿಕೆಗಳು',
@@ -335,6 +335,14 @@ export const kn: Record<string, string> = {
   'audit.modification_details': 'ಡೇಟಾ ಮಾರ್ಪಾಡು ವಿವರಗಳು (ಮೊದಲು → ನಂತರ)',
   'audit.crypto_integrity': 'ಕ್ರಿಪ್ಟೋಗ್ರಾಫಿಕ್ ಸಮಗ್ರತೆ ಮತ್ತು ಪಾಲನೆ ಸರಪಳಿ',
   'audit.digital_signature': 'ಡಿಜಿಟಲ್ ಸಹಿ',
+  'audit.clear_history': 'ಇತಿಹಾಸ ಅಳಿಸಿ',
+  'audit.clear_modal_title': 'ಆಡಿಟ್ ಇತಿಹಾಸ ಅಳಿಸಬೇಕೆ?',
+  'audit.clear_modal_message': 'ಇದು ಪ್ರಸ್ತುತ ಆಡಿಟ್ ಇತಿಹಾಸವನ್ನು ಶಾಶ್ವತವಾಗಿ ತೆಗೆದುಹಾಕುತ್ತದೆ. ಈ ಕ್ರಿಯೆಯನ್ನು ರದ್ದುಗೊಳಿಸಲಾಗುವುದಿಲ್ಲ.',
+  'audit.cancel': 'ರದ್ದುಮಾಡಿ',
+  'audit.no_history': 'ಯಾವುದೇ ಆಡಿಟ್ ಇತಿಹಾಸ ಲಭ್ಯವಿಲ್ಲ.',
+  'audit.no_history_sub': 'ಹೊಸ ಅಧಿಕಾರಿ ಕ್ರಮಗಳು ಅಥವಾ ಬಳಕೆದಾರರ ಅಧಿವೇಶನಗಳು ನಡೆದಂತೆ ಆಡಿಟ್ ಈವೆಂಟ್‌ಗಳು ಇಲ್ಲಿ ದಾಖಲಾಗುತ್ತವೆ.',
+  'audit.history_cleared_success': 'ಆಡಿಟ್ ಇತಿಹಾಸವನ್ನು ಯಶಸ್ವಿಯಾಗಿ ಅಳಿಸಲಾಗಿದೆ.',
+  'audit.clearing': 'ಅಳಿಸಲಾಗುತ್ತಿದೆ...',
 
   // Profile Pages
   'profile.title': 'ಪ್ರೊಫೈಲ್ ಮತ್ತು ಭದ್ರತಾ ಸ್ಥಿತಿ',

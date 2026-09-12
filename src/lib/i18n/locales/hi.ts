@@ -15,7 +15,7 @@ export const hi: Record<string, string> = {
   'nav.existing_tenders': 'मौजूदा निविदाएं',
   'nav.create_tender': 'निविदा बनाएं',
   'nav.gfr_compliant': 'GFR नियम 151 अनुपालन',
-  'nav.audit_trail': 'ऑडिट ट्रेल',
+  'nav.audit_trail': 'ऑडिट/इतिहास',
   'nav.bidder_dashboard': 'बोलीदाता डैशबोर्ड',
   'nav.available_tenders': 'उपलब्ध निविदाएं',
   'nav.my_submissions': 'मेरी प्रस्तुतियां',
@@ -335,6 +335,14 @@ export const hi: Record<string, string> = {
   'audit.modification_details': 'डेटा संशोधन विवरण (पहले → बाद में)',
   'audit.crypto_integrity': 'क्रिप्टोग्राफ़िक सत्यनिष्ठा और अभिरक्षा श्रृंखला',
   'audit.digital_signature': 'डिजिटल हस्ताक्षर',
+  'audit.clear_history': 'इतिहास साफ़ करें',
+  'audit.clear_modal_title': 'ऑडिट इतिहास साफ़ करें?',
+  'audit.clear_modal_message': 'यह वर्तमान ऑडिट इतिहास को स्थायी रूप से हटा देगा। यह क्रिया पूर्ववत नहीं की जा सकती।',
+  'audit.cancel': 'रद्द करें',
+  'audit.no_history': 'कोई ऑडिट इतिहास उपलब्ध नहीं है।',
+  'audit.no_history_sub': 'साफ़ किए गए ऑडिट इवेंट यहाँ नए अधिकारी कार्यों या सत्रों के रूप में दर्ज होंगे।',
+  'audit.history_cleared_success': 'ऑडिट इतिहास सफलतापूर्वक साफ़ किया गया।',
+  'audit.clearing': 'साफ़ किया जा रहा है...',
 
   // Profile Pages
   'profile.title': 'प्रोफ़ाइल एवं सुरक्षा स्थिति',

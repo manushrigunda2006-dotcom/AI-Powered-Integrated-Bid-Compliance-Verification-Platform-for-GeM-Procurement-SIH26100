@@ -151,7 +151,7 @@ export function Header() {
                   title="Cryptographic Audit Logs"
                 >
                   <Lock className="w-3 h-3 text-[#64748B]" />
-                  <span>{t('nav.audit_trail', 'Audit Trail')}</span>
+                  <span>{t('nav.audit_trail', 'Audit/History')}</span>
                 </Link>
 
                 <Link
@@ -352,7 +352,7 @@ export function Header() {
                           className="w-full flex items-center space-x-2 px-3 py-1.5 text-[11px] font-medium text-[#334155] hover:text-[#102F5F] hover:bg-slate-50 rounded-lg transition-colors cursor-pointer"
                         >
                           <Lock className="w-3.5 h-3.5 text-[#64748B]" />
-                          <span>{t('nav.audit_trail', 'Immutable Audit Trail')}</span>
+                          <span>{t('nav.audit_trail', 'Audit/History')}</span>
                         </Link>
 
                         <Link
