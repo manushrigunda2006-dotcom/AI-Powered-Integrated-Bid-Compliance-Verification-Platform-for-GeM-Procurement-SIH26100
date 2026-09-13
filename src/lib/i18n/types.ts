@@ -1,4 +1,4 @@
-export type Language = 'en' | 'hi' | 'kn';
+export type Language = 'en' | 'hi' | 'kn' | 'ta' | 'te' | 'mr' | 'tulu' | 'kok';
 
 export interface LanguageContextType {
   language: Language;

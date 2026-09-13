@@ -117,7 +117,7 @@ export default function AboutPage() {
                   {t('about.feature_engine_title', 'Deterministic Engine')}
                 </h3>
                 <span className="text-[11px] text-slate-500 font-medium">
-                  Rule-based mathematical &amp; threshold gate
+                  {t('about.feature_engine_sub', 'Rule-based mathematical & threshold gate')}
                 </span>
               </div>
             </div>
@@ -187,7 +187,7 @@ export default function AboutPage() {
                   {t('about.feature_adapters_title', 'Registry Adapters')}
                 </h3>
                 <span className="text-[11px] text-slate-500 font-medium">
-                  Statutory verification connectors
+                  {t('about.feature_adapters_sub', 'Statutory verification connectors')}
                 </span>
               </div>
             </div>
@@ -318,7 +318,7 @@ export default function AboutPage() {
                   {t('about.feature_crosscheck_title', 'Cross-Entity Check')}
                 </h3>
                 <span className="text-[11px] text-slate-500 font-medium">
-                  Cross-document fuzzy name matching
+                  {t('about.feature_crosscheck_sub', 'Cross-document fuzzy name matching')}
                 </span>
               </div>
             </div>
@@ -391,7 +391,7 @@ export default function AboutPage() {
                   {t('about.feature_audit_title', 'Immutable Audit Log')}
                 </h3>
                 <span className="text-[11px] text-slate-500 font-medium">
-                  Section 65B certified evidence trail
+                  {t('about.feature_audit_sub', 'Section 65B certified evidence trail')}
                 </span>
               </div>
             </div>

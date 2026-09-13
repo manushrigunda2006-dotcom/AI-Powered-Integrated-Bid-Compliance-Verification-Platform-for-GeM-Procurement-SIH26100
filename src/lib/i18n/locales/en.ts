@@ -445,4 +445,8 @@ export const en: Record<string, string> = {
   'lang.hi': 'हिन्दी',
   'lang.kn': 'ಕನ್ನಡ',
   'lang.select': 'Language',
+  'about.feature_engine_sub': 'Rule-based mathematical & threshold gate',
+  'about.feature_adapters_sub': 'Statutory verification connectors',
+  'about.feature_crosscheck_sub': 'Cross-document fuzzy name matching',
+  'about.feature_audit_sub': 'Section 65B certified evidence trail',
 };

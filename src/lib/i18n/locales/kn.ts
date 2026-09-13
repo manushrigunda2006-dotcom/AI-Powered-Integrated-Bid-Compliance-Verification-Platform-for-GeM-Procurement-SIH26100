@@ -445,4 +445,8 @@ export const kn: Record<string, string> = {
   'lang.hi': 'हिन्दी',
   'lang.kn': 'ಕನ್ನಡ',
   'lang.select': 'ಭಾಷೆ',
+  'about.feature_engine_sub': 'ನಿಯಮ-ಆಧಾರಿತ ಗಣಿತ ಮತ್ತು ಮಿತಿ ಗೇಟ್',
+  'about.feature_adapters_sub': 'ಶಾಸನಬದ್ಧ ಪರಿಶೀಲನಾ ಕನೆಕ್ಟರ್‌ಗಳು',
+  'about.feature_crosscheck_sub': 'ಕ್ರಾಸ್-ದಾಖಲೆ ಅಸ್ಪಷ್ಟ ಹೆಸರು ಹೊಂದಾಣಿಕೆ',
+  'about.feature_audit_sub': 'ವಿಭಾಗ 65B ಪ್ರಮಾಣೀಕೃತ ಸಾಕ್ಷ್ಯ ಜಾಡು',
 };

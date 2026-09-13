@@ -25,8 +25,9 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     try {
       const saved = localStorage.getItem(STORAGE_KEY);
-      if (saved === 'en' || saved === 'hi' || saved === 'kn') {
-        setLanguageState(saved);
+      const validLangs: Language[] = ['en', 'hi', 'kn', 'ta', 'te', 'mr', 'tulu', 'kok'];
+      if (saved && validLangs.includes(saved as Language)) {
+        setLanguageState(saved as Language);
       }
     } catch {
       // localStorage may not be available in private browsing or SSR

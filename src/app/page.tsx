@@ -4,8 +4,11 @@ import React, { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { getAuthSession } from '@/lib/authGuard';
 
+import { useLanguage } from '@/lib/i18n/LanguageContext';
+
 export default function RootHomePage() {
   const router = useRouter();
+  const { t } = useLanguage();
 
   useEffect(() => {
     const session = getAuthSession();
@@ -26,7 +29,7 @@ export default function RootHomePage() {
         <div className="inline-flex items-center justify-center w-12 h-12 rounded-2xl bg-gradient-to-br from-[#0F2F63] to-[#1D4ED8] text-white font-black text-xl shadow-md ring-4 ring-blue-100 animate-pulse">
           GeM
         </div>
-        <p className="text-xs font-bold text-slate-500">Routing to Authorized Portal...</p>
+        <p className="text-xs font-bold text-slate-500">{t('app.routing', 'Routing to Authorized Portal...')}</p>
       </div>
     </div>
   );

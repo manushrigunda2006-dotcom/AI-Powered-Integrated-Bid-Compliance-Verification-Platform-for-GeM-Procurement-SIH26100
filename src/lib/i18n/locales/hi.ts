@@ -445,4 +445,8 @@ export const hi: Record<string, string> = {
   'lang.hi': 'हिन्दी',
   'lang.kn': 'ಕನ್ನಡ',
   'lang.select': 'भाषा',
+  'about.feature_engine_sub': 'नियम-आधारित गणितीय और सीमा गेट',
+  'about.feature_adapters_sub': 'वैधानिक सत्यापन कनेक्टर्स',
+  'about.feature_crosscheck_sub': 'क्रॉस-दस्तावेज़ अस्पष्ट नाम मिलान',
+  'about.feature_audit_sub': 'धारा 65B प्रमाणित साक्ष्य ट्रेल',
 };

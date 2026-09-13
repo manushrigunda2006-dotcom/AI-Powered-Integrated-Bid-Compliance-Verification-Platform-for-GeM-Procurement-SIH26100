@@ -36,5 +36,10 @@ export interface NotificationTranslations {
     en: string;
     hi: string;
     kn: string;
+    ta: string;
+    te: string;
+    mr: string;
+    tulu: string;
+    kok: string;
   };
 }
