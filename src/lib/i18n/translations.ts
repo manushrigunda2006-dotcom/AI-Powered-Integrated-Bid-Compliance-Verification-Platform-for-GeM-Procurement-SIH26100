@@ -15,6 +15,14 @@ import { pa } from './locales/pa';
 import { hry } from './locales/hry';
 import { mni } from './locales/mni';
 import { ks } from './locales/ks';
+import { ne } from './locales/ne';
+import { sd } from './locales/sd';
+import { doi } from './locales/doi';
+import { sat } from './locales/sat';
+import { mai } from './locales/mai';
+import { sa } from './locales/sa';
+import { brx } from './locales/brx';
+import { lus } from './locales/lus';
 import { Language } from './types';
 
 export const translations: Record<Language, Record<string, string>> = {
@@ -35,4 +43,12 @@ export const translations: Record<Language, Record<string, string>> = {
   hry,
   mni,
   ks,
+  ne,
+  sd,
+  doi,
+  sat,
+  mai,
+  sa,
+  brx,
+  lus,
 };

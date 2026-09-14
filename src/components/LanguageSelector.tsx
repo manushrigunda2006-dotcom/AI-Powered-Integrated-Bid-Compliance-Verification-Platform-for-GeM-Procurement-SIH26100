@@ -28,6 +28,14 @@ const LANGUAGES: { code: Language; label: string; nativeName: string }[] = [
   { code: 'hry', label: 'Haryanvi', nativeName: 'हरियाणवी' },
   { code: 'mni', label: 'Manipuri', nativeName: 'মৈতৈলোন্ / ꯃꯤꯇꯩ' },
   { code: 'ks', label: 'Kashmiri', nativeName: 'کٲشُر' },
+  { code: 'ne', label: 'Nepali', nativeName: 'नेपाली' },
+  { code: 'sd', label: 'Sindhi', nativeName: 'سنڌي' },
+  { code: 'doi', label: 'Dogri', nativeName: 'डोगरी' },
+  { code: 'sat', label: 'Santali', nativeName: 'ᱥᱟᱱᱛᱟᱲᱤ' },
+  { code: 'mai', label: 'Maithili', nativeName: 'मैथिली' },
+  { code: 'sa', label: 'Sanskrit', nativeName: 'संस्कृतम्' },
+  { code: 'brx', label: 'Bodo', nativeName: 'बर\' राव' },
+  { code: 'lus', label: 'Mizo', nativeName: 'Mizo' },
 ];
 
 export function LanguageSelector({ variant = 'compact', className = '' }: LanguageSelectorProps) {

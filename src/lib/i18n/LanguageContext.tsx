@@ -27,7 +27,8 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
       const saved = localStorage.getItem(STORAGE_KEY);
       const validLangs: Language[] = [
         'en', 'hi', 'kn', 'ta', 'te', 'mr', 'tulu', 'kok',
-        'ml', 'gu', 'bn', 'or', 'as', 'pa', 'hry', 'mni', 'ks'
+        'ml', 'gu', 'bn', 'or', 'as', 'pa', 'hry', 'mni', 'ks',
+        'ne', 'sd', 'doi', 'sat', 'mai', 'sa', 'brx', 'lus'
       ];
       if (saved && validLangs.includes(saved as Language)) {
         setLanguageState(saved as Language);
@@ -41,9 +42,9 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     if (typeof document !== 'undefined') {
-      if (language === 'ks') {
+      if (language === 'ks' || language === 'sd') {
         document.documentElement.setAttribute('dir', 'rtl');
-        document.documentElement.setAttribute('lang', 'ks');
+        document.documentElement.setAttribute('lang', language);
       } else {
         document.documentElement.setAttribute('dir', 'ltr');
         document.documentElement.setAttribute('lang', language);

@@ -15,7 +15,15 @@ export type Language =
   | 'pa'
   | 'hry'
   | 'mni'
-  | 'ks';
+  | 'ks'
+  | 'ne'
+  | 'sd'
+  | 'doi'
+  | 'sat'
+  | 'mai'
+  | 'sa'
+  | 'brx'
+  | 'lus';
 
 export interface LanguageContextType {
   language: Language;

@@ -504,7 +504,16 @@ html.dark [role="dialog"],
 [lang="pa"] {
   font-family: "Noto Sans Gurmukhi", "Raavi", "Nirmala UI", sans-serif;
 }
-[lang="ks"], [dir="rtl"] {
-  font-family: "Noto Nastaliq Urdu", "Noto Sans Arabic", "Segoe UI", Tahoma, Arial, sans-serif;
+[lang="ks"], [lang="sd"], [dir="rtl"] {
+  font-family: "Noto Nastaliq Urdu", "Noto Sans Arabic", "Scheherazade New", "Segoe UI", Tahoma, Arial, sans-serif;
+}
+[lang="sat"] {
+  font-family: "Noto Sans Ol Chiki", "Nirmala UI", sans-serif;
+}
+[lang="ne"], [lang="doi"], [lang="mai"], [lang="sa"], [lang="brx"], [lang="hi"], [lang="mr"], [lang="kok"], [lang="hry"] {
+  font-family: "Noto Sans Devanagari", "Nirmala UI", "Mangal", sans-serif;
+}
+[lang="lus"] {
+  font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
 }
 

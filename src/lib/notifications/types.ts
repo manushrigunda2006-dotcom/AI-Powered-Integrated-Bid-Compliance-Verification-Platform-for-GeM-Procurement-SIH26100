@@ -31,24 +31,8 @@ export interface AppNotification {
   actionKey?: string;
 }
 
+import { Language } from '../i18n/types';
+
 export interface NotificationTranslations {
-  [key: string]: {
-    en: string;
-    hi: string;
-    kn: string;
-    ta: string;
-    te: string;
-    mr: string;
-    tulu: string;
-    kok: string;
-    ml: string;
-    gu: string;
-    bn: string;
-    or: string;
-    as: string;
-    pa: string;
-    hry: string;
-    mni: string;
-    ks: string;
-  };
+  [key: string]: Record<Language, string>;
 }
