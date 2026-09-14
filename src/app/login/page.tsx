@@ -3,10 +3,12 @@
 import React, { useEffect } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { Suspense } from 'react';
+import { useLanguage } from '@/lib/i18n/LanguageContext';
 
 function LoginRedirector() {
   const router = useRouter();
   const searchParams = useSearchParams();
+  const { t } = useLanguage();
 
   useEffect(() => {
     const role = searchParams.get('role');
@@ -23,7 +25,7 @@ function LoginRedirector() {
     <div className="min-h-[70vh] flex items-center justify-center">
       <div className="flex flex-col items-center space-y-3">
         <div className="w-9 h-9 border-3 border-blue-900 border-t-transparent rounded-full animate-spin" />
-        <p className="text-xs font-bold text-slate-500">Redirecting to Role Selection...</p>
+        <p className="text-xs font-bold text-slate-500">{t('Redirecting to Role Selection...', 'Redirecting to Role Selection...')}</p>
       </div>
     </div>
   );

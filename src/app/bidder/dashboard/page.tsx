@@ -418,7 +418,7 @@ export default function BidderDashboardPage() {
                 </h3>
                 <p className="text-xs text-amber-800 leading-relaxed">
                   {t('The Procurement Evaluation Authority has flagged an inconsistency between your GST Registration legal name and the legal name appearing on your submitted OEM Manufacturer Authorization Form.')}{' '}
-                  (<strong>{bidder.company_name}</strong> vs <strong>{bidder.company_name} Systems</strong>).
+                  (<strong>{bidder.company_name}</strong> {t('vs', 'vs')} <strong>{bidder.company_name} Systems</strong>).
                 </p>
                 <div className="p-3 bg-white/80 rounded-xl border border-amber-200 text-xs text-amber-900 font-mono mt-2">
                   &ldquo;{t('Please furnish Board Resolution or Registrar of Companies (ROC) name amendment certificate confirming corporate continuity.')}&rdquo;

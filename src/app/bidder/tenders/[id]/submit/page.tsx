@@ -233,7 +233,7 @@ export default function BidderTenderSubmitPage() {
       <div className="min-h-[60vh] flex items-center justify-center">
         <div className="flex flex-col items-center space-y-3">
           <div className="w-9 h-9 border-3 border-blue-900 border-t-transparent rounded-full animate-spin" />
-          <p className="text-xs font-bold text-slate-500">Verifying Bidder Credentials...</p>
+          <p className="text-xs font-bold text-slate-500">{t('Verifying Bidder Credentials...', 'Verifying Bidder Credentials...')}</p>
         </div>
       </div>
     );
@@ -244,7 +244,7 @@ export default function BidderTenderSubmitPage() {
       <div className="min-h-[60vh] flex items-center justify-center">
         <div className="flex flex-col items-center space-y-3">
           <div className="w-9 h-9 border-3 border-blue-900 border-t-transparent rounded-full animate-spin" />
-          <p className="text-xs font-bold text-slate-500">Loading Tender &amp; Required Documents...</p>
+          <p className="text-xs font-bold text-slate-500">{t('tender.loading_tender', 'Loading Tender & Required Documents...')}</p>
         </div>
       </div>
     );
@@ -269,14 +269,14 @@ export default function BidderTenderSubmitPage() {
               </span>
               <span className="bg-emerald-100 text-emerald-800 text-[10px] font-bold px-2 py-0.5 rounded-md flex items-center space-x-1">
                 <ShieldCheck className="w-3 h-3 text-emerald-600" />
-                <span>GFR 2017 Verified</span>
+                <span>{t('GFR 2017 Verified', 'GFR 2017 Verified')}</span>
               </span>
             </div>
             <h1 className="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight mt-1">
               {t('bidder.upload_docs_title', 'Upload Required Bid Documents')}
             </h1>
             <p className="text-xs text-slate-500">
-              Submit your compliance dossier for official evaluation by the Government Procurement Authority.
+              {t('Submit your compliance dossier for official evaluation by the Government Procurement Authority.', 'Submit your compliance dossier for official evaluation by the Government Procurement Authority.')}
             </p>
           </div>
         </div>
@@ -300,10 +300,10 @@ export default function BidderTenderSubmitPage() {
                 {tender.tender_number}
               </span>
               <span className="bg-emerald-50 text-emerald-800 text-xs font-bold px-2.5 py-0.5 rounded-md border border-emerald-200">
-                Active RFP
+                {t('status.active', 'Active RFP')}
               </span>
               <span className="text-xs text-slate-500 font-medium">
-                Bidder: <strong className="text-slate-800">{session.companyName}</strong> (GSTIN: <span className="font-mono">{session.gstNumber}</span>)
+                {t('Bidder:', 'Bidder:')} <strong className="text-slate-800">{session.companyName}</strong> (GSTIN: <span className="font-mono">{session.gstNumber}</span>)
               </span>
             </div>
             <h2 className="text-xl font-bold text-slate-900">{tender.title}</h2>
@@ -316,7 +316,7 @@ export default function BidderTenderSubmitPage() {
           <div className="grid grid-cols-2 sm:grid-cols-2 gap-3 shrink-0">
             <div className="p-3 bg-slate-50 rounded-2xl border border-slate-100">
               <span className="text-[10px] uppercase font-bold text-slate-400 block">
-                Estimated Budget
+                {t('tender.budget', 'Estimated Budget')}
               </span>
               <span className="text-sm font-black text-slate-900">
                 {tender.budget_formatted || formatIndianCurrency(tender.estimated_budget)}
@@ -324,7 +324,7 @@ export default function BidderTenderSubmitPage() {
             </div>
             <div className="p-3 bg-slate-50 rounded-2xl border border-slate-100">
               <span className="text-[10px] uppercase font-bold text-slate-400 block">
-                Closing Deadline
+                {t('Closing Deadline', 'Closing Deadline')}
               </span>
               <span className="text-xs font-bold text-slate-800">
                 {formatDate(tender.deadline)}
@@ -347,7 +347,7 @@ export default function BidderTenderSubmitPage() {
                   {t('bidder.bid_submitted_success', 'Bid Submitted Successfully')}
                 </h3>
                 <p className="text-xs text-emerald-800">
-                  Tender ID: <strong className="font-mono">{tender.tender_number}</strong> • Submitted: {new Date(submission.submittedAt).toLocaleString('en-IN', { dateStyle: 'medium', timeStyle: 'short' })}
+                  {t('Tender ID:', 'Tender ID:')} <strong className="font-mono">{tender.tender_number}</strong> • Submitted: {new Date(submission.submittedAt).toLocaleString('en-IN', { dateStyle: 'medium', timeStyle: 'short' })}
                 </p>
               </div>
             </div>
@@ -359,15 +359,15 @@ export default function BidderTenderSubmitPage() {
 
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-2 text-xs">
             <div className="p-3 bg-white/80 rounded-xl border border-emerald-200">
-              <span className="text-[10px] uppercase font-bold text-emerald-700 block">Current Status</span>
+              <span className="text-[10px] uppercase font-bold text-emerald-700 block">{t('Current Status', 'Current Status')}</span>
               <span className="font-bold text-emerald-900">{submission.complianceStatus}</span>
             </div>
             <div className="p-3 bg-white/80 rounded-xl border border-emerald-200">
-              <span className="text-[10px] uppercase font-bold text-emerald-700 block">Dossier Packet</span>
-              <span className="font-bold text-emerald-900">{submission.documents.length} Files Uploaded</span>
+              <span className="text-[10px] uppercase font-bold text-emerald-700 block">{t('Dossier Packet', 'Dossier Packet')}</span>
+              <span className="font-bold text-emerald-900">{submission.documents.length} {t('Files', 'Files')}</span>
             </div>
             <div className="p-3 bg-white/80 rounded-xl border border-emerald-200">
-              <span className="text-[10px] uppercase font-bold text-emerald-700 block">Entity Cross-Check</span>
+              <span className="text-[10px] uppercase font-bold text-emerald-700 block">{t('Entity Cross-Check', 'Entity Cross-Check')}</span>
               <span className="font-bold text-emerald-900">
                 {submission.crossEntityReport?.isMatch ? '✅ Coherent Entity Names' : '⚠️ Name Variance Flagged'}
               </span>
@@ -397,8 +397,8 @@ export default function BidderTenderSubmitPage() {
               }`}
             >
               {isAllMandatoryUploaded
-                ? 'Ready for Official Submission'
-                : 'Pending Mandatory Files'}
+                ? t('Ready for Official Submission', 'Ready for Official Submission')
+                : t('Pending Mandatory Files', 'Pending Mandatory Files')}
             </span>
           </div>
         </div>
@@ -423,10 +423,10 @@ export default function BidderTenderSubmitPage() {
         <div className="pt-2 border-t border-slate-100 grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
           <div>
             <span className="text-[10.5px] font-bold text-slate-400 uppercase tracking-wider block mb-1">
-              Uploaded:
+              {t('Uploaded:', 'Uploaded:')}
             </span>
             {uploadedDocs.length === 0 ? (
-              <p className="text-slate-400 text-xs italic">No documents uploaded yet</p>
+              <p className="text-slate-400 text-xs italic">{t('No documents uploaded yet', 'No documents uploaded yet')}</p>
             ) : (
               <div className="space-y-1">
                 {uploadedDocs.map((u) => (
@@ -441,12 +441,12 @@ export default function BidderTenderSubmitPage() {
 
           <div>
             <span className="text-[10.5px] font-bold text-slate-400 uppercase tracking-wider block mb-1">
-              Pending Mandatory:
+              {t('Pending Mandatory:', 'Pending Mandatory:')}
             </span>
             {mandatoryDocs.filter((m) => !uploadedDocs.some((u) => u.documentType === m.document_type)).length === 0 ? (
               <p className="text-emerald-600 text-xs font-bold flex items-center space-x-1">
                 <Check className="w-3.5 h-3.5" />
-                <span>All mandatory documents have been provided</span>
+                <span>{t('All mandatory documents have been provided', 'All mandatory documents have been provided')}</span>
               </p>
             ) : (
               <div className="space-y-1">
@@ -507,11 +507,11 @@ export default function BidderTenderSubmitPage() {
                       </span>
                       {reqDoc.is_mandatory ? (
                         <span className="text-[10px] font-bold uppercase tracking-wider bg-rose-100 text-rose-800 px-2 py-0.5 rounded-full border border-rose-200">
-                          Mandatory
+                          {t('tender.mandatory', 'Mandatory')}
                         </span>
                       ) : (
                         <span className="text-[10px] font-bold uppercase tracking-wider bg-slate-100 text-slate-600 px-2 py-0.5 rounded-full">
-                          Optional
+                          {t('tender.optional', 'Optional')}
                         </span>
                       )}
                     </div>
@@ -572,7 +572,7 @@ export default function BidderTenderSubmitPage() {
                             title="Preview Document Details"
                           >
                             <Eye className="w-3.5 h-3.5" />
-                            <span>Preview</span>
+                            <span>{t('common.preview', 'Preview')}</span>
                           </button>
 
                           <button
@@ -583,7 +583,7 @@ export default function BidderTenderSubmitPage() {
                             title="Replace Document with new file"
                           >
                             <RefreshCw className={`w-3.5 h-3.5 ${isUploading ? 'animate-spin' : ''}`} />
-                            <span>Replace</span>
+                            <span>{t('tender.replace', 'Replace')}</span>
                           </button>
 
                           <button
@@ -605,7 +605,7 @@ export default function BidderTenderSubmitPage() {
                         className="px-4 py-2.5 bg-blue-900 hover:bg-blue-800 text-white text-xs font-bold rounded-xl shadow-xs transition-all flex items-center space-x-2 cursor-pointer disabled:opacity-50"
                       >
                         <Upload className={`w-4 h-4 ${isUploading ? 'animate-spin' : ''}`} />
-                        <span>{isUploading ? 'Uploading...' : 'Upload Document'}</span>
+                        <span>{isUploading ? t('common.loading', 'Uploading...') : t('Upload Document', 'Upload Document')}</span>
                       </button>
                     )}
                   </div>
@@ -621,13 +621,13 @@ export default function BidderTenderSubmitPage() {
         <div className="space-y-1">
           <h4 className="text-sm font-bold text-slate-900">
             {isAllMandatoryUploaded
-              ? 'All Mandatory Documents Attached'
-              : 'Mandatory Documents Required'}
+              ? t('All Mandatory Documents Attached', 'All Mandatory Documents Attached')
+              : t('Mandatory Documents Required', 'Mandatory Documents Required')}
           </h4>
           <p className="text-xs text-slate-500">
             {isAllMandatoryUploaded
-              ? 'Click below to submit your bid. Deterministic compliance and cross-document verification will be executed.'
-              : 'Please upload all mandatory documents to enable official bid submission.'}
+              ? t('Click below to submit your bid. Deterministic compliance and cross-document verification will be executed.', 'Click below to submit your bid. Deterministic compliance and cross-document verification will be executed.')
+              : t('Please upload all mandatory documents to enable official bid submission.', 'Please upload all mandatory documents to enable official bid submission.')}
           </p>
         </div>
 
@@ -642,7 +642,7 @@ export default function BidderTenderSubmitPage() {
           }`}
         >
           <Check className="w-4 h-4" />
-          <span>{isSubmitting ? 'Submitting...' : 'Submit Bid'}</span>
+          <span>{isSubmitting ? t('Submitting...', 'Submitting...') : t('Submit Bid', 'Submit Bid')}</span>
         </button>
       </div>
 
@@ -663,25 +663,25 @@ export default function BidderTenderSubmitPage() {
               </div>
               <div className="space-y-1">
                 <h3 className="text-base font-bold text-slate-900">
-                  Submit Bid for Compliance Verification?
+                  {t('Submit Bid for Compliance Verification?', 'Submit Bid for Compliance Verification?')}
                 </h3>
                 <p className="text-xs text-slate-600 leading-relaxed">
-                  All mandatory documents have been uploaded. Submit your bid for compliance verification?
+                  {t('All mandatory documents have been uploaded. Submit your bid for compliance verification?', 'All mandatory documents have been uploaded. Submit your bid for compliance verification?')}
                 </p>
               </div>
             </div>
 
             <div className="p-3 bg-slate-50 rounded-xl border border-slate-100 text-xs space-y-1 text-slate-600">
               <div className="flex justify-between">
-                <span>Tender ID:</span>
+                <span>{t('Tender ID:', 'Tender ID:')}</span>
                 <span className="font-mono font-bold text-slate-800">{tender.tender_number}</span>
               </div>
               <div className="flex justify-between">
-                <span>Total Documents:</span>
-                <span className="font-bold text-slate-800">{uploadedDocs.length} Files</span>
+                <span>{t('Total Documents:', 'Total Documents:')}</span>
+                <span className="font-bold text-slate-800">{uploadedDocs.length} {t('Files', 'Files')}</span>
               </div>
               <div className="flex justify-between">
-                <span>Bidder:</span>
+                <span>{t('Bidder:', 'Bidder:')}</span>
                 <span className="font-bold text-slate-800">{session.companyName}</span>
               </div>
             </div>
@@ -693,7 +693,7 @@ export default function BidderTenderSubmitPage() {
                 disabled={isSubmitting}
                 className="px-4 py-2 text-xs font-semibold text-slate-700 hover:text-slate-900 bg-slate-100 hover:bg-slate-200 rounded-xl transition-colors cursor-pointer"
               >
-                Cancel
+                {t('common.cancel', 'Cancel')}
               </button>
               <button
                 type="button"
@@ -704,12 +704,12 @@ export default function BidderTenderSubmitPage() {
                 {isSubmitting ? (
                   <>
                     <div className="w-3.5 h-3.5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                    <span>Submitting...</span>
+                    <span>{t('Submitting...', 'Submitting...')}</span>
                   </>
                 ) : (
                   <>
                     <Check className="w-4 h-4" />
-                    <span>Submit Bid</span>
+                    <span>{t('Submit Bid', 'Submit Bid')}</span>
                   </>
                 )}
               </button>
@@ -754,29 +754,29 @@ export default function BidderTenderSubmitPage() {
 
             <div className="p-3.5 bg-slate-50 rounded-2xl border border-slate-100 text-xs space-y-2">
               <div className="flex justify-between">
-                <span className="text-slate-500">File Name:</span>
+                <span className="text-slate-500">{t('File Name:', 'File Name:')}</span>
                 <span className="font-mono font-semibold text-slate-800">{previewDoc.fileName}</span>
               </div>
               <div className="flex justify-between">
-                <span className="text-slate-500">File Size:</span>
+                <span className="text-slate-500">{t('File Size:', 'File Size:')}</span>
                 <span className="font-semibold text-slate-800">{(previewDoc.fileSize / 1024).toFixed(1)} KB</span>
               </div>
               <div className="flex justify-between">
-                <span className="text-slate-500">Uploaded At:</span>
+                <span className="text-slate-500">{t('Uploaded At:', 'Uploaded At:')}</span>
                 <span className="font-semibold text-slate-800">
                   {new Date(previewDoc.uploadedAt).toLocaleString('en-IN')}
                 </span>
               </div>
               <div className="flex justify-between">
-                <span className="text-slate-500">Extracted Legal Entity:</span>
+                <span className="text-slate-500">{t('Extracted Legal Entity:', 'Extracted Legal Entity:')}</span>
                 <span className="font-semibold text-slate-800">{previewDoc.extractedEntityName || session.companyName}</span>
               </div>
             </div>
 
             <div className="p-4 bg-blue-50/60 rounded-2xl border border-blue-200 text-xs text-slate-600 space-y-1">
-              <span className="font-bold text-blue-900 block">Digital Chain of Custody</span>
+              <span className="font-bold text-blue-900 block">{t('Section 65B certified evidence trail', 'Digital Chain of Custody')}</span>
               <p className="text-[11px] leading-relaxed">
-                Document verified under GFR 2017 &amp; Indian Evidence Act Section 65B requirements. Cryptographic hash recorded upon upload.
+                {t('Section 65B certified evidence trail', 'Document verified under GFR 2017 & Indian Evidence Act Section 65B requirements. Cryptographic hash recorded upon upload.')}
               </p>
             </div>
 
@@ -786,7 +786,7 @@ export default function BidderTenderSubmitPage() {
                 onClick={() => setPreviewDoc(null)}
                 className="px-4 py-2 bg-slate-900 text-white text-xs font-bold rounded-xl hover:bg-slate-800 transition-colors"
               >
-                Close Preview
+                {t('common.close', 'Close Preview')}
               </button>
             </div>
           </div>

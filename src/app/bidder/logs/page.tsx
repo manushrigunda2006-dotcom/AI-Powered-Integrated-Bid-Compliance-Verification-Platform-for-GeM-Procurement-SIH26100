@@ -76,7 +76,7 @@ export default function BidderLogsPage() {
       <div className="min-h-[60vh] flex items-center justify-center">
         <div className="flex flex-col items-center space-y-3">
           <div className="w-9 h-9 border-3 border-blue-900 border-t-transparent rounded-full animate-spin" />
-          <p className="text-xs font-bold text-slate-500">Verifying Bidder Authorization...</p>
+          <p className="text-xs font-bold text-slate-500">{t('Verifying Bidder Credentials...', 'Verifying Bidder Authorization...')}</p>
         </div>
       </div>
     );
@@ -100,11 +100,11 @@ export default function BidderLogsPage() {
                 {t('nav.my_logs', 'Bidder History & Submissions')}
               </h1>
               <span className="bg-blue-100 text-blue-900 text-xs font-bold px-2.5 py-0.5 rounded-full border border-blue-200">
-                Bidder Isolation Enforced
+                {t('Bidder Isolation Enforced', 'Bidder Isolation Enforced')}
               </span>
             </div>
             <p className="text-xs text-slate-600">
-              Complete history of your tender submissions, uploaded documents, and cryptographic activity logs for <strong className="text-slate-800">{session.companyName}</strong>.
+              {t('Complete history of your tender submissions, uploaded documents, and cryptographic activity logs for', 'Complete history of your tender submissions, uploaded documents, and cryptographic activity logs for')} <strong className="text-slate-800">{session.companyName}</strong>.
             </p>
           </div>
         </div>
@@ -120,20 +120,16 @@ export default function BidderLogsPage() {
         <div className="flex items-center justify-between">
           <h2 className="text-base font-black text-slate-900 flex items-center space-x-2">
             <FileCheck2 className="w-5 h-5 text-blue-900" />
-            <span>My Tender Submissions</span>
+            <span>{t('My Tender Submissions', 'My Tender Submissions')}</span>
           </h2>
           <span className="text-xs font-semibold text-slate-500">
-            {submissions.length} Active Submissions Recorded
+            {submissions.length} {t('Active Submissions Recorded', 'Active Submissions Recorded')}
           </span>
         </div>
 
         {submissions.length === 0 ? (
           <div className="bg-white rounded-2xl border border-slate-200 p-8 text-center text-xs text-slate-400">
-            No tender submissions recorded yet. Browse{' '}
-            <Link href="/bidder/tenders" className="text-blue-900 font-bold hover:underline">
-              Available Tenders
-            </Link>{' '}
-            to participate.
+            {t('No tender submissions recorded yet. Browse Available Tenders to participate.', 'No tender submissions recorded yet. Browse Available Tenders to participate.')}
           </div>
         ) : (
           <div className="grid grid-cols-1 gap-3">
@@ -179,7 +175,7 @@ export default function BidderLogsPage() {
                         className="px-3.5 py-2 bg-blue-900 hover:bg-blue-800 text-white text-xs font-bold rounded-xl shadow-xs transition-colors flex items-center space-x-1.5 cursor-pointer"
                       >
                         <Upload className="w-3.5 h-3.5" />
-                        <span>View / Update Dossier</span>
+                        <span>{t('View / Update Dossier', 'View / Update Dossier')}</span>
                       </Link>
                     </div>
                   </div>
@@ -187,7 +183,7 @@ export default function BidderLogsPage() {
                   <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 pt-3 border-t border-slate-100 text-xs">
                     <div className="p-2.5 bg-slate-50 rounded-xl">
                       <span className="text-[10px] uppercase font-bold text-slate-400 block">
-                        Submission Date/Time
+                        {t('Submission Date/Time', 'Submission Date/Time')}
                       </span>
                       <span className="font-semibold text-slate-800 text-[11px]">
                         {new Date(sub.submittedAt).toLocaleString('en-IN', {
@@ -199,7 +195,7 @@ export default function BidderLogsPage() {
 
                     <div className="p-2.5 bg-slate-50 rounded-xl">
                       <span className="text-[10px] uppercase font-bold text-slate-400 block">
-                        Submission Status
+                        {t('Submission Status', 'Submission Status')}
                       </span>
                       <span className="font-bold text-slate-900 text-xs">
                         {sub.status}
@@ -208,7 +204,7 @@ export default function BidderLogsPage() {
 
                     <div className="p-2.5 bg-slate-50 rounded-xl">
                       <span className="text-[10px] uppercase font-bold text-slate-400 block">
-                        Compliance Status
+                        {t('Compliance Status', 'Compliance Status')}
                       </span>
                       <span className="font-bold text-blue-900 text-xs">
                         {sub.complianceStatus}
@@ -217,11 +213,11 @@ export default function BidderLogsPage() {
 
                     <div className="p-2.5 bg-slate-50 rounded-xl">
                       <span className="text-[10px] uppercase font-bold text-slate-400 block">
-                        Dossier Files
+                        {t('Dossier Files', 'Dossier Files')}
                       </span>
                       <span className="font-bold text-slate-800 text-xs flex items-center space-x-1">
                         <FileText className="w-3.5 h-3.5 text-blue-700" />
-                        <span>{sub.documents?.length || 0} Files Attached</span>
+                        <span>{sub.documents?.length || 0} {t('Files', 'Files')}</span>
                       </span>
                     </div>
                   </div>
@@ -238,7 +234,7 @@ export default function BidderLogsPage() {
           <div>
             <h2 className="text-base font-black text-slate-900 flex items-center space-x-2">
               <Clock className="w-5 h-5 text-blue-900" />
-              <span>Bidder Activity Audit Trail</span>
+              <span>{t('Bidder Activity Audit Trail', 'Bidder Activity Audit Trail')}</span>
             </h2>
             <p className="text-xs text-slate-500">
               Verified records of document uploads, replacements, tender views, and clarification responses.

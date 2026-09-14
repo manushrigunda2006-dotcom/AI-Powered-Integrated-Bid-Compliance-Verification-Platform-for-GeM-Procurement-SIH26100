@@ -313,19 +313,19 @@ export function Header() {
                                 : 'bg-blue-100 dark:bg-blue-950 text-blue-900 dark:text-blue-300'
                             }`}
                           >
-                            {isOfficer ? 'Officer' : 'Bidder'}
+                            {isOfficer ? t('role.officer', 'Officer') : t('role.bidder', 'Bidder')}
                           </span>
                         </div>
                         <p className="text-[10px] text-[#64748B] dark:text-slate-400 flex items-center space-x-1 mt-0.5 truncate">
                           {isOfficer ? (
                             <>
                               <Building2 className="w-3 h-3 text-[#94A3B8] shrink-0" />
-                              <span className="truncate">Dept of Public Procurement</span>
+                              <span className="truncate">{t('Dept of Public Procurement', 'Dept of Public Procurement')}</span>
                             </>
                           ) : (
                             <>
                               <ShieldCheck className="w-3 h-3 text-emerald-600 shrink-0" />
-                              <span className="truncate font-mono">{(session as any).gstNumber || 'GST Verified'}</span>
+                              <span className="truncate font-mono">{(session as any).gstNumber || t('GST Verified', 'GST Verified')}</span>
                             </>
                           )}
                         </p>

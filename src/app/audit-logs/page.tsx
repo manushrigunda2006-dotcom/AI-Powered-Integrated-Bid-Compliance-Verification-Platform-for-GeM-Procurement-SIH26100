@@ -204,7 +204,7 @@ export default function AuditLogsPage() {
       <div className="min-h-[60vh] flex items-center justify-center">
         <div className="flex flex-col items-center space-y-3">
           <div className="w-9 h-9 border-3 border-blue-900 border-t-transparent rounded-full animate-spin" />
-          <p className="text-xs font-bold text-slate-500">Verifying Officer Audit Access...</p>
+          <p className="text-xs font-bold text-slate-500">{t('Verifying Officer Audit Access...', 'Verifying Officer Audit Access...')}</p>
         </div>
       </div>
     );
@@ -492,7 +492,7 @@ export default function AuditLogsPage() {
         {loading ? (
           <div className="p-12 text-center text-slate-500 space-y-2">
             <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-blue-900" />
-            <p className="text-xs font-semibold">Loading cryptographic audit log records...</p>
+            <p className="text-xs font-semibold">{t('Loading cryptographic audit log records...', 'Loading cryptographic audit log records...')}</p>
           </div>
         ) : filteredLogs.length === 0 ? (
           <div className="p-12 text-center text-slate-500 space-y-2">
@@ -825,7 +825,7 @@ export default function AuditLogsPage() {
                           </div>
                           {Boolean(log.metadata?.remarks) && (
                             <div className="text-[11px] text-slate-600 pt-1">
-                              <strong>Remarks:</strong> {String(log.metadata?.remarks)}
+                              <strong>{t('Remarks:', 'Remarks:')}</strong> {String(log.metadata?.remarks)}
                             </div>
                           )}
                         </div>
@@ -842,7 +842,7 @@ export default function AuditLogsPage() {
                         </div>
                         <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-[11px] text-slate-600 font-mono">
                           <span>{t('audit.digital_signature')}: <strong className="text-slate-800">DSC-Class-3 Validated ({userName})</strong></span>
-                          <span>Gateway: <strong className="text-slate-800">NIC-GovNet 10.24.110.42</strong></span>
+                          <span>{t('Gateway:', 'Gateway:')} <strong className="text-slate-800">NIC-GovNet 10.24.110.42</strong></span>
                         </div>
                       </div>
 

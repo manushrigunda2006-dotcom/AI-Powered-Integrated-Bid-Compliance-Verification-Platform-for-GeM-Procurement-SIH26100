@@ -55,9 +55,9 @@ export function GeminiAiInsights({
                 {t('ai.copilot_title', 'Gemini AI Procurement Copilot')}
               </h3>
               <span className="bg-indigo-100 text-indigo-900 border border-indigo-200 text-[10px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wider flex items-center space-x-1">
-                <span>✨ AI-Assisted</span>
+                <span>✨ {t('AI-Assisted', 'AI-Assisted')}</span>
                 <span className="text-indigo-400">•</span>
-                <span>Non-Authoritative</span>
+                <span>{t('Non-Authoritative', 'Non-Authoritative')}</span>
               </span>
             </div>
             <p className="text-xs text-slate-500 mt-0.5">
@@ -94,7 +94,7 @@ export function GeminiAiInsights({
         <div className="px-5 py-2 bg-amber-50/80 border-b border-amber-200/60 text-[11px] text-amber-800 flex items-center space-x-2">
           <Info className="w-3.5 h-3.5 text-amber-600 shrink-0" />
           <span>
-            <strong>Deterministic Mode:</strong> {fallbackMessage || 'Live Gemini API key not detected in server environment. Displaying pre-computed statutory guidance.'}
+            <strong>{t('Deterministic Mode:', 'Deterministic Mode:')}</strong> {fallbackMessage || 'Live Gemini API key not detected in server environment. Displaying pre-computed statutory guidance.'}
           </span>
         </div>
       )}
@@ -163,7 +163,7 @@ export function GeminiAiInsights({
                 <div className="p-3 bg-indigo-50/60 rounded-xl border border-indigo-100 text-[11px] text-indigo-950 space-y-1">
                   <div className="flex items-center space-x-1.5 font-bold text-indigo-900">
                     <Scale className="w-3.5 h-3.5 text-indigo-600" />
-                    <span>GFR 2017 & Statutory Citations</span>
+                    <span>{t('GFR 2017 & Statutory Citations', 'GFR 2017 & Statutory Citations')}</span>
                   </div>
                   {evaluation.risk_explanation.gfr_compliance_notes.map((note, i) => (
                     <p key={i} className="text-slate-700 leading-relaxed">

@@ -135,12 +135,12 @@ export function RegistryBadges({ registrySummary, latencyMs }: RegistryBadgeProp
         <div className="p-3 bg-slate-50 rounded-lg border border-slate-200 text-xs space-y-1 animate-fadeIn">
           <div className="font-bold text-slate-800 flex justify-between">
             <span>{t('registry.gstn', 'GSTN Registry')} {t('common.details', 'Details')}</span>
-            <span className="text-[10px] text-slate-500">Form REG-06 Verified</span>
+            <span className="text-[10px] text-slate-500">{t('Form REG-06 Verified', 'Form REG-06 Verified')}</span>
           </div>
-          <p><strong className="text-slate-600">Legal Name:</strong> {gstn.legal_name}</p>
-          <p><strong className="text-slate-600">Matched PAN:</strong> {gstn.matched_pan}</p>
-          <p><strong className="text-slate-600">Filing Frequency:</strong> {gstn.filing_frequency} (Active Returns)</p>
-          <p><strong className="text-slate-600">Jurisdiction:</strong> {gstn.state_jurisdiction}</p>
+          <p><strong className="text-slate-600">{t('Legal Name:', 'Legal Name:')}</strong> {gstn.legal_name}</p>
+          <p><strong className="text-slate-600">{t('Matched PAN:', 'Matched PAN:')}</strong> {gstn.matched_pan}</p>
+          <p><strong className="text-slate-600">{t('Filing Frequency:', 'Filing Frequency:')}</strong> {gstn.filing_frequency} ({t('(Active Returns)', 'Active Returns')})</p>
+          <p><strong className="text-slate-600">{t('Jurisdiction:', 'Jurisdiction:')}</strong> {gstn.state_jurisdiction}</p>
         </div>
       )}
 
@@ -148,12 +148,12 @@ export function RegistryBadges({ registrySummary, latencyMs }: RegistryBadgeProp
         <div className="p-3 bg-slate-50 rounded-lg border border-slate-200 text-xs space-y-1 animate-fadeIn">
           <div className="font-bold text-slate-800 flex justify-between">
             <span>{t('registry.msme', 'MSME / Udyam')} {t('common.details', 'Details')}</span>
-            <span className="text-[10px] text-slate-500">MSME Registry</span>
+            <span className="text-[10px] text-slate-500">{t('MSME Registry', 'MSME Registry')}</span>
           </div>
-          <p><strong className="text-slate-600">Enterprise:</strong> {udyam.enterprise_name}</p>
-          <p><strong className="text-slate-600">Category:</strong> {udyam.msme_category} Enterprise ({udyam.major_activity})</p>
-          <p><strong className="text-slate-600">Udyam No:</strong> {udyam.udyam_number}</p>
-          <p><strong className="text-slate-600">Registration Date:</strong> {udyam.registration_date}</p>
+          <p><strong className="text-slate-600">{t('Enterprise:', 'Enterprise:')}</strong> {udyam.enterprise_name}</p>
+          <p><strong className="text-slate-600">{t('Category:', 'Category:')}</strong> {udyam.msme_category} Enterprise ({udyam.major_activity})</p>
+          <p><strong className="text-slate-600">{t('Udyam No:', 'Udyam No:')}</strong> {udyam.udyam_number}</p>
+          <p><strong className="text-slate-600">{t('Registration Date:', 'Registration Date:')}</strong> {udyam.registration_date}</p>
         </div>
       )}
 
@@ -167,14 +167,14 @@ export function RegistryBadges({ registrySummary, latencyMs }: RegistryBadgeProp
           </div>
           {debarment.is_blacklisted ? (
             <>
-              <p className="font-bold text-rose-700">ALERT: Vendor Debarred from Public Procurement</p>
-              <p><strong>Debarring Authority:</strong> {debarment.debarring_agency}</p>
-              <p><strong>Order No:</strong> {debarment.order_number}</p>
-              <p><strong>Reason:</strong> {debarment.reason}</p>
-              <p><strong>Period:</strong> {debarment.debarment_period?.start_date} to {debarment.debarment_period?.end_date}</p>
+              <p className="font-bold text-rose-700">{t('ALERT: Vendor Debarred from Public Procurement', 'ALERT: Vendor Debarred from Public Procurement')}</p>
+              <p><strong>{t('Debarring Authority:', 'Debarring Authority:')}</strong> {debarment.debarring_agency}</p>
+              <p><strong>{t('Order No:', 'Order No:')}</strong> {debarment.order_number}</p>
+              <p><strong>{t('Reason:', 'Reason:')}</strong> {debarment.reason}</p>
+              <p><strong>{t('Period:', 'Period:')}</strong> {debarment.debarment_period?.start_date} {t('to', 'to')} {debarment.debarment_period?.end_date}</p>
             </>
           ) : (
-            <p className="text-slate-600">No adverse entries or debarment orders found under PAN/CIN in the Central Public Procurement Portal database.</p>
+            <p className="text-slate-600">{t('No adverse entries or debarment orders found under PAN/CIN in the Central Public Procurement Portal database.', 'No adverse entries or debarment orders found under PAN/CIN in the Central Public Procurement Portal database.')}</p>
           )}
         </div>
       )}

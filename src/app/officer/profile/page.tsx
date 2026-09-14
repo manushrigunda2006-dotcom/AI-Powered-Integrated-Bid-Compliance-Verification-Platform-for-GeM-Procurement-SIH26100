@@ -126,10 +126,10 @@ export default function OfficerProfilePage() {
                 </span>
                 <span className="bg-emerald-100 text-emerald-800 text-xs font-bold px-2.5 py-0.5 rounded-md flex items-center space-x-1">
                   <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
-                  <span>Class-3 DSC Active</span>
+                  <span>{t('Class-3 DSC Active', 'Class-3 DSC Active')}</span>
                 </span>
                 <span className="bg-purple-100 text-purple-800 text-xs font-bold px-2.5 py-0.5 rounded-md">
-                  SIH Evaluator Ready
+                  {t('app.evaluator_ready', 'SIH Evaluator Ready')}
                 </span>
               </div>
 
@@ -175,45 +175,45 @@ export default function OfficerProfilePage() {
         <div className="bg-white rounded-3xl border border-slate-200 p-6 shadow-xs space-y-4">
           <div className="flex items-center space-x-2 pb-3 border-b border-slate-100">
             <ShieldCheck className="w-5 h-5 text-emerald-600" />
-            <h2 className="text-base font-bold text-slate-900">Digital Signature Credential</h2>
+            <h2 className="text-base font-bold text-slate-900">{t('Digital Signature Credential', 'Digital Signature Credential')}</h2>
           </div>
 
           <div className="space-y-3 text-xs">
             <div className="p-3 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-900 space-y-1">
               <div className="font-bold flex items-center space-x-1.5">
                 <CheckCircle2 className="w-4 h-4 text-emerald-600" />
-                <span>Class-3 PKI Token Verified & Plugged</span>
+                <span>{t('Class-3 PKI Token Verified & Plugged', 'Class-3 PKI Token Verified & Plugged')}</span>
               </div>
               <p className="text-[11px] text-emerald-800">
-                Hardware cryptographic device authenticated for legally binding procurement decisions under Indian IT Act 2000.
+                {t('Hardware cryptographic device authenticated for legally binding procurement decisions under Indian IT Act 2000.', 'Hardware cryptographic device authenticated for legally binding procurement decisions under Indian IT Act 2000.')}
               </p>
             </div>
 
             <div className="space-y-2 pt-2">
               <div>
-                <span className="text-slate-400 text-[10px] uppercase font-bold block">Token Device</span>
+                <span className="text-slate-400 text-[10px] uppercase font-bold block">{t('Token Device', 'Token Device')}</span>
                 <span className="text-slate-900 font-bold">{officer.dscToken.hardwareDevice}</span>
               </div>
               <div>
-                <span className="text-slate-400 text-[10px] uppercase font-bold block">Serial Number</span>
+                <span className="text-slate-400 text-[10px] uppercase font-bold block">{t('Serial Number', 'Serial Number')}</span>
                 <span className="font-mono text-slate-800">{officer.dscToken.serialNumber}</span>
               </div>
               <div>
-                <span className="text-slate-400 text-[10px] uppercase font-bold block">Certifying Authority</span>
+                <span className="text-slate-400 text-[10px] uppercase font-bold block">{t('Certifying Authority', 'Certifying Authority')}</span>
                 <span className="text-slate-800">{officer.dscToken.issuer}</span>
               </div>
               <div className="grid grid-cols-2 gap-2">
                 <div>
-                  <span className="text-slate-400 text-[10px] uppercase font-bold block">Issued On</span>
+                  <span className="text-slate-400 text-[10px] uppercase font-bold block">{t('Issued On', 'Issued On')}</span>
                   <span className="text-slate-800 font-medium">{officer.dscToken.validFrom}</span>
                 </div>
                 <div>
-                  <span className="text-slate-400 text-[10px] uppercase font-bold block">Valid Until</span>
+                  <span className="text-slate-400 text-[10px] uppercase font-bold block">{t('Valid Until', 'Valid Until')}</span>
                   <span className="text-emerald-700 font-bold">{officer.dscToken.validTill}</span>
                 </div>
               </div>
               <div>
-                <span className="text-slate-400 text-[10px] uppercase font-bold block">SHA-256 Token Fingerprint</span>
+                <span className="text-slate-400 text-[10px] uppercase font-bold block">{t('SHA-256 Token Fingerprint', 'SHA-256 Token Fingerprint')}</span>
                 <span className="font-mono text-[10px] text-slate-500 break-all block bg-slate-50 p-2 rounded-lg border border-slate-100 mt-1">
                   {officer.dscToken.sha256Fingerprint}
                 </span>
@@ -229,7 +229,7 @@ export default function OfficerProfilePage() {
             <div className="flex items-center justify-between pb-3 border-b border-slate-100">
               <div className="flex items-center space-x-2">
                 <Award className="w-5 h-5 text-blue-900" />
-                <h2 className="text-base font-bold text-slate-900">Officer Adjudication Performance</h2>
+                <h2 className="text-base font-bold text-slate-900">{t('Officer Adjudication Performance', 'Officer Adjudication Performance')}</h2>
               </div>
               <span className="text-xs font-bold text-slate-500">FY 2025–26</span>
             </div>
@@ -237,7 +237,7 @@ export default function OfficerProfilePage() {
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs">
               <div className="p-3.5 bg-slate-50 rounded-2xl">
                 <span className="text-[10px] uppercase font-bold text-slate-400 block mb-1">
-                  Bids Evaluated
+                  {t('Bids Evaluated', 'Bids Evaluated')}
                 </span>
                 <span className="text-2xl font-black text-slate-900">
                   {officer.adjudicationStats.totalEvaluated}
@@ -246,7 +246,7 @@ export default function OfficerProfilePage() {
 
               <div className="p-3.5 bg-emerald-50 rounded-2xl border border-emerald-100">
                 <span className="text-[10px] uppercase font-bold text-emerald-700 block mb-1">
-                  Qualified
+                  {t('officer.filter_qualified', 'Qualified')}
                 </span>
                 <span className="text-2xl font-black text-emerald-800">
                   {officer.adjudicationStats.qualified}
@@ -255,7 +255,7 @@ export default function OfficerProfilePage() {
 
               <div className="p-3.5 bg-rose-50 rounded-2xl border border-rose-100">
                 <span className="text-[10px] uppercase font-bold text-rose-700 block mb-1">
-                  GFR 151 Disqualified
+                  {t('GFR 151 Disqualified', 'GFR 151 Disqualified')}
                 </span>
                 <span className="text-2xl font-black text-rose-800">
                   {officer.adjudicationStats.disqualifiedGfr151}
@@ -264,7 +264,7 @@ export default function OfficerProfilePage() {
 
               <div className="p-3.5 bg-amber-50 rounded-2xl border border-amber-100">
                 <span className="text-[10px] uppercase font-bold text-amber-700 block mb-1">
-                  Clarifications
+                  {t('Clarifications', 'Clarifications')}
                 </span>
                 <span className="text-2xl font-black text-amber-800">
                   {officer.adjudicationStats.clarificationsRaised}
@@ -288,9 +288,9 @@ export default function OfficerProfilePage() {
             <div className="flex items-center justify-between pb-3 border-b border-slate-100">
               <div className="flex items-center space-x-2">
                 <FileSignature className="w-5 h-5 text-purple-900" />
-                <h2 className="text-base font-bold text-slate-900">Recent Signed Adjudications (Audit Trail)</h2>
+                <h2 className="text-base font-bold text-slate-900">{t('Recent Signed Adjudications (Audit Trail)', 'Recent Signed Adjudications (Audit Trail)')}</h2>
               </div>
-              <span className="text-[11px] text-slate-500">Immutable Log</span>
+              <span className="text-[11px] text-slate-500">{t('Immutable Log', 'Immutable Log')}</span>
             </div>
 
             <div className="space-y-3">
@@ -322,7 +322,7 @@ export default function OfficerProfilePage() {
                   </div>
 
                   <p className="text-[11px] text-slate-600 bg-white p-2.5 rounded-xl border border-slate-100">
-                    <span className="font-bold text-slate-700">Official Adjudication Finding: </span>
+                    <span className="font-bold text-slate-700">{t('Official Adjudication Finding:', 'Official Adjudication Finding:')} </span>
                     {sig.reason}
                   </p>
                 </div>

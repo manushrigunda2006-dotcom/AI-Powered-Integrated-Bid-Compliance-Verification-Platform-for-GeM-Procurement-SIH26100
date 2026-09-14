@@ -215,7 +215,7 @@ export default function BidderLoginPage() {
               <div className="flex items-center justify-between text-[11px] text-slate-500 font-semibold px-0.5">
                 <span>{t('bidder.select_persona')}</span>
                 <span className="text-[10px] text-blue-700 bg-blue-50 px-2 py-0.5 rounded-full border border-blue-200 font-mono">
-                  20 Bidders Ready
+                  {t('20 Bidders Ready', '20 Bidders Ready')}
                 </span>
               </div>
 
@@ -232,7 +232,7 @@ export default function BidderLoginPage() {
                   </span>
                   <span className="text-[9px] font-bold px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 border border-emerald-300 flex items-center space-x-1">
                     <CheckCircle2 className="w-2.5 h-2.5" />
-                    <span>Eligible (96%)</span>
+                    <span>{t('tender.eligible', 'Eligible')} (96%)</span>
                   </span>
                 </div>
                 <div className="text-[10.5px] text-slate-600 mt-1 flex justify-between">
@@ -254,11 +254,11 @@ export default function BidderLoginPage() {
                   </span>
                   <span className="text-[9px] font-bold px-2 py-0.5 rounded-full bg-amber-100 text-amber-800 border border-amber-300 flex items-center space-x-1">
                     <AlertTriangle className="w-2.5 h-2.5" />
-                    <span>Clarification (76%)</span>
+                    <span>{t('Clarifications', 'Clarification')} (76%)</span>
                   </span>
                 </div>
                 <div className="text-[10.5px] text-slate-600 mt-1 flex justify-between">
-                  <span>Name Mismatch on MAF</span>
+                  <span>{t('Name Mismatch on MAF', 'Name Mismatch on MAF')}</span>
                   <span className="font-semibold text-amber-700">{t('bidder.quick_sign_in')}</span>
                 </div>
               </button>
@@ -276,11 +276,11 @@ export default function BidderLoginPage() {
                   </span>
                   <span className="text-[9px] font-bold px-2 py-0.5 rounded-full bg-red-100 text-red-800 border border-red-300 flex items-center space-x-1">
                     <XCircle className="w-2.5 h-2.5" />
-                    <span>Debarred (28%)</span>
+                    <span>{t('status.debarred', 'Debarred')} (28%)</span>
                   </span>
                 </div>
                 <div className="text-[10.5px] text-slate-600 mt-1 flex justify-between">
-                  <span>CPPP Blacklisted / Cancelled GST</span>
+                  <span>{t('CPPP Blacklisted / Cancelled GST', 'CPPP Blacklisted / Cancelled GST')}</span>
                   <span className="font-semibold text-red-700">{t('bidder.quick_sign_in')}</span>
                 </div>
               </button>
@@ -288,7 +288,7 @@ export default function BidderLoginPage() {
               {loginSuccess && (
                 <div className="p-2.5 bg-emerald-100 border border-emerald-300 rounded-xl text-xs text-emerald-900 font-bold flex items-center space-x-2">
                   <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
-                  <span>Authenticated as Bidder! Redirecting to dashboard...</span>
+                  <span>{t('Authenticated as Bidder! Redirecting to dashboard...', 'Authenticated as Bidder! Redirecting to dashboard...')}</span>
                 </div>
               )}
             </div>
@@ -298,7 +298,7 @@ export default function BidderLoginPage() {
           {authTab === 'CREDENTIALS' && (
             <form onSubmit={handleCredentialsLogin} className="space-y-4 text-xs">
               <div className="space-y-1">
-                <label className="font-bold text-slate-700">Company GSTIN</label>
+                <label className="font-bold text-slate-700">{t('Company GSTIN', 'Company GSTIN')}</label>
                 <input
                   type="text"
                   value={gstin}
@@ -310,7 +310,7 @@ export default function BidderLoginPage() {
               </div>
 
               <div className="space-y-1">
-                <label className="font-bold text-slate-700">Authorized Signatory Email</label>
+                <label className="font-bold text-slate-700">{t('Authorized Signatory Email', 'Authorized Signatory Email')}</label>
                 <input
                   type="email"
                   value={customEmail}
@@ -321,7 +321,7 @@ export default function BidderLoginPage() {
               </div>
 
               <div className="space-y-1">
-                <label className="font-bold text-slate-700">Password</label>
+                <label className="font-bold text-slate-700">{t('Password', 'Password')}</label>
                 <input
                   type="password"
                   value={password}

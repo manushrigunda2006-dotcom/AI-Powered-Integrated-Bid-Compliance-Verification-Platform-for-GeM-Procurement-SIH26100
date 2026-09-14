@@ -120,7 +120,7 @@ export default function OfficerLoginPage() {
               </div>
               <div className="min-w-0 flex-1 text-xs">
                 <div className="font-bold text-slate-900 truncate">Officer ABCD</div>
-                <div className="text-[11px] text-slate-500 truncate">Department of Public Procurement</div>
+                <div className="text-[11px] text-slate-500 truncate">{t('officer.department', 'Department of Public Procurement')}</div>
               </div>
             </div>
             <button
@@ -132,10 +132,10 @@ export default function OfficerLoginPage() {
               {loginSuccess ? (
                 <>
                   <CheckCircle2 className="w-4 h-4 text-emerald-400" />
-                  <span>Authenticated! Redirecting to Dashboard...</span>
+                  <span>{t('Authenticated! Redirecting to Dashboard...', 'Authenticated! Redirecting to Dashboard...')}</span>
                 </>
               ) : isLoading ? (
-                <span>Authenticating Officer...</span>
+                <span>{t('Authenticating Officer...', 'Authenticating Officer...')}</span>
               ) : (
                 <>
                   <span>{t('officer.btn_signin')}</span>

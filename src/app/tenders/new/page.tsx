@@ -684,7 +684,7 @@ export default function CreateTenderNewPage() {
                     <option value="Ministry of Finance (Department of Expenditure)">
                       Ministry of Finance (Dept of Expenditure)
                     </option>
-                    <option value="CUSTOM">Custom Ministry / Organization...</option>
+                    <option value="CUSTOM">{t('Custom Ministry / Organization...', 'Custom Ministry / Organization...')}</option>
                   </select>
                   {department === 'CUSTOM' && (
                     <input
@@ -826,7 +826,7 @@ export default function CreateTenderNewPage() {
                           onChange={(e) => handleUpdateClause(req.id, 'is_mandatory', e.target.checked)}
                           className="rounded text-blue-900 focus:ring-blue-600"
                         />
-                        <span className="font-bold text-slate-700 text-[11px]">Mandatory</span>
+                        <span className="font-bold text-slate-700 text-[11px]">{t('tender.mandatory', 'Mandatory')}</span>
                       </label>
 
                       <button

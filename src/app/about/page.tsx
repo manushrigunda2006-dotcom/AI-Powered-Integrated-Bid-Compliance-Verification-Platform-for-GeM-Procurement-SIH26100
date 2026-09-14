@@ -154,15 +154,15 @@ export default function AboutPage() {
             </span>
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 font-mono text-[11.5px]">
               <div className="bg-white p-2.5 rounded-lg border border-blue-200">
-                <span className="text-[10px] uppercase font-bold text-slate-400 block font-sans">Threshold</span>
+                <span className="text-[10px] uppercase font-bold text-slate-400 block font-sans">{t('Threshold', 'Threshold')}</span>
                 <span className="font-bold text-slate-800">{t('about.engine_example_min', 'Minimum turnover: ₹5 crore')}</span>
               </div>
               <div className="bg-white p-2.5 rounded-lg border border-blue-200">
-                <span className="text-[10px] uppercase font-bold text-slate-400 block font-sans">Bidder Filing</span>
+                <span className="text-[10px] uppercase font-bold text-slate-400 block font-sans">{t('Bidder Filing', 'Bidder Filing')}</span>
                 <span className="font-bold text-slate-800">{t('about.engine_example_bidder', 'Bidder turnover: ₹4.7 crore')}</span>
               </div>
               <div className="bg-rose-50 p-2.5 rounded-lg border border-rose-200 flex flex-col justify-center">
-                <span className="text-[10px] uppercase font-bold text-rose-700 block font-sans">Evaluation Gate</span>
+                <span className="text-[10px] uppercase font-bold text-rose-700 block font-sans">{t('Evaluation Gate', 'Evaluation Gate')}</span>
                 <span className="font-bold text-rose-900">{t('about.engine_example_result', 'Result: NOT COMPLIANT')}</span>
               </div>
             </div>
@@ -348,19 +348,19 @@ export default function AboutPage() {
             </span>
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 font-mono text-[11px]">
               <div className="bg-white p-2.5 rounded-lg border border-amber-200">
-                <span className="text-[10px] uppercase font-bold text-slate-400 block font-sans">Document A</span>
+                <span className="text-[10px] uppercase font-bold text-slate-400 block font-sans">{t('Document A', 'Document A')}</span>
                 <span className="font-semibold text-slate-800">
                   {t('about.crosscheck_doc_a', 'Document A: ABCD Technologies Private Limited')}
                 </span>
               </div>
               <div className="bg-white p-2.5 rounded-lg border border-amber-200">
-                <span className="text-[10px] uppercase font-bold text-slate-400 block font-sans">Document B</span>
+                <span className="text-[10px] uppercase font-bold text-slate-400 block font-sans">{t('Document B', 'Document B')}</span>
                 <span className="font-semibold text-slate-800">
                   {t('about.crosscheck_doc_b', 'Document B: ABCD Technology Pvt. Ltd.')}
                 </span>
               </div>
               <div className="bg-white p-2.5 rounded-lg border border-amber-200">
-                <span className="text-[10px] uppercase font-bold text-slate-400 block font-sans">Document C</span>
+                <span className="text-[10px] uppercase font-bold text-slate-400 block font-sans">{t('Document C', 'Document C')}</span>
                 <span className="font-semibold text-slate-800">
                   {t('about.crosscheck_doc_c', 'Document C: A.B.C.D. Technologies Pvt Ltd')}
                 </span>
