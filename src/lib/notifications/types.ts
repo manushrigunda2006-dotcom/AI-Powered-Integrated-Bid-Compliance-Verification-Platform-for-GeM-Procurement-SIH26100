@@ -41,5 +41,14 @@ export interface NotificationTranslations {
     mr: string;
     tulu: string;
     kok: string;
+    ml: string;
+    gu: string;
+    bn: string;
+    or: string;
+    as: string;
+    pa: string;
+    hry: string;
+    mni: string;
+    ks: string;
   };
 }

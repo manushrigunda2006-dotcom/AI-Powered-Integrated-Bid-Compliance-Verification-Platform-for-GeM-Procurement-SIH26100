@@ -21,7 +21,7 @@ export default function RootLayout({
       <head>
         <script
           dangerouslySetInnerHTML={{
-            __html: `(function(){try{var t=localStorage.getItem('gem_app_theme');if(t==='dark'){document.documentElement.classList.add('dark');}}catch(e){}})();`,
+            __html: `(function(){try{var t=localStorage.getItem('gem_app_theme');if(t==='dark'){document.documentElement.classList.add('dark');}var l=localStorage.getItem('gem_language');if(l==='ks'){document.documentElement.setAttribute('dir','rtl');document.documentElement.setAttribute('lang','ks');}}catch(e){}})();`,
           }}
         />
       </head>

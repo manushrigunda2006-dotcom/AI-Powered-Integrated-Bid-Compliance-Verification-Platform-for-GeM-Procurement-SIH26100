@@ -467,3 +467,44 @@ html.dark [role="dialog"],
 .animate-fadeIn {
   animation: fadeIn 0.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
+
+/* ========================================================
+   RTL & REGIONAL INDIC SCRIPT SUPPORT
+   ======================================================== */
+[dir="rtl"] {
+  text-align: right;
+  direction: rtl;
+}
+
+[dir="rtl"] input,
+[dir="rtl"] textarea,
+[dir="rtl"] select {
+  text-align: right;
+  direction: rtl;
+}
+
+[dir="rtl"] .ltr-override {
+  text-align: left;
+  direction: ltr;
+}
+
+/* Unicode font fallbacks for regional scripts */
+[lang="ml"] {
+  font-family: "Noto Sans Malayalam", "Manjari", "Gayathri", "Nirmala UI", sans-serif;
+}
+[lang="gu"] {
+  font-family: "Noto Sans Gujarati", "Shruti", "Nirmala UI", sans-serif;
+}
+[lang="bn"], [lang="as"], [lang="mni"] {
+  font-family: "Noto Sans Bengali", "Kalpurush", "Mukti", "SolaimanLipi", "Vrinda", "Nirmala UI", sans-serif;
+}
+[lang="or"] {
+  font-family: "Noto Sans Oriya", "Kalinga", "Nirmala UI", sans-serif;
+}
+[lang="pa"] {
+  font-family: "Noto Sans Gurmukhi", "Raavi", "Nirmala UI", sans-serif;
+}
+[lang="ks"], [dir="rtl"] {
+  font-family: "Noto Nastaliq Urdu", "Noto Sans Arabic", "Segoe UI", Tahoma, Arial, sans-serif;
+}
+

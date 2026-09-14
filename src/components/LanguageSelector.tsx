@@ -19,6 +19,15 @@ const LANGUAGES: { code: Language; label: string; nativeName: string }[] = [
   { code: 'mr', label: 'Marathi', nativeName: 'मराठी' },
   { code: 'tulu', label: 'Tulu', nativeName: 'ತುಳು' },
   { code: 'kok', label: 'Konkani', nativeName: 'कोंकणी' },
+  { code: 'ml', label: 'Malayalam', nativeName: 'മലയാളം' },
+  { code: 'gu', label: 'Gujarati', nativeName: 'ગુજરાતી' },
+  { code: 'bn', label: 'Bengali', nativeName: 'বাংলা' },
+  { code: 'or', label: 'Odia', nativeName: 'ଓଡ଼ିଆ' },
+  { code: 'as', label: 'Assamese', nativeName: 'অসমীয়া' },
+  { code: 'pa', label: 'Punjabi', nativeName: 'ਪੰਜਾਬੀ' },
+  { code: 'hry', label: 'Haryanvi', nativeName: 'हरियाणवी' },
+  { code: 'mni', label: 'Manipuri', nativeName: 'মৈতৈলোন্ / ꯃꯤꯇꯩ' },
+  { code: 'ks', label: 'Kashmiri', nativeName: 'کٲشُر' },
 ];
 
 export function LanguageSelector({ variant = 'compact', className = '' }: LanguageSelectorProps) {
@@ -77,7 +86,7 @@ export function LanguageSelector({ variant = 'compact', className = '' }: Langua
       </button>
 
       {isOpen && (
-        <div className="absolute right-0 mt-1.5 w-40 bg-white dark:bg-slate-800 rounded-xl shadow-lg border border-slate-200 dark:border-slate-700 py-1 z-50 animate-in fade-in zoom-in-95 duration-100 max-h-80 overflow-y-auto">
+        <div className="absolute right-0 mt-1.5 w-48 bg-white dark:bg-slate-800 rounded-xl shadow-lg border border-slate-200 dark:border-slate-700 py-1 z-50 animate-in fade-in zoom-in-95 duration-100 max-h-96 overflow-y-auto">
           <div className="px-2.5 py-1 text-[9.5px] font-bold text-slate-400 uppercase tracking-wider border-b border-slate-100 dark:border-slate-700">
             {t('lang.select', 'Language')}
           </div>
